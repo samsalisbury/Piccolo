@@ -4,9 +4,9 @@ using Shouldly;
 
 namespace Piccolo.UnitTests.IoC
 {
-	[TestFixture]
 	public class DefaultRequestHandlerFactoryTests
 	{
+		[TestFixture]
 		public class when_creating_instance : given_default_request_handler_factory
 		{
 			[Test]
@@ -26,8 +26,12 @@ namespace Piccolo.UnitTests.IoC
 			}
 		}
 
+		#region Test Classes
+
 		public class TestRequestHandler : IRequestHandler
 		{
 		}
+
+		#endregion
 	}
 }

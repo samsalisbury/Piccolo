@@ -35,6 +35,7 @@
     </Compile>
     <Compile Include="HttpHandlerTests.cs" />
     <Compile Include="IoC\DefaultRequestHandlerFactoryTests.cs" />
+    <Compile Include="IoC\BootstrapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

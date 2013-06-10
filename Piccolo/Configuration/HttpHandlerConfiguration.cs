@@ -1,3 +1,5 @@
+using System;
+using System.Collections.ObjectModel;
 using Piccolo.IoC;
 
 namespace Piccolo.Configuration
@@ -9,5 +11,6 @@ namespace Piccolo.Configuration
 		}
 
 		public IRequestHandlerFactory RequestHandlerFactory { get; set; }
+		public ReadOnlyCollection<Type> RequestHandlers { get; internal set; }
 	}
 }

@@ -7,7 +7,6 @@ namespace Piccolo
 {
 	public class HttpHandler : IHttpHandler
 	{
-		[ExcludeFromCodeCoverage]
 		public HttpHandler() : this(true)
 		{
 		}
@@ -17,6 +16,8 @@ namespace Piccolo
 			var bootstrapper = new Bootstrapper(Assembly.GetCallingAssembly());
 			Configuration = bootstrapper.ApplyConfiguration(applyCustomConfiguration);
 		}
+
+		public HttpHandlerConfiguration Configuration { get; private set; }
 
 		public void ProcessRequest(HttpContext context)
 		{
@@ -28,7 +29,5 @@ namespace Piccolo
 		{
 			get { return true; }
 		}
-
-		public HttpHandlerConfiguration Configuration { get; private set; }
 	}
 }
