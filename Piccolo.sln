@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo", "Piccolo\Piccolo.csproj", "{E255BE35-4591-4B0E-A3B8-B51D34F7CEFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.Samples", "Piccolo.Samples\Piccolo.Samples.csproj", "{A17AE55B-3660-43CC-9432-97ECE3C974CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.UnitTests", "Piccolo.UnitTests\Piccolo.UnitTests.csproj", "{2D1D5C98-F62F-4626-B67D-515335FFF6AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E255BE35-4591-4B0E-A3B8-B51D34F7CEFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E255BE35-4591-4B0E-A3B8-B51D34F7CEFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E255BE35-4591-4B0E-A3B8-B51D34F7CEFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E255BE35-4591-4B0E-A3B8-B51D34F7CEFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D1D5C98-F62F-4626-B67D-515335FFF6AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D1D5C98-F62F-4626-B67D-515335FFF6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D1D5C98-F62F-4626-B67D-515335FFF6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D1D5C98-F62F-4626-B67D-515335FFF6AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
