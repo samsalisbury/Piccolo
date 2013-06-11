@@ -135,6 +135,24 @@ namespace Piccolo.UnitTests.Routing
 		}
 
 		[TestFixture]
+		public class when_searching_for_request_handler_that_matches_XXXXXXXX : given_route_handler_lookup_initialised_with_test_routes
+		{
+			private Type _requestHandler;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/1/2/3/is-not-routed");
+			}
+
+			[Test]
+			public void it_should_return_null()
+			{
+				_requestHandler.ShouldBe(null);
+			}
+		}
+
+		[TestFixture]
 		public class when_searching_for_request_handler : given_route_handler_lookup_initialised_with_0_routes
 		{
 			private Type _requestHandler;
