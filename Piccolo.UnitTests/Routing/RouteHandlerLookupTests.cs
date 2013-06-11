@@ -170,27 +170,6 @@ namespace Piccolo.UnitTests.Routing
 			}
 		}
 
-		[TestFixture]
-		public class when_initialising_route_handler_lookup_with_conflicting_routes
-		{
-			[Test]
-			public void it_should_throw_exception()
-			{
-				var requestHandlers = new List<Type> {typeof(Handler1), typeof(Handler2)};
-				Should.Throw<InvalidOperationException>(() => new RouteHandlerLookup(requestHandlers));
-			}
-
-			[Route("/route")]
-			public class Handler1 : IRequestHandler
-			{
-			}
-
-			[Route("/route")]
-			public class Handler2 : IRequestHandler
-			{
-			}
-		}
-
 		public abstract class given_route_handler_lookup_initialised_with_test_routes : given_route_handler_lookup
 		{
 			private static readonly IEnumerable<Type> _testRoutes = new List<Type>

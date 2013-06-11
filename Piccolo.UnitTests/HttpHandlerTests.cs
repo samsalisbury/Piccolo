@@ -9,9 +9,21 @@ namespace Piccolo.UnitTests
 		public class when_instantiated : given_http_handler
 		{
 			[Test]
-			public void it_should_configure_custom_request_handler_factory()
+			public void it_should_configure_request_handler_factory()
 			{
 				HttpHandler.Configuration.RequestHandlerFactory.ShouldNotBe(null);
+			}
+
+			[Test]
+			public void it_should_configure_request_handlers()
+			{
+				HttpHandler.Configuration.RequestHandlers.Count.ShouldBeGreaterThan(0);
+			}
+
+			[Test]
+			public void it_should_configure_router()
+			{
+				HttpHandler.Configuration.Router.ShouldNotBe(null);
 			}
 		}
 

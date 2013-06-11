@@ -7,13 +7,13 @@ namespace Piccolo
 {
 	public class HttpHandler : IHttpHandler
 	{
-		public HttpHandler() : this(true)
+		public HttpHandler() : this(true, Assembly.GetCallingAssembly())
 		{
 		}
 
-		public HttpHandler(bool applyCustomConfiguration)
+		public HttpHandler(bool applyCustomConfiguration, Assembly assembly)
 		{
-			var bootstrapper = new Bootstrapper(Assembly.GetCallingAssembly());
+			var bootstrapper = new Bootstrapper(assembly);
 			Configuration = bootstrapper.ApplyConfiguration(applyCustomConfiguration);
 		}
 

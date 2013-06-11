@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Piccolo.IoC;
+using Piccolo.Routing;
 
 namespace Piccolo.Configuration
 {
@@ -19,8 +20,8 @@ namespace Piccolo.Configuration
 		{
 			var configuration = new HttpHandlerConfiguration();
 
-			ApplyDefaultConfiguration(configuration);
 			DiscoverRequestHandlers(configuration, _assembly);
+			ApplyDefaultConfiguration(configuration);
 
 			if (applyCustomConfiguration)
 				ApplyCustomConfiguration(configuration, _assembly);
@@ -31,6 +32,7 @@ namespace Piccolo.Configuration
 		private static void ApplyDefaultConfiguration(HttpHandlerConfiguration configuration)
 		{
 			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
+			configuration.Router = new RequestRouter(configuration);
 		}
 
 		private void DiscoverRequestHandlers(HttpHandlerConfiguration configuration, Assembly assembly)

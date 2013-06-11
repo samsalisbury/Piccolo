@@ -49,7 +49,7 @@ namespace Piccolo.UnitTests.Configuration
 			[Test]
 			public void it_should_autodetect_request_handlers()
 			{
-				_handlerConfiguration.RequestHandlers.Any(x => x == typeof(TestRequestHandler)).ShouldBe(true);
+				_handlerConfiguration.RequestHandlers.Any(x => x == typeof(EmptyTestRequestHandler)).ShouldBe(true);
 			}
 		}
 
@@ -80,10 +80,6 @@ namespace Piccolo.UnitTests.Configuration
 			{
 				return null;
 			}
-		}
-
-		public class TestRequestHandler : IRequestHandler
-		{
 		}
 
 		#endregion

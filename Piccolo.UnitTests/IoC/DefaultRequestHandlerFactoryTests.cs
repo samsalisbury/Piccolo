@@ -12,7 +12,7 @@ namespace Piccolo.UnitTests.IoC
 			[Test]
 			public void it_should_return_instance()
 			{
-				HandlerFactory.CreateInstance(typeof(TestRequestHandler)).ShouldBeTypeOf<TestRequestHandler>();
+				HandlerFactory.CreateInstance(typeof(EmptyTestRequestHandler)).ShouldBeTypeOf<EmptyTestRequestHandler>();
 			}
 		}
 
@@ -25,13 +25,5 @@ namespace Piccolo.UnitTests.IoC
 				HandlerFactory = new DefaultRequestHandlerFactory();
 			}
 		}
-
-		#region Test Classes
-
-		public class TestRequestHandler : IRequestHandler
-		{
-		}
-
-		#endregion
 	}
 }
