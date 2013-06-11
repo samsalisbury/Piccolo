@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +7,7 @@ using Piccolo.Configuration;
 using Piccolo.IoC;
 using Shouldly;
 
-namespace Piccolo.UnitTests.IoC
+namespace Piccolo.UnitTests.Configuration
 {
 	public class BootstrapperTests
 	{
