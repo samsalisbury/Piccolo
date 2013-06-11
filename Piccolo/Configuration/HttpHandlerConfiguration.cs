@@ -1,16 +1,14 @@
 using System;
 using System.Collections.ObjectModel;
 using Piccolo.IoC;
+using Piccolo.Routing;
 
 namespace Piccolo.Configuration
 {
 	public class HttpHandlerConfiguration
 	{
-		internal HttpHandlerConfiguration()
-		{
-		}
-
 		public IRequestHandlerFactory RequestHandlerFactory { get; set; }
-		public ReadOnlyCollection<Type> RequestHandlers { get; internal set; }
+		public ReadOnlyCollection<Type> RequestHandlers { get; set; }
+		public IRequestRouter Router { get; set; }
 	}
 }
