@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Piccolo.Routing
 {
-	internal class RouteHandlerLookup
+	public class RouteHandlerLookup
 	{
 		private readonly Node _tree;
 
@@ -17,27 +17,55 @@ namespace Piccolo.Routing
 				var routeAttributes = requestHandler.GetCustomAttributes(typeof(RouteAttribute), true);
 				var routeUris = routeAttributes.Cast<RouteAttribute>().Select(x => Split(x.Uri));
 				foreach (var routeUri in routeUris)
-					_tree.AddChildNode(routeUri, requestHandler);
+					_tree.AddNode(routeUri, requestHandler);
 			}
 		}
 
-		public Type FindRequestHandlerForPath(string absolutePath)
+		public Type FindRequestHandlerForPath(string relativePath)
 		{
-			var pathFragments = Split(absolutePath);
+			var pathFragments = Split(relativePath);
 			return FindNode(_tree, pathFragments);
 		}
 
 		private static Type FindNode(Node node, IList<string> pathFragments)
 		{
+			if (pathFragments.Count == 1 && pathFragments.First() == node.RootNode.RouteTemplateFragment)
+				return node.RootNode.RequestHandler;
+
 			foreach (var childNode in node.ChildNodes)
 			{
 				if (IsMatch(childNode, pathFragments.First()))
 				{
 					var remainingPathFragments = pathFragments.Skip(1).ToList();
-					return remainingPathFragments.Any() ? FindNode(childNode, remainingPathFragments) : childNode.RequestHandler;
-				}
+					if (remainingPathFragments.Count == 0)
+						return childNode.RequestHandler;
 
-				return null;
+					foreach (var grandChildNode in childNode.ChildNodes)
+					{
+						var requestHandler = Lookahead(grandChildNode, remainingPathFragments);
+						if (requestHandler != null)
+							return requestHandler;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		private static Type Lookahead(Node node, IList<string> pathFragments)
+		{
+			if (IsMatch(node, pathFragments.First()))
+			{
+				var remainingPathFragments = pathFragments.Skip(1).ToList();
+				if (remainingPathFragments.Count == 0)
+					return node.RequestHandler;
+
+				foreach (var childNode in node.ChildNodes)
+				{
+					var requestHandler = Lookahead(childNode, remainingPathFragments);
+					if (requestHandler != null)
+						return requestHandler;
+				}
 			}
 
 			return null;
@@ -63,7 +91,8 @@ namespace Piccolo.Routing
 
 		private static IList<string> Split(string uri)
 		{
-			return uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
+			var fragments = uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
+			return fragments.Length == 0 ? new[] {""} : fragments;
 		}
 
 		internal class Node
@@ -72,6 +101,7 @@ namespace Piccolo.Routing
 
 			internal Node() : this(string.Empty, new List<string>(), null, new Dictionary<string, Type>())
 			{
+				RootNode = this;
 			}
 
 			internal Node(string headFragment, IList<string> routeTemplateFragments, Type requestHandler, Dictionary<string, Type> requestHandlerProperties)
@@ -83,24 +113,34 @@ namespace Piccolo.Routing
 				RequestHandlerProperties = requestHandlerProperties;
 
 				if (routeTemplateFragments.Any())
-					AddChildNode(routeTemplateFragments, requestHandler);
+					AddNode(routeTemplateFragments, requestHandler);
 			}
 
+			internal Node RootNode { get; set; }
 			internal IList<Node> ChildNodes { get; set; }
 			internal bool IsStaticRouteTemplateFragment { get; set; }
 			internal string RouteTemplateFragment { get; set; }
 			internal Type RequestHandler { get; set; }
 			internal Dictionary<string, Type> RequestHandlerProperties { get; set; }
 
-			internal void AddChildNode(IList<string> routeTemplateFragments, Type requestHandler)
+			internal void AddNode(IList<string> routeTemplateFragments, Type requestHandler)
 			{
 				var headFragment = routeTemplateFragments.First();
+
+				// matches root
+				if (headFragment == string.Empty)
+				{
+					RequestHandler = requestHandler;
+					RequestHandlerProperties = GetRequestHandlerProperties(requestHandler);
+					return;
+				}
+
 				var childNode = FindChildNode(headFragment);
 				var remainingTemplateFragments = routeTemplateFragments.Skip(1).ToList();
 
 				if (childNode != null)
 				{
-					childNode.AddChildNode(remainingTemplateFragments, requestHandler);
+					childNode.AddNode(remainingTemplateFragments, requestHandler);
 				}
 				else
 				{
