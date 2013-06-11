@@ -14,55 +14,37 @@ namespace Piccolo.Routing
 
 			foreach (var requestHandler in requestHandlers)
 			{
-				var routeAttributes = requestHandler.GetCustomAttributes(typeof(RouteAttribute), true);
-				var routeUris = routeAttributes.Cast<RouteAttribute>().Select(x => Split(x.Uri));
-				foreach (var routeUri in routeUris)
-					_tree.AddNode(routeUri, requestHandler);
+				var routeAttributes = RouteHandlerDescriptor.GetRouteAttributes(requestHandler);
+				var routeFragmentSets = routeAttributes.Select(x => GetPathFragments(x.Uri));
+
+				foreach (var routeFragementSet in routeFragmentSets)
+					_tree.AddNode(routeFragementSet, requestHandler);
 			}
 		}
 
 		public Type FindRequestHandlerForPath(string relativePath)
 		{
-			var pathFragments = Split(relativePath);
+			var pathFragments = GetPathFragments(relativePath);
 			return FindNode(_tree, pathFragments);
 		}
 
 		private static Type FindNode(Node node, IList<string> pathFragments)
 		{
-			if (pathFragments.Count == 1 && pathFragments.First() == node.RootNode.RouteTemplateFragment)
+			if (IsRootMatch(node, pathFragments))
 				return node.RootNode.RequestHandler;
 
 			foreach (var childNode in node.ChildNodes)
 			{
-				if (IsMatch(childNode, pathFragments.First()))
-				{
-					var remainingPathFragments = pathFragments.Skip(1).ToList();
-					if (remainingPathFragments.Count == 0)
-						return childNode.RequestHandler;
+				if (IsMatch(childNode, pathFragments.First()) == false)
+					continue;
 
-					foreach (var grandChildNode in childNode.ChildNodes)
-					{
-						var requestHandler = Lookahead(grandChildNode, remainingPathFragments);
-						if (requestHandler != null)
-							return requestHandler;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		private static Type Lookahead(Node node, IList<string> pathFragments)
-		{
-			if (IsMatch(node, pathFragments.First()))
-			{
 				var remainingPathFragments = pathFragments.Skip(1).ToList();
 				if (remainingPathFragments.Count == 0)
-					return node.RequestHandler;
+					return childNode.RequestHandler;
 
-				foreach (var childNode in node.ChildNodes)
+				foreach (var grandChildNode in childNode.ChildNodes)
 				{
-					var requestHandler = Lookahead(childNode, remainingPathFragments);
+					var requestHandler = Lookahead(grandChildNode, remainingPathFragments);
 					if (requestHandler != null)
 						return requestHandler;
 				}
@@ -71,28 +53,52 @@ namespace Piccolo.Routing
 			return null;
 		}
 
+		private static Type Lookahead(Node node, IList<string> pathFragments)
+		{
+			if (IsMatch(node, pathFragments.First()) == false)
+				return null;
+
+			var remainingPathFragments = pathFragments.Skip(1).ToList();
+			if (remainingPathFragments.Count == 0)
+				return node.RequestHandler;
+
+			foreach (var childNode in node.ChildNodes)
+			{
+				var requestHandler = Lookahead(childNode, remainingPathFragments);
+				if (requestHandler != null)
+					return requestHandler;
+			}
+
+			return null;
+		}
+
+		private static bool IsRootMatch(Node node, ICollection<string> pathFragments)
+		{
+			return pathFragments.Count == 1 && pathFragments.First() == node.RootNode.RouteTemplateFragment;
+		}
+
 		private static bool IsMatch(Node node, string pathFragment)
 		{
-			// is static and matches
 			if (node.IsStaticRouteTemplateFragment && node.RouteTemplateFragment == pathFragment)
 				return true;
-
-			// ## the rest handles dynamic fragments
-
-			// property for fragment name does not exist
+			
 			Type propertyType;
 			if (node.RequestHandlerProperties.TryGetValue(node.RouteTemplateFragment, out propertyType) == false)
 				return false;
 
-			// try to parse fragment as int
+			return FragmentTypeMatchesPropertyType(pathFragment, propertyType);
+		}
+
+		private static bool FragmentTypeMatchesPropertyType(string pathFragment, Type propertyType)
+		{
 			int result;
 			return int.TryParse(pathFragment, out result);
 		}
 
-		private static IList<string> Split(string uri)
+		private static IList<string> GetPathFragments(string uri)
 		{
 			var fragments = uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
-			return fragments.Length == 0 ? new[] {""} : fragments;
+			return fragments.Length == 0 ? new[] {string.Empty} : fragments;
 		}
 
 		internal class Node
@@ -161,6 +167,14 @@ namespace Piccolo.Routing
 			{
 				return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == headFragment);
 			}
+		}
+	}
+
+	public static class RouteHandlerDescriptor
+	{
+		public static List<RouteAttribute> GetRouteAttributes(Type requestHandler)
+		{
+			return requestHandler.GetCustomAttributes(typeof(RouteAttribute), true).Cast<RouteAttribute>().ToList();
 		}
 	}
 }
