@@ -152,6 +152,27 @@ namespace Piccolo.UnitTests.Routing
 			}
 		}
 
+		[TestFixture]
+		public class when_initialising_route_handler_lookup_with_conflicting_routes
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				var requestHandlers = new List<Type> {typeof(Handler1), typeof(Handler2)};
+				Should.Throw<InvalidOperationException>(() => new RouteHandlerLookup(requestHandlers));
+			}
+
+			[Route("/route")]
+			public class Handler1 : IRequestHandler
+			{
+			}
+
+			[Route("/route")]
+			public class Handler2 : IRequestHandler
+			{
+			}
+		}
+
 		public abstract class given_route_handler_lookup_initialised_with_test_routes : given_route_handler_lookup
 		{
 			private static readonly IEnumerable<Type> _testRoutes = new List<Type>
@@ -204,19 +225,19 @@ namespace Piccolo.UnitTests.Routing
 		{
 		}
 
-		[Route("/{dynamicLevel1}")]
+		[Route("/{DynamicLevel1}")]
 		public class DynamicLevel1RequestHandler : IRequestHandler
 		{
 			public int DynamicLevel1 { get; set; }
 		}
 
-		[Route("/level-1/{dynamicLevel2}")]
+		[Route("/level-1/{DynamicLevel2}")]
 		public class DynamicLevel2RequestHandler : IRequestHandler
 		{
 			public int DynamicLevel2 { get; set; }
 		}
 
-		[Route("/{dynamicLevel1}/{dynamicLevel2}/{dynamicLevel3}")]
+		[Route("/{DynamicLevel1}/{DynamicLevel2}/{DynamicLevel3}")]
 		public class DynamicMultiLevelRequestHandler : IRequestHandler
 		{
 			public int DynamicLevel1 { get; set; }

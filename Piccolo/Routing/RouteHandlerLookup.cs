@@ -11,11 +11,15 @@ namespace Piccolo.Routing
 		public RouteHandlerLookup(IEnumerable<Type> requestHandlers)
 		{
 			_tree = new Node();
+			var knownRouteFragmentSets = new List<IList<string>>();
 
 			foreach (var requestHandler in requestHandlers)
 			{
 				var routeAttributes = RouteHandlerDescriptor.GetRouteAttributes(requestHandler);
-				var routeFragmentSets = routeAttributes.Select(x => GetPathFragments(x.Uri));
+				var routeFragmentSets = routeAttributes.Select(x => GetPathFragments(x.Uri)).ToList();
+
+				knownRouteFragmentSets.AddRange(routeFragmentSets);
+				ScanForUnreachableRouteHandlers(knownRouteFragmentSets, routeAttributes.First().Uri, requestHandler);
 
 				foreach (var routeFragementSet in routeFragmentSets)
 					_tree.AddNode(routeFragementSet, requestHandler);
@@ -81,7 +85,7 @@ namespace Piccolo.Routing
 		{
 			if (node.IsStaticRouteTemplateFragment && node.RouteTemplateFragment == pathFragment)
 				return true;
-			
+
 			Type propertyType;
 			if (node.RequestHandlerProperties.TryGetValue(node.RouteTemplateFragment, out propertyType) == false)
 				return false;
@@ -99,6 +103,16 @@ namespace Piccolo.Routing
 		{
 			var fragments = uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
 			return fragments.Length == 0 ? new[] {string.Empty} : fragments;
+		}
+
+		private static void ScanForUnreachableRouteHandlers(List<IList<string>> routeFragmentSets, string routeTemplate, Type requestHandler)
+		{
+			var distinctRouteFragmentSets = routeFragmentSets.GroupBy(x => x.Aggregate((a, b) => a + b)).Select(x => x.First());
+			if (distinctRouteFragmentSets.Count() != routeFragmentSets.Count())
+			{
+				string message = string.Format("Handler for route template [{0}] is already defined. Unable to register request handler [{1}] for lookup as it would be unreachable.", routeTemplate, requestHandler.FullName);
+				throw new InvalidOperationException(message);
+			}
 		}
 
 		internal class Node
