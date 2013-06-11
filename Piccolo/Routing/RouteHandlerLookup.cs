@@ -117,20 +117,18 @@ namespace Piccolo.Routing
 
 		internal class Node
 		{
-			private static readonly string[] _reservedPropertyNames = new[] {"output"};
-
-			internal Node() : this(string.Empty, new List<string>(), null, new Dictionary<string, Type>())
+			internal Node() : this(string.Empty, new List<string>(), null)
 			{
 				RootNode = this;
 			}
 
-			internal Node(string headFragment, IList<string> routeTemplateFragments, Type requestHandler, Dictionary<string, Type> requestHandlerProperties)
+			internal Node(string headFragment, IList<string> routeTemplateFragments, Type requestHandler)
 			{
 				ChildNodes = new List<Node>();
-				IsStaticRouteTemplateFragment = headFragment.Contains('{') == false;
-				RouteTemplateFragment = headFragment.Trim(new[] {'{', '}'});
+				IsStaticRouteTemplateFragment = IsStaticFragment(headFragment);
+				RouteTemplateFragment = RemoveDynamicFragmentTokens(headFragment);
 				RequestHandler = requestHandler;
-				RequestHandlerProperties = requestHandlerProperties;
+				RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
 
 				if (routeTemplateFragments.Any())
 					AddNode(routeTemplateFragments, requestHandler);
@@ -147,11 +145,10 @@ namespace Piccolo.Routing
 			{
 				var headFragment = routeTemplateFragments.First();
 
-				// matches root
-				if (headFragment == string.Empty)
+				if (IsRootNodeFragment(headFragment))
 				{
 					RequestHandler = requestHandler;
-					RequestHandlerProperties = GetRequestHandlerProperties(requestHandler);
+					RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
 					return;
 				}
 
@@ -159,36 +156,30 @@ namespace Piccolo.Routing
 				var remainingTemplateFragments = routeTemplateFragments.Skip(1).ToList();
 
 				if (childNode != null)
-				{
 					childNode.AddNode(remainingTemplateFragments, requestHandler);
-				}
 				else
-				{
-					var requestHandlerProperties = GetRequestHandlerProperties(requestHandler);
-					ChildNodes.Add(new Node(headFragment, remainingTemplateFragments, requestHandler, requestHandlerProperties));
-				}
+					ChildNodes.Add(new Node(headFragment, remainingTemplateFragments, requestHandler));
 			}
 
-			private static Dictionary<string, Type> GetRequestHandlerProperties(Type requestHandler)
+			private static bool IsRootNodeFragment(string headFragment)
 			{
-				var allProperties = requestHandler.GetProperties();
-				var allInputProperties = allProperties.Where(x => _reservedPropertyNames.Contains(x.Name.ToLower()) == false);
-
-				return allInputProperties.ToDictionary(x => x.Name.ToLower(), x => x.PropertyType);
+				return headFragment == string.Empty;
 			}
 
 			private Node FindChildNode(string headFragment)
 			{
 				return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == headFragment);
 			}
-		}
-	}
 
-	public static class RouteHandlerDescriptor
-	{
-		public static List<RouteAttribute> GetRouteAttributes(Type requestHandler)
-		{
-			return requestHandler.GetCustomAttributes(typeof(RouteAttribute), true).Cast<RouteAttribute>().ToList();
+			private static bool IsStaticFragment(string headFragment)
+			{
+				return headFragment.Contains('{') == false;
+			}
+
+			private static string RemoveDynamicFragmentTokens(string headFragment)
+			{
+				return headFragment.Trim(new[] {'{', '}'});
+			}
 		}
 	}
 }

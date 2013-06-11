@@ -44,6 +44,7 @@
     <Compile Include="Routing\RouteAttribute.cs" />
     <Compile Include="Routing\IRequestRouter.cs" />
     <Compile Include="Routing\RequestRouter.cs" />
+    <Compile Include="Routing\RouteHandlerDescriptor.cs" />
     <Compile Include="Routing\RouteHandlerLookup.cs" />
   </ItemGroup>
   <ItemGroup>
