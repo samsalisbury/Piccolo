@@ -14,6 +14,11 @@ namespace Piccolo.Abstractions
 			_context = context;
 		}
 
+		public string Verb
+		{
+			get { return _context.Request.HttpMethod; }
+		}
+
 		public Uri Uri
 		{
 			get { return _context.Request.Url; }

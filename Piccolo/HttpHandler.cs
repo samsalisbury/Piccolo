@@ -41,11 +41,11 @@ namespace Piccolo
 
 		public HttpResponseMessage HandleRequest(IRequestContextWrapper requestContext)
 		{
-			var requestHandlerType = Configuration.Router.GetRequestHandlerForUri(requestContext.Uri);
-			if (requestHandlerType == null)
+			var requestRouterResult = Configuration.Router.FindRequestHandler(requestContext.Verb, requestContext.Uri);
+			if (requestRouterResult.HandlerType == null)
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestHandlerType);
+			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestRouterResult.HandlerType);
 			// TODO: push properties
 
 			// TODO: handle other verbs

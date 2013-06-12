@@ -16,7 +16,8 @@ namespace Piccolo.Routing
 			foreach (var requestHandler in requestHandlers)
 			{
 				var routeAttributes = RouteHandlerDescriptor.GetRouteAttributes(requestHandler);
-				var routeFragmentSets = routeAttributes.Select(x => GetPathFragments(x.Uri)).ToList();
+				var routeHandlerVerb = RouteHandlerDescriptor.GetVerb(requestHandler);
+				var routeFragmentSets = routeAttributes.Select(x => BuildHandlerIdentifier(routeHandlerVerb, x.Uri)).ToList();
 
 				knownRouteFragmentSets.AddRange(routeFragmentSets);
 				ScanForUnreachableRouteHandlers(knownRouteFragmentSets, routeAttributes.First().Uri, requestHandler);
@@ -26,10 +27,10 @@ namespace Piccolo.Routing
 			}
 		}
 
-		public Type FindRequestHandlerForPath(string relativePath)
+		public Type FindRequestHandler(string verb, string relativePath)
 		{
-			var pathFragments = GetPathFragments(relativePath);
-			return FindNode(_tree, pathFragments);
+			var handlerIdentifier = BuildHandlerIdentifier(verb, relativePath);
+			return FindNode(_tree, handlerIdentifier);
 		}
 
 		private static Type FindNode(Node node, IList<string> pathFragments)
@@ -39,12 +40,7 @@ namespace Piccolo.Routing
 
 			foreach (var childNode in node.ChildNodes)
 			{
-				if (IsMatch(childNode, pathFragments.First()) == false)
-					continue;
-
 				var remainingPathFragments = pathFragments.Skip(1).ToList();
-				if (remainingPathFragments.Count == 0)
-					return childNode.RequestHandler;
 
 				foreach (var grandChildNode in childNode.ChildNodes)
 				{
@@ -99,10 +95,14 @@ namespace Piccolo.Routing
 			return int.TryParse(pathFragment, out result);
 		}
 
-		private static IList<string> GetPathFragments(string uri)
+		private static IList<string> BuildHandlerIdentifier(string verb, string uri)
 		{
-			var fragments = uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
-			return fragments.Length == 0 ? new[] {string.Empty} : fragments;
+			var uriFragments = uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
+
+			var handlerIdentifier = new List<string>(new[] {verb.ToLower()});
+			handlerIdentifier.AddRange(uriFragments);
+
+			return uriFragments.Length == 0 ? new List<string>(new[] {string.Empty}) : handlerIdentifier;
 		}
 
 		private static void ScanForUnreachableRouteHandlers(List<IList<string>> routeFragmentSets, string routeTemplate, Type requestHandler)

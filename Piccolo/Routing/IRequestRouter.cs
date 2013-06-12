@@ -4,6 +4,6 @@ namespace Piccolo.Routing
 {
 	public interface IRequestRouter
 	{
-		Type GetRequestHandlerForUri(Uri requestUri);
+		RequestRouterResult FindRequestHandler(string verb, Uri requestUri);
 	}
 }

@@ -11,38 +11,38 @@ namespace Piccolo.UnitTests.Routing
 	public class RequestRouterTests
 	{
 		[TestFixture]
-		public class when_getting_request_handler_for_uri_that_is_routed : given_request_router
+		public class when_searching_for_request_handler_for_uri_that_is_routed : given_request_router
 		{
-			private Type _requestHandler;
+			private RequestRouterResult _requestRouterResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RequestRouter.GetRequestHandlerForUri(new Uri("https://api.com/data/resources/1"));
+				_requestRouterResult = RequestRouter.FindRequestHandler("get", new Uri("https://api.com/data/resources/1"));
 			}
 
 			[Test]
 			public void it_should_return_handler_type()
 			{
-				_requestHandler.ShouldBe(typeof(TestRequestHandler));
+				_requestRouterResult.HandlerType.ShouldBe(typeof(TestRequestHandler));
 			}
 		}
 
 		[TestFixture]
-		public class when_getting_request_handler_for_uri_that_is_not_routed : given_request_router
+		public class when_searching_for_request_handler_for_uri_that_is_not_routed : given_request_router
 		{
-			private Type _requestHandler;
+			private RequestRouterResult _requestRouterResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RequestRouter.GetRequestHandlerForUri(new Uri("https://api.com/not-defined/1"));
+				_requestRouterResult = RequestRouter.FindRequestHandler("get", new Uri("https://api.com/not-defined/1"));
 			}
 
 			[Test]
 			public void it_should_return_null()
 			{
-				_requestHandler.ShouldBe(null);
+				_requestRouterResult.HandlerType.ShouldBe(null);
 			}
 		}
 

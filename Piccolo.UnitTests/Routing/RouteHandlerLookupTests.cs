@@ -16,7 +16,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/");
 			}
 
 			[Test]
@@ -34,7 +34,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/level-1");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/level-1");
 			}
 
 			[Test]
@@ -52,7 +52,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/level-1/level-2");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/level-1/level-2");
 			}
 
 			[Test]
@@ -70,7 +70,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/alternative-path");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/alternative-path");
 			}
 
 			[Test]
@@ -88,7 +88,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/1");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/1");
 			}
 
 			[Test]
@@ -106,7 +106,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/level-1/2");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/level-1/2");
 			}
 
 			[Test]
@@ -124,7 +124,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/1/2/3");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/1/2/3");
 			}
 
 			[Test]
@@ -142,7 +142,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath("/1/2/3/is-not-routed");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/1/2/3/is-not-routed");
 			}
 
 			[Test]
@@ -160,7 +160,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandlerForPath(string.Empty);
+				_requestHandler = RouteHandlerLookup.FindRequestHandler(string.Empty, string.Empty);
 			}
 
 			[Test]

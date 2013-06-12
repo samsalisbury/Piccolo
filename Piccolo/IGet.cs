@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace Piccolo
+﻿namespace Piccolo
 {
 	public interface IGet<TOutput> : IRequestHandler
 	{

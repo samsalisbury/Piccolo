@@ -44,6 +44,7 @@ namespace Piccolo.UnitTests
 			public void SetUp()
 			{
 				var requestContext = new Mock<IRequestContextWrapper>();
+				requestContext.SetupGet(x => x.Verb).Returns("GET");
 				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resource/1"));
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}
@@ -87,6 +88,7 @@ namespace Piccolo.UnitTests
 			public void SetUp()
 			{
 				var requestContext = new Mock<IRequestContextWrapper>();
+				requestContext.SetupGet(x => x.Verb).Returns("GET");
 				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/unhandled-resource"));
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}

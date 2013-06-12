@@ -23,5 +23,10 @@ namespace Piccolo.Routing
 
 			return allInputProperties.ToDictionary(x => x.Name.ToLower(), x => x.PropertyType);
 		}
+
+		public static string GetVerb(Type requestHandler)
+		{
+			return "get";
+		}
 	}
 }
