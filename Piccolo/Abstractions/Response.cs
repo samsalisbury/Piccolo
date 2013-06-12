@@ -7,9 +7,10 @@ namespace Piccolo.Abstractions
 	{
 		public class Success
 		{
-			public static HttpResponseMessage Ok(string content)
+			public static HttpResponseMessage<TOutput> Ok<TOutput>(TOutput content)
 			{
-				return new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(content)};
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(content.ToString())};
+				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 		}
 	}

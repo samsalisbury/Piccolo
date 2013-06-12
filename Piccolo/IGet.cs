@@ -2,8 +2,8 @@
 
 namespace Piccolo
 {
-	public interface IGet<out TOutput> : IRequestHandler
+	public interface IGet<TOutput> : IRequestHandler
 	{
-		HttpResponseMessage Get();
+		HttpResponseMessage<TOutput> Get();
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using Moq;
@@ -48,6 +49,18 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_return_status_200()
+			{
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.OK);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_ok()
+			{
+				_responseMessage.ReasonPhrase.ShouldBe("OK");
+			}
+
+			[Test]
 			public void it_should_return_content()
 			{
 				_responseMessage.Content.ReadAsStringAsync().Result.ShouldBe("TEST");
@@ -56,12 +69,44 @@ namespace Piccolo.UnitTests
 			[Route("/test-resource/{id}")]
 			public class GetTestResourceById : IGet<string>
 			{
-				public string Get()
+				public HttpResponseMessage<string> Get()
 				{
-					return "TEST";
+					return Response.Success.Ok("TEST");
 				}
 
 				public int Id { get; set; }
+			}
+		}
+
+		[TestFixture]
+		public class when_handling_request_to_unhandled_resource : given_http_handler
+		{
+			private HttpResponseMessage _responseMessage;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var requestContext = new Mock<IRequestContextWrapper>();
+				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/unhandled-resource"));
+				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
+			}
+
+			[Test]
+			public void it_should_return_status_404()
+			{
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_not_found()
+			{
+				_responseMessage.ReasonPhrase.ShouldBe("Not Found");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_responseMessage.Content.ShouldBe(null);
 			}
 		}
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Web;
@@ -28,7 +29,8 @@ namespace Piccolo
 		{
 			var responseMessage = HandleRequest(new RequestContextWrapper(context));
 
-			context.Response.Write(responseMessage.Content.ReadAsStringAsync().Result);
+			if (responseMessage.Content != null)
+				context.Response.Write(responseMessage.Content.ReadAsStringAsync().Result);
 		}
 
 		[ExcludeFromCodeCoverage]
@@ -40,7 +42,8 @@ namespace Piccolo
 		public HttpResponseMessage HandleRequest(IRequestContextWrapper requestContext)
 		{
 			var requestHandlerType = Configuration.Router.GetRequestHandlerForUri(requestContext.Uri);
-			// TODO: handle null type
+			if (requestHandlerType == null)
+				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestHandlerType);
 			// TODO: push properties
@@ -48,7 +51,7 @@ namespace Piccolo
 			// TODO: handle other verbs
 			// TODO: handle other return types
 
-			return ((IGet<string>)requestHandler).Get();
+			return ((IGet<string>)requestHandler).Get().Message;
 		}
 	}
 }

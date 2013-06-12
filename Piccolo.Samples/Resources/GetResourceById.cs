@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using Piccolo.Abstractions;
+﻿using Piccolo.Abstractions;
 using Piccolo.Routing;
 
 namespace Piccolo.Samples.Resources
@@ -7,7 +6,7 @@ namespace Piccolo.Samples.Resources
 	[Route("/")]
 	public class GetResourceById : IGet<string>
 	{
-		public HttpResponseMessage Get()
+		public HttpResponseMessage<string> Get()
 		{
 			return Response.Success.Ok("Adam West!");
 		}
