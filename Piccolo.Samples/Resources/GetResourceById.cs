@@ -3,7 +3,7 @@ using Piccolo.Routing;
 
 namespace Piccolo.Samples.Resources
 {
-	[Route("/")]
+	[Route("/resource")]
 	public class GetResourceById : IGet<string>
 	{
 		public HttpResponseMessage<string> Get()

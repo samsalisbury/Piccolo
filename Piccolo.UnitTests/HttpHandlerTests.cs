@@ -36,7 +36,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_handling_request_to_test_resource : given_http_handler
+		public class when_handling_get_request_to_test_resource : given_http_handler
 		{
 			private HttpResponseMessage _responseMessage;
 
@@ -45,7 +45,7 @@ namespace Piccolo.UnitTests
 			{
 				var requestContext = new Mock<IRequestContextWrapper>();
 				requestContext.SetupGet(x => x.Verb).Returns("GET");
-				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resource/1"));
+				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources/1"));
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}
 
@@ -67,7 +67,7 @@ namespace Piccolo.UnitTests
 				_responseMessage.Content.ReadAsStringAsync().Result.ShouldBe("TEST");
 			}
 
-			[Route("/test-resource/{id}")]
+			[Route("/test-resources/{id}")]
 			public class GetTestResourceById : IGet<string>
 			{
 				public HttpResponseMessage<string> Get()
@@ -76,6 +76,81 @@ namespace Piccolo.UnitTests
 				}
 
 				public int Id { get; set; }
+			}
+		}
+
+		[TestFixture]
+		public class when_handling_post_request_to_test_resource : given_http_handler
+		{
+			private HttpResponseMessage _responseMessage;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var requestContext = new Mock<IRequestContextWrapper>();
+				requestContext.SetupGet(x => x.Verb).Returns("POST");
+				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources"));
+				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
+			}
+
+			[Test]
+			public void it_should_return_status_201()
+			{
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.Created);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_created()
+			{
+				_responseMessage.ReasonPhrase.ShouldBe("Created");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_responseMessage.Content.ShouldBe(null);
+			}
+
+			[Route("/test-resources")]
+			public class CreateTestResource : IPost<string>
+			{
+				public HttpResponseMessage<dynamic> Post(string parameters)
+				{
+					return Response.Success.Created();
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_handling_request_with_unsupported_verb : given_http_handler
+		{
+			private HttpResponseMessage _responseMessage;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var requestContext = new Mock<IRequestContextWrapper>();
+				requestContext.SetupGet(x => x.Verb).Returns("FAKE!");
+				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/"));
+				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
+			}
+
+			[Test]
+			public void it_should_return_status_405()
+			{
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.MethodNotAllowed);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_method_not_allowed()
+			{
+				_responseMessage.ReasonPhrase.ShouldBe("Method Not Allowed");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_responseMessage.Content.ShouldBe(null);
 			}
 		}
 

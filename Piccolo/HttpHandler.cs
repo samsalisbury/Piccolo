@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -46,12 +47,22 @@ namespace Piccolo
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestRouterResult.HandlerType);
-			// TODO: push properties
 
-			// TODO: handle other verbs
-			// TODO: handle other return types
-
-			return ((IGet<string>)requestHandler).Get().Message;
+			if (requestContext.Verb.Equals("GET", StringComparison.InvariantCultureIgnoreCase))
+			{
+				// TODO: push properties
+				return ((IGet<string>)requestHandler).Get().Message;
+			}
+			else if (requestContext.Verb.Equals("POST", StringComparison.InvariantCultureIgnoreCase))
+			{
+				// TODO: push properties
+				// TODO: pass post params
+				return ((IPost<string>)requestHandler).Post("").Message;
+			}
+			else
+			{
+				return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
+			}
 		}
 	}
 }

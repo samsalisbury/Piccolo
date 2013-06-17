@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\GetResourceById.cs" />
+    <Compile Include="Resources\PostResource.cs" />
     <Compile Include="Startup\IoC\StartupTask.cs" />
     <Compile Include="Startup\IoC\SamplesRegistry.cs" />
     <Compile Include="Startup\IoC\StructureMapRequestHandlerFactory.cs" />

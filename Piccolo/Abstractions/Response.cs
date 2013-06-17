@@ -12,6 +12,12 @@ namespace Piccolo.Abstractions
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(content.ToString())};
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
+
+			public static HttpResponseMessage<dynamic> Created()
+			{
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.Created);
+				return new HttpResponseMessage<dynamic>(responseMessage);
+			}
 		}
 	}
 }

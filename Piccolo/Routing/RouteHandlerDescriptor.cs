@@ -26,7 +26,12 @@ namespace Piccolo.Routing
 
 		public static string GetVerb(Type requestHandler)
 		{
-			return "get";
+			var interfaces = requestHandler.GetInterfaces();
+
+			if (interfaces.Any(x => x.Name == typeof(IGet<>).Name))
+				return "get";
+			else
+				return "post";
 		}
 	}
 }
