@@ -54,6 +54,7 @@
     <Compile Include="Routing\RequestRouter.cs" />
     <Compile Include="Routing\RouteHandlerDescriptor.cs" />
     <Compile Include="Routing\RouteHandlerLookup.cs" />
+    <Compile Include="Routing\RouteHandlerLookupNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

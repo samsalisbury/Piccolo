@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Piccolo.Routing
 {
 	public class RouteHandlerLookup
 	{
-		private readonly Node _tree;
+		private readonly RouteHandlerLookupNode _tree;
 
 		public RouteHandlerLookup(IEnumerable<Type> requestHandlers)
 		{
-			_tree = new Node();
+			_tree = new RouteHandlerLookupNode();
 			var knownRouteFragmentSets = new List<IList<string>>();
 
 			foreach (var requestHandler in requestHandlers)
@@ -34,7 +33,7 @@ namespace Piccolo.Routing
 			return FindNode(_tree, handlerIdentifier);
 		}
 
-		private static Type FindNode(Node node, IList<string> pathFragments)
+		private static Type FindNode(RouteHandlerLookupNode node, IList<string> pathFragments)
 		{
 			foreach (var childNode in node.ChildNodes)
 			{
@@ -54,7 +53,7 @@ namespace Piccolo.Routing
 			return null;
 		}
 
-		private static Type Lookahead(Node node, IList<string> pathFragments)
+		private static Type Lookahead(RouteHandlerLookupNode node, IList<string> pathFragments)
 		{
 			if (IsMatch(node, pathFragments.First()) == false)
 				return null;
@@ -73,7 +72,7 @@ namespace Piccolo.Routing
 			return null;
 		}
 
-		private static bool IsMatch(Node node, string pathFragment)
+		private static bool IsMatch(RouteHandlerLookupNode node, string pathFragment)
 		{
 			if (node.IsStaticRouteTemplateFragment)
 				return node.RouteTemplateFragment == pathFragment;
@@ -114,81 +113,6 @@ namespace Piccolo.Routing
 			{
 				string message = string.Format("Handler for route template [{0}] is already defined. Unable to register request handler [{1}] for lookup as it would be unreachable.", routeTemplate, requestHandler.FullName);
 				throw new InvalidOperationException(message);
-			}
-		}
-
-		internal class Node
-		{
-			internal Node() : this(string.Empty, new List<string>(), null)
-			{
-			}
-
-			internal Node(string headFragment, IList<string> routeTemplateFragments, Type requestHandler)
-			{
-				ChildNodes = new List<Node>();
-				IsStaticRouteTemplateFragment = IsStaticFragment(headFragment);
-				RouteTemplateFragment = RemoveDynamicFragmentTokens(headFragment);
-
-				if (routeTemplateFragments.Count == 0) // is not a virtual fragment
-				{
-					RequestHandler = requestHandler;
-					RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
-				}
-			}
-
-			internal IList<Node> ChildNodes { get; set; }
-			internal bool IsStaticRouteTemplateFragment { get; set; }
-			internal string RouteTemplateFragment { get; set; }
-			internal Type RequestHandler { get; set; }
-			internal Dictionary<string, Type> RequestHandlerProperties { get; set; }
-
-			internal void AddNode(IList<string> routeTemplateFragments, Type requestHandler)
-			{
-				var headFragment = routeTemplateFragments.First();
-
-				var childNode = FindChildNode(headFragment);
-				var remainingTemplateFragments = routeTemplateFragments.Skip(1).ToList();
-
-				if (childNode != null)
-				{
-					if (remainingTemplateFragments.Count > 0)
-					{
-						childNode.AddNode(remainingTemplateFragments, requestHandler);
-					}
-					else
-					{
-						childNode.RequestHandler = requestHandler;
-						childNode.RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
-					}
-				}
-				else
-				{
-					var newChildNode = new Node(headFragment, remainingTemplateFragments, requestHandler);
-					ChildNodes.Add(newChildNode);
-					if (remainingTemplateFragments.Any())
-						newChildNode.AddNode(remainingTemplateFragments, requestHandler);
-				}
-			}
-
-			private Node FindChildNode(string headFragment)
-			{
-				return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == RemoveDynamicFragmentTokens(headFragment));
-			}
-
-			private static bool IsStaticFragment(string headFragment)
-			{
-				return headFragment.Contains('{') == false;
-			}
-
-			private static string RemoveDynamicFragmentTokens(string headFragment)
-			{
-				return headFragment.Trim(new[] {'{', '}'});
-			}
-
-			[ExcludeFromCodeCoverage]
-			public override string ToString()
-			{
-				return string.Format("[{0}], {1} child node(s)", RouteTemplateFragment, ChildNodes.Count);
 			}
 		}
 	}
