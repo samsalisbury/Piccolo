@@ -80,7 +80,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_handling_post_request_to_test_resource : given_http_handler
+		public class when_handling_put_request_to_test_resource : given_http_handler
 		{
 			private HttpResponseMessage _responseMessage;
 
@@ -88,7 +88,7 @@ namespace Piccolo.UnitTests
 			public void SetUp()
 			{
 				var requestContext = new Mock<IRequestContextWrapper>();
-				requestContext.SetupGet(x => x.Verb).Returns("POST");
+				requestContext.SetupGet(x => x.Verb).Returns("PUT");
 				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources"));
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}
@@ -112,12 +112,56 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources")]
-			public class CreateTestResource : IPost<string>
+			public class CreateTestResource : IPut<string>
 			{
-				public HttpResponseMessage<dynamic> Post(string parameters)
+				public HttpResponseMessage<dynamic> Put(string parameters)
 				{
 					return Response.Success.Created();
 				}
+			}
+		}
+
+		[TestFixture]
+		public class when_handling_post_request_to_test_resource : given_http_handler
+		{
+			private HttpResponseMessage _responseMessage;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var requestContext = new Mock<IRequestContextWrapper>();
+				requestContext.SetupGet(x => x.Verb).Returns("POST");
+				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources/1"));
+				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
+			}
+
+			[Test]
+			public void it_should_return_status_200()
+			{
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.OK);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_created()
+			{
+				_responseMessage.ReasonPhrase.ShouldBe("OK");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_responseMessage.Content.ShouldBe(null);
+			}
+
+			[Route("/test-resources/{Id}")]
+			public class UpdateTestResource : IPost<string>
+			{
+				public HttpResponseMessage<dynamic> Post(string parameters)
+				{
+					return Response.Success.Ok();
+				}
+
+				public int Id { get; set; }
 			}
 		}
 
@@ -136,15 +180,15 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_return_status_405()
+			public void it_should_return_status_404()
 			{
-				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.MethodNotAllowed);
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.NotFound);
 			}
 
 			[Test]
 			public void it_should_return_status_reason_method_not_allowed()
 			{
-				_responseMessage.ReasonPhrase.ShouldBe("Method Not Allowed");
+				_responseMessage.ReasonPhrase.ShouldBe("Not Found");
 			}
 
 			[Test]

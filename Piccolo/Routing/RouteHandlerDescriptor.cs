@@ -30,8 +30,12 @@ namespace Piccolo.Routing
 
 			if (interfaces.Any(x => x.Name == typeof(IGet<>).Name))
 				return "get";
-			else
+			if (interfaces.Any(x => x.Name == typeof(IPut<>).Name))
+				return "put";
+			if (interfaces.Any(x => x.Name == typeof(IPost<>).Name))
 				return "post";
+			else
+				throw new InvalidOperationException(string.Format("Request handler [{0}] does not implement any of the following supported interfaces: IGet<>, IPut<>, IPost<>.", requestHandler.FullName));
 		}
 	}
 }

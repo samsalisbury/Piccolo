@@ -35,11 +35,11 @@ namespace Piccolo.Routing
 
 		private static Type FindNode(Node node, IList<string> pathFragments)
 		{
-			if (IsRootMatch(node, pathFragments))
-				return node.RootNode.RequestHandler;
-
 			foreach (var childNode in node.ChildNodes)
 			{
+				if (IsMatch(childNode, pathFragments.First()) == false)
+					continue;
+
 				var remainingPathFragments = pathFragments.Skip(1).ToList();
 
 				foreach (var grandChildNode in childNode.ChildNodes)
@@ -72,14 +72,12 @@ namespace Piccolo.Routing
 			return null;
 		}
 
-		private static bool IsRootMatch(Node node, ICollection<string> pathFragments)
-		{
-			return pathFragments.Count == 1 && pathFragments.First() == node.RootNode.RouteTemplateFragment;
-		}
-
 		private static bool IsMatch(Node node, string pathFragment)
 		{
-			if (node.IsStaticRouteTemplateFragment && node.RouteTemplateFragment == pathFragment)
+			if (node.IsStaticRouteTemplateFragment)
+				return node.RouteTemplateFragment == pathFragment;
+
+			if (node.IsStaticRouteTemplateFragment == false && node.ChildNodes.Count > 0 && node.RequestHandlerProperties == null) // IsVirtualNode
 				return true;
 
 			Type propertyType;
@@ -91,18 +89,21 @@ namespace Piccolo.Routing
 
 		private static bool FragmentTypeMatchesPropertyType(string pathFragment, Type propertyType)
 		{
+			// TODO: Add support for other datatypes
 			int result;
 			return int.TryParse(pathFragment, out result);
 		}
 
 		private static IList<string> BuildHandlerIdentifier(string verb, string uri)
 		{
+			var baseHandlerIdentifier = new List<string>(new[] {verb.ToLower(), "_root_"});
+
 			var uriFragments = uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
+			if (uriFragments.Length == 0)
+				return baseHandlerIdentifier;
 
-			var handlerIdentifier = new List<string>(new[] {verb.ToLower()});
-			handlerIdentifier.AddRange(uriFragments);
-
-			return uriFragments.Length == 0 ? new List<string>(new[] {string.Empty}) : handlerIdentifier;
+			baseHandlerIdentifier.AddRange(uriFragments);
+			return baseHandlerIdentifier;
 		}
 
 		private static void ScanForUnreachableRouteHandlers(List<IList<string>> routeFragmentSets, string routeTemplate, Type requestHandler)
@@ -119,7 +120,6 @@ namespace Piccolo.Routing
 		{
 			internal Node() : this(string.Empty, new List<string>(), null)
 			{
-				RootNode = this;
 			}
 
 			internal Node(string headFragment, IList<string> routeTemplateFragments, Type requestHandler)
@@ -127,14 +127,14 @@ namespace Piccolo.Routing
 				ChildNodes = new List<Node>();
 				IsStaticRouteTemplateFragment = IsStaticFragment(headFragment);
 				RouteTemplateFragment = RemoveDynamicFragmentTokens(headFragment);
-				RequestHandler = requestHandler;
-				RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
 
-				if (routeTemplateFragments.Any())
-					AddNode(routeTemplateFragments, requestHandler);
+				if (routeTemplateFragments.Count == 0) // is not a virtual fragment
+				{
+					RequestHandler = requestHandler;
+					RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
+				}
 			}
 
-			internal Node RootNode { get; set; }
 			internal IList<Node> ChildNodes { get; set; }
 			internal bool IsStaticRouteTemplateFragment { get; set; }
 			internal string RouteTemplateFragment { get; set; }
@@ -145,30 +145,33 @@ namespace Piccolo.Routing
 			{
 				var headFragment = routeTemplateFragments.First();
 
-				if (IsRootNodeFragment(headFragment))
-				{
-					RequestHandler = requestHandler;
-					RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
-					return;
-				}
-
 				var childNode = FindChildNode(headFragment);
 				var remainingTemplateFragments = routeTemplateFragments.Skip(1).ToList();
 
 				if (childNode != null)
-					childNode.AddNode(remainingTemplateFragments, requestHandler);
+				{
+					if (remainingTemplateFragments.Count > 0)
+					{
+						childNode.AddNode(remainingTemplateFragments, requestHandler);
+					}
+					else
+					{
+						childNode.RequestHandler = requestHandler;
+						childNode.RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
+					}
+				}
 				else
-					ChildNodes.Add(new Node(headFragment, remainingTemplateFragments, requestHandler));
-			}
-
-			private static bool IsRootNodeFragment(string headFragment)
-			{
-				return headFragment == string.Empty;
+				{
+					var newChildNode = new Node(headFragment, remainingTemplateFragments, requestHandler);
+					ChildNodes.Add(newChildNode);
+					if (remainingTemplateFragments.Any())
+						newChildNode.AddNode(remainingTemplateFragments, requestHandler);
+				}
 			}
 
 			private Node FindChildNode(string headFragment)
 			{
-				return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == headFragment);
+				return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == RemoveDynamicFragmentTokens(headFragment));
 			}
 
 			private static bool IsStaticFragment(string headFragment)
@@ -179,6 +182,11 @@ namespace Piccolo.Routing
 			private static string RemoveDynamicFragmentTokens(string headFragment)
 			{
 				return headFragment.Trim(new[] {'{', '}'});
+			}
+
+			public override string ToString()
+			{
+				return string.Format("[{0}], {1} child node(s)", RouteTemplateFragment, ChildNodes.Count);
 			}
 		}
 	}

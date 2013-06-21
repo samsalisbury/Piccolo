@@ -39,6 +39,7 @@
     <Compile Include="Configuration\Bootstrapper.cs" />
     <Compile Include="Configuration\HttpHandlerConfiguration.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
+    <Compile Include="IPut.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HttpResponseMessage.cs" />
     <Compile Include="IGet.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Routing\RouteHandlerLookup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>

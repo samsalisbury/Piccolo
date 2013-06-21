@@ -48,10 +48,19 @@ namespace Piccolo
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestRouterResult.HandlerType);
 
+			// TODO: refactor the routing layer handles root routes (currently can't have more that one handler+verb combination)
+			// TODO: implement handler property verification
+			// TODO: refactor this mess
 			if (requestContext.Verb.Equals("GET", StringComparison.InvariantCultureIgnoreCase))
 			{
 				// TODO: push properties
 				return ((IGet<string>)requestHandler).Get().Message;
+			}
+			else if (requestContext.Verb.Equals("PUT", StringComparison.InvariantCultureIgnoreCase))
+			{
+				// TODO: push properties
+				// TODO: pass post params
+				return ((IPut<string>)requestHandler).Put("").Message;
 			}
 			else if (requestContext.Verb.Equals("POST", StringComparison.InvariantCultureIgnoreCase))
 			{
@@ -61,7 +70,7 @@ namespace Piccolo
 			}
 			else
 			{
-				return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
+				return new HttpResponseMessage(HttpStatusCode.NotFound);
 			}
 		}
 	}

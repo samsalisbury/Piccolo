@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using NUnit.Framework;
 using Piccolo.Routing;
 using Shouldly;
@@ -207,36 +208,63 @@ namespace Piccolo.UnitTests.Routing
 		#region Test Classes
 
 		[Route("/")]
-		public class RootRequestHandler : IRequestHandler
+		public class RootRequestHandler : IGet<string>
 		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
 		}
 
 		[Route("/level-1")]
-		public class StaticLevel1RequestHandler : IRequestHandler
+		public class StaticLevel1RequestHandler : IGet<string>
 		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
 		}
 
 		[Route("/level-1/level-2")]
 		[Route("/alternative-path")]
-		public class StaticLevel2RequestHandler : IRequestHandler
+		public class StaticLevel2RequestHandler : IGet<string>
 		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
 		}
 
 		[Route("/{DynamicLevel1}")]
-		public class DynamicLevel1RequestHandler : IRequestHandler
+		public class DynamicLevel1RequestHandler : IGet<string>
 		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
 			public int DynamicLevel1 { get; set; }
 		}
 
 		[Route("/level-1/{DynamicLevel2}")]
-		public class DynamicLevel2RequestHandler : IRequestHandler
+		public class DynamicLevel2RequestHandler : IGet<string>
 		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
 			public int DynamicLevel2 { get; set; }
 		}
 
 		[Route("/{DynamicLevel1}/{DynamicLevel2}/{DynamicLevel3}")]
-		public class DynamicMultiLevelRequestHandler : IRequestHandler
+		public class DynamicMultiLevelRequestHandler : IGet<string>
 		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
 			public int DynamicLevel1 { get; set; }
 			public int DynamicLevel2 { get; set; }
 			public int DynamicLevel3 { get; set; }
