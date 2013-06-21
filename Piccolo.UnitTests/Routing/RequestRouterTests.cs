@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net.Http;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Routing;
@@ -58,20 +57,5 @@ namespace Piccolo.UnitTests.Routing
 				RequestRouter = new RequestRouter(httpHandlerConfiguration);
 			}
 		}
-
-		#region Test Classes
-
-		[Route("/data/resources/{id}")]
-		public class TestRequestHandler : IGet<string>
-		{
-			public HttpResponseMessage<string> Get()
-			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
-			}
-
-			public int Id { get; set; }
-		}
-
-		#endregion
 	}
 }

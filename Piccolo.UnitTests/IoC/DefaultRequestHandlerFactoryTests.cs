@@ -12,7 +12,7 @@ namespace Piccolo.UnitTests.IoC
 			[Test]
 			public void it_should_return_instance()
 			{
-				HandlerFactory.CreateInstance(typeof(EmptyTestRequestHandler)).ShouldBeTypeOf<EmptyTestRequestHandler>();
+				HandlerFactory.CreateInstance(typeof(TestRequestHandler)).ShouldBeTypeOf<TestRequestHandler>();
 			}
 		}
 
