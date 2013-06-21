@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using NUnit.Framework;
 using Piccolo.Routing;
@@ -136,7 +137,7 @@ namespace Piccolo.UnitTests.Routing
 		}
 
 		[TestFixture]
-		public class when_searching_for_request_handler_that_matches_XXXXXXXX : given_route_handler_lookup_initialised_with_test_routes
+		public class when_searching_for_request_handler_that_matches_dynamic_multi_level_path_that_is_not_routed : given_route_handler_lookup_initialised_with_test_routes
 		{
 			private Type _requestHandler;
 
@@ -144,6 +145,24 @@ namespace Piccolo.UnitTests.Routing
 			public void SetUp()
 			{
 				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/1/2/3/is-not-routed");
+			}
+
+			[Test]
+			public void it_should_return_null()
+			{
+				_requestHandler.ShouldBe(null);
+			}
+		}
+
+		[TestFixture]
+		public class when_searching_for_request_handler_that_does_not_match_parameter_name : given_route_handler_lookup_initialised_with_test_routes
+		{
+			private Type _requestHandler;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/type-mismatch/1");
 			}
 
 			[Test]
@@ -179,6 +198,7 @@ namespace Piccolo.UnitTests.Routing
 					typeof(StaticLevel1RequestHandler),
 					typeof(StaticLevel2RequestHandler),
 					typeof(DynamicLevel1RequestHandler),
+					typeof(DynamicLevel1RequestHandlerWithInputParameterNameMismatch),
 					typeof(DynamicLevel2RequestHandler),
 					typeof(DynamicMultiLevelRequestHandler)
 				};
@@ -210,6 +230,7 @@ namespace Piccolo.UnitTests.Routing
 		[Route("/")]
 		public class RootRequestHandler : IGet<string>
 		{
+			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
 				return new HttpResponseMessage<string>(new HttpResponseMessage());
@@ -219,6 +240,7 @@ namespace Piccolo.UnitTests.Routing
 		[Route("/level-1")]
 		public class StaticLevel1RequestHandler : IGet<string>
 		{
+			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
 				return new HttpResponseMessage<string>(new HttpResponseMessage());
@@ -229,6 +251,7 @@ namespace Piccolo.UnitTests.Routing
 		[Route("/alternative-path")]
 		public class StaticLevel2RequestHandler : IGet<string>
 		{
+			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
 				return new HttpResponseMessage<string>(new HttpResponseMessage());
@@ -238,6 +261,7 @@ namespace Piccolo.UnitTests.Routing
 		[Route("/{DynamicLevel1}")]
 		public class DynamicLevel1RequestHandler : IGet<string>
 		{
+			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
 				return new HttpResponseMessage<string>(new HttpResponseMessage());
@@ -246,9 +270,22 @@ namespace Piccolo.UnitTests.Routing
 			public int DynamicLevel1 { get; set; }
 		}
 
+		[Route("/type-mismatch/{DynamicLevel1}")]
+		public class DynamicLevel1RequestHandlerWithInputParameterNameMismatch : IGet<string>
+		{
+			[ExcludeFromCodeCoverage]
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
+			public string NameDoesNotMatch { get; set; }
+		}
+
 		[Route("/level-1/{DynamicLevel2}")]
 		public class DynamicLevel2RequestHandler : IGet<string>
 		{
+			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
 				return new HttpResponseMessage<string>(new HttpResponseMessage());
@@ -260,6 +297,7 @@ namespace Piccolo.UnitTests.Routing
 		[Route("/{DynamicLevel1}/{DynamicLevel2}/{DynamicLevel3}")]
 		public class DynamicMultiLevelRequestHandler : IGet<string>
 		{
+			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
 				return new HttpResponseMessage<string>(new HttpResponseMessage());

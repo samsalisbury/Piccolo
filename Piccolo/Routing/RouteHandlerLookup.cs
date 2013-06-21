@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Piccolo.Routing
@@ -184,6 +185,7 @@ namespace Piccolo.Routing
 				return headFragment.Trim(new[] {'{', '}'});
 			}
 
+			[ExcludeFromCodeCoverage]
 			public override string ToString()
 			{
 				return string.Format("[{0}], {1} child node(s)", RouteTemplateFragment, ChildNodes.Count);

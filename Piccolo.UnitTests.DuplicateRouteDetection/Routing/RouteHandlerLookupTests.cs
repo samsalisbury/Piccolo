@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Piccolo.Routing;
 using Shouldly;
@@ -19,13 +20,23 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 			}
 
 			[Route("/route")]
-			public class Handler1 : IRequestHandler
+			public class Handler1 : IGet<string>
 			{
+				[ExcludeFromCodeCoverage]
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
 			}
 
 			[Route("/route")]
-			public class Handler2 : IRequestHandler
+			public class Handler2 : IGet<string>
 			{
+				[ExcludeFromCodeCoverage]
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
 			}
 		}
 	}
