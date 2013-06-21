@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Piccolo.Routing
 {
+	[DebuggerDisplay("[{RouteTemplateFragment}], {ChildNodes.Count} child node(s)")]
 	internal class RouteHandlerLookupNode
 	{
 		internal RouteHandlerLookupNode() : this(String.Empty, new List<string>(), null)
@@ -71,12 +72,6 @@ namespace Piccolo.Routing
 		private static string RemoveDynamicFragmentTokens(string headFragment)
 		{
 			return headFragment.Trim(new[] {'{', '}'});
-		}
-
-		[ExcludeFromCodeCoverage]
-		public override string ToString()
-		{
-			return String.Format("[{0}], {1} child node(s)", RouteTemplateFragment, ChildNodes.Count);
 		}
 	}
 }
