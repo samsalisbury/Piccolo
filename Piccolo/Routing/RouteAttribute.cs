@@ -5,11 +5,11 @@ namespace Piccolo.Routing
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 	public class RouteAttribute : Attribute
 	{
-		public RouteAttribute(string uri)
+		public RouteAttribute(string template)
 		{
-			Uri = uri;
+			Template = template;
 		}
 
-		public string Uri { get; private set; }
+		public string Template { get; private set; }
 	}
 }

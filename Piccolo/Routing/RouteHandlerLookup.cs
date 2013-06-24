@@ -17,10 +17,10 @@ namespace Piccolo.Routing
 			{
 				var routeAttributes = RouteHandlerDescriptor.GetRouteAttributes(requestHandler);
 				var routeHandlerVerb = RouteHandlerDescriptor.GetVerb(requestHandler);
-				var routeFragmentSets = routeAttributes.Select(x => BuildHandlerIdentifier(routeHandlerVerb, x.Uri)).ToList();
+				var routeFragmentSets = routeAttributes.Select(x => BuildHandlerIdentifier(routeHandlerVerb, x.Template)).ToList();
 
 				knownRouteFragmentSets.AddRange(routeFragmentSets);
-				ScanForUnreachableRouteHandlers(knownRouteFragmentSets, routeAttributes.First().Uri, requestHandler);
+				ScanForUnreachableRouteHandlers(knownRouteFragmentSets, routeAttributes.First().Template, requestHandler);
 
 				foreach (var routeFragementSet in routeFragmentSets)
 					_tree.AddNode(routeFragementSet, requestHandler);
