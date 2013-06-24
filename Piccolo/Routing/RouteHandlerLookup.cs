@@ -15,7 +15,7 @@ namespace Piccolo.Routing
 
 		public Type FindRequestHandler(string verb, string relativePath)
 		{
-			var handlerIdentifier = BuildHandlerIdentifier(verb, relativePath);
+			var handlerIdentifier = RouteHandlerIdentifierBuiler.BuildRouteHandlerIdentifier(verb, relativePath);
 			return FindNode(_tree, handlerIdentifier);
 		}
 
@@ -78,18 +78,6 @@ namespace Piccolo.Routing
 			// TODO: Add support for other datatypes
 			int result;
 			return int.TryParse(pathFragment, out result);
-		}
-
-		private static IList<string> BuildHandlerIdentifier(string verb, string uri)
-		{
-			var baseHandlerIdentifier = new List<string>(new[] { verb.ToLower(), "_root_" });
-
-			var uriFragments = uri.ToLower().Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-			if (uriFragments.Length == 0)
-				return baseHandlerIdentifier;
-
-			baseHandlerIdentifier.AddRange(uriFragments);
-			return baseHandlerIdentifier;
 		}
 	}
 }

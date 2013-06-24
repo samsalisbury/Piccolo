@@ -6,7 +6,7 @@ namespace Piccolo.Routing
 {
 	internal static class RouteHandlerLookupTreeBuiler
 	{
-		public static RouteHandlerLookupNode BuildRouteHandlerLookupTree(IEnumerable<Type> requestHandlers)
+		internal static RouteHandlerLookupNode BuildRouteHandlerLookupTree(IEnumerable<Type> requestHandlers)
 		{
 			var tree = new RouteHandlerLookupNode();
 			var knownRouteFragmentSets = new List<IList<string>>();
@@ -15,7 +15,7 @@ namespace Piccolo.Routing
 			{
 				var routeAttributes = RouteHandlerDescriptor.GetRouteAttributes(requestHandler);
 				var routeHandlerVerb = RouteHandlerDescriptor.GetVerb(requestHandler);
-				var routeFragmentSets = routeAttributes.Select(x => BuildHandlerIdentifier(routeHandlerVerb, x.Template)).ToList();
+				var routeFragmentSets = routeAttributes.Select(x => RouteHandlerIdentifierBuiler.BuildRouteHandlerIdentifier(routeHandlerVerb, x.Template)).ToList();
 
 				knownRouteFragmentSets.AddRange(routeFragmentSets);
 				ScanForUnreachableRouteHandlers(knownRouteFragmentSets, routeAttributes.First().Template, requestHandler);
@@ -25,18 +25,6 @@ namespace Piccolo.Routing
 			}
 
 			return tree;
-		}
-
-		private static IList<string> BuildHandlerIdentifier(string verb, string uri)
-		{
-			var baseHandlerIdentifier = new List<string>(new[] {verb.ToLower(), "_root_"});
-
-			var uriFragments = uri.ToLower().Split(new[] {"/"}, StringSplitOptions.RemoveEmptyEntries);
-			if (uriFragments.Length == 0)
-				return baseHandlerIdentifier;
-
-			baseHandlerIdentifier.AddRange(uriFragments);
-			return baseHandlerIdentifier;
 		}
 
 		private static void ScanForUnreachableRouteHandlers(List<IList<string>> routeFragmentSets, string routeTemplate, Type requestHandler)
