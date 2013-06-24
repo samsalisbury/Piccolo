@@ -19,7 +19,8 @@ namespace Piccolo
 			{
 				{"GET", new GetRequestHandlerInvoker()},
 				{"PUT", new PutRequestHandlerInvoker()},
-				{"POST", new PostRequestHandlerInvoker()}
+				{"POST", new PostRequestHandlerInvoker()},
+				{"DELETE", new DeleteRequestHandlerInvoker()}
 			};
 
 		[ExcludeFromCodeCoverage]

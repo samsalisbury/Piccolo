@@ -7,12 +7,6 @@ namespace Piccolo
 	{
 		public class Success
 		{
-			public static HttpResponseMessage<dynamic> Ok()
-			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.OK);
-				return new HttpResponseMessage<dynamic>(responseMessage);
-			}
-
 			public static HttpResponseMessage<TOutput> Ok<TOutput>(TOutput content)
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(content.ToString())};
@@ -22,6 +16,12 @@ namespace Piccolo
 			public static HttpResponseMessage<dynamic> Created()
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.Created);
+				return new HttpResponseMessage<dynamic>(responseMessage);
+			}
+
+			public static HttpResponseMessage<dynamic> NoContent()
+			{
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.NoContent);
 				return new HttpResponseMessage<dynamic>(responseMessage);
 			}
 		}

@@ -10,7 +10,8 @@ namespace Piccolo.Routing
 			{
 				{typeof(IGet<>).Name, "get"},
 				{typeof(IPut<>).Name, "put"},
-				{typeof(IPost<>).Name, "post"}
+				{typeof(IPost<>).Name, "post"},
+				{typeof(IDelete).Name, "delete"}
 			};
 
 		public static List<RouteAttribute> GetRouteAttributes(Type requestHandler)

@@ -135,15 +135,15 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_return_status_200()
+			public void it_should_return_status_204()
 			{
-				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.OK);
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 			}
 
 			[Test]
-			public void it_should_return_status_reason_created()
+			public void it_should_return_status_reason_no_content()
 			{
-				_responseMessage.ReasonPhrase.ShouldBe("OK");
+				_responseMessage.ReasonPhrase.ShouldBe("No Content");
 			}
 
 			[Test]
@@ -157,7 +157,51 @@ namespace Piccolo.UnitTests
 			{
 				public HttpResponseMessage<dynamic> Post(string parameters)
 				{
-					return Response.Success.Ok();
+					return Response.Success.NoContent();
+				}
+
+				public int Id { get; set; }
+			}
+		}
+
+		[TestFixture]
+		public class when_handling_delete_request_to_test_resource : given_http_handler
+		{
+			private HttpResponseMessage _responseMessage;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var requestContext = new Mock<IRequestContextWrapper>();
+				requestContext.SetupGet(x => x.Verb).Returns("DELETE");
+				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources/1"));
+				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
+			}
+
+			[Test]
+			public void it_should_return_status_204()
+			{
+				_responseMessage.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_no_content()
+			{
+				_responseMessage.ReasonPhrase.ShouldBe("No Content");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_responseMessage.Content.ShouldBe(null);
+			}
+
+			[Route("/test-resources/{Id}")]
+			public class UpdateTestResource : IDelete
+			{
+				public HttpResponseMessage<dynamic> Delete()
+				{
+					return Response.Success.NoContent();
 				}
 
 				public int Id { get; set; }
