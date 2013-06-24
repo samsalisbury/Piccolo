@@ -49,6 +49,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\DeleteResource.cs" />
     <Compile Include="Resources\CreateResource.cs" />
     <Compile Include="Resources\GetResourceById.cs" />
     <Compile Include="Resources\UpdateResource.cs" />
