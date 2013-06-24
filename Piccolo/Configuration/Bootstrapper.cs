@@ -24,9 +24,15 @@ namespace Piccolo.Configuration
 			ApplyDefaultConfiguration(configuration);
 
 			if (applyCustomConfiguration)
-				ApplyCustomConfiguration(configuration, _assembly);
+				RunStartupTasks(configuration, _assembly);
 
 			return configuration;
+		}
+
+		private static void DiscoverRequestHandlers(HttpHandlerConfiguration configuration, Assembly assembly)
+		{
+			var requestHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IRequestHandler)));
+			configuration.RequestHandlers = new ReadOnlyCollection<Type>(requestHandlers.ToList());
 		}
 
 		private static void ApplyDefaultConfiguration(HttpHandlerConfiguration configuration)
@@ -35,13 +41,7 @@ namespace Piccolo.Configuration
 			configuration.Router = new RequestRouter(configuration);
 		}
 
-		private void DiscoverRequestHandlers(HttpHandlerConfiguration configuration, Assembly assembly)
-		{
-			var requestHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IRequestHandler)));
-			configuration.RequestHandlers = new ReadOnlyCollection<Type>(requestHandlers.ToList());
-		}
-
-		private static void ApplyCustomConfiguration(HttpHandlerConfiguration configuration, Assembly assembly)
+		private static void RunStartupTasks(HttpHandlerConfiguration configuration, Assembly assembly)
 		{
 			var bootstrapperTypes = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IStartupTask)));
 
