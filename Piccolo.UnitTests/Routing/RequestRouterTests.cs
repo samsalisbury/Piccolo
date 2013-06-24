@@ -13,36 +13,36 @@ namespace Piccolo.UnitTests.Routing
 		[TestFixture]
 		public class when_searching_for_request_handler_for_uri_that_is_routed : given_request_router
 		{
-			private RequestRouterResult _requestRouterResult;
+			private Type _requestHandlerType;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestRouterResult = RequestRouter.FindRequestHandler("get", new Uri("https://api.com/data/resources/1"));
+				_requestHandlerType = RequestRouter.FindRequestHandler("get", new Uri("https://api.com/data/resources/1"));
 			}
 
 			[Test]
 			public void it_should_return_handler_type()
 			{
-				_requestRouterResult.HandlerType.ShouldBe(typeof(TestRequestHandler));
+				_requestHandlerType.ShouldBe(typeof(TestRequestHandler));
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_for_uri_that_is_not_routed : given_request_router
 		{
-			private RequestRouterResult _requestRouterResult;
+			private Type _requestHandlerType;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestRouterResult = RequestRouter.FindRequestHandler("get", new Uri("https://api.com/not-defined/1"));
+				_requestHandlerType = RequestRouter.FindRequestHandler("get", new Uri("https://api.com/not-defined/1"));
 			}
 
 			[Test]
 			public void it_should_return_null()
 			{
-				_requestRouterResult.HandlerType.ShouldBe(null);
+				_requestHandlerType.ShouldBe(null);
 			}
 		}
 

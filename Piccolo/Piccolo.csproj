@@ -48,7 +48,6 @@
     <Compile Include="IPost.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Routing\RequestRouterResult.cs" />
     <Compile Include="Routing\RouteAttribute.cs" />
     <Compile Include="Routing\IRequestRouter.cs" />
     <Compile Include="Routing\RequestRouter.cs" />

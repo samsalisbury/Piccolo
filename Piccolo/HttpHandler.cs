@@ -43,10 +43,10 @@ namespace Piccolo
 		public HttpResponseMessage HandleRequest(IRequestContextWrapper requestContext)
 		{
 			var requestRouterResult = Configuration.Router.FindRequestHandler(requestContext.Verb, requestContext.Uri);
-			if (requestRouterResult.HandlerType == null)
+			if (requestRouterResult == null)
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestRouterResult.HandlerType);
+			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestRouterResult);
 
 			// TODO: refactor the routing layer handles root routes (currently can't have more that one handler+verb combination)
 			// TODO: implement handler property verification
