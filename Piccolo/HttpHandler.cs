@@ -40,6 +40,8 @@ namespace Piccolo
 		{
 			var responseMessage = HandleRequest(new RequestContextWrapper(context));
 
+			context.Response.StatusCode = (int)responseMessage.StatusCode;
+			context.Response.StatusDescription = responseMessage.ReasonPhrase;
 			if (responseMessage.Content != null)
 				context.Response.Write(responseMessage.Content.ReadAsStringAsync().Result);
 		}
