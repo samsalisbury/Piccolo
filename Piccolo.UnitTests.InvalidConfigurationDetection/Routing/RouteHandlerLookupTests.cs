@@ -39,5 +39,21 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 				}
 			}
 		}
+
+		[TestFixture]
+		public class when_initialising_route_handler_lookup_with_route_handler_that_does_not_implement_correct_interface
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				var requestHandlers = new List<Type> {typeof(Handler)};
+				Should.Throw<InvalidOperationException>(() => new RouteHandlerLookup(requestHandlers));
+			}
+
+			[Route("/")]
+			public class Handler : IRequestHandler
+			{
+			}
+		}
 	}
 }
