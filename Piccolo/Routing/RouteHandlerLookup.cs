@@ -67,17 +67,7 @@ namespace Piccolo.Routing
 				return true;
 
 			Type propertyType;
-			if (node.RequestHandlerProperties.TryGetValue(node.RouteTemplateFragment, out propertyType) == false)
-				return false;
-
-			return FragmentTypeMatchesPropertyType(pathFragment, propertyType);
-		}
-
-		private static bool FragmentTypeMatchesPropertyType(string pathFragment, Type propertyType)
-		{
-			// TODO: Add support for other datatypes
-			int result;
-			return int.TryParse(pathFragment, out result);
+			return node.RequestHandlerProperties.TryGetValue(node.RouteTemplateFragment, out propertyType);
 		}
 	}
 }

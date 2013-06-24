@@ -18,10 +18,12 @@ namespace Piccolo.Routing
 			IsStaticRouteTemplateFragment = IsStaticFragment(headFragment);
 			IsVirtualRouteTemplateFragment = IsVirtualFragment(routeTemplateFragments);
 			RouteTemplateFragment = RemoveDynamicFragmentTokens(headFragment);
-			RequestHandler = requestHandler;
 
 			if (IsVirtualRouteTemplateFragment == false)
+			{
 				RequestHandlerProperties = RouteHandlerDescriptor.GetRequestHandlerProperties(requestHandler);
+				RequestHandler = requestHandler;
+			}
 		}
 
 		internal IList<RouteHandlerLookupNode> ChildNodes { get; set; }

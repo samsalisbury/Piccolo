@@ -83,20 +83,56 @@ namespace Piccolo.UnitTests.Routing
 		}
 
 		[TestFixture]
-		public class when_searching_for_request_handler_that_matches_dynamic_level1_path : given_route_handler_lookup_initialised_with_test_routes
+		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_int32_property : given_route_handler_lookup_initialised_with_test_routes
 		{
 			private Type _requestHandler;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/1");
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1Int32/1");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(DynamicLevel1RequestHandler));
+				_requestHandler.ShouldBe(typeof(DynamicLevel1Int32RequestHandler));
+			}
+		}
+
+		[TestFixture]
+		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_int64_property : given_route_handler_lookup_initialised_with_test_routes
+		{
+			private Type _requestHandler;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1Int64/1");
+			}
+
+			[Test]
+			public void it_should_return_request_handler()
+			{
+				_requestHandler.ShouldBe(typeof(DynamicLevel1Int64RequestHandler));
+			}
+		}
+
+		[TestFixture]
+		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_string_property : given_route_handler_lookup_initialised_with_test_routes
+		{
+			private Type _requestHandler;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1String/text");
+			}
+
+			[Test]
+			public void it_should_return_request_handler()
+			{
+				_requestHandler.ShouldBe(typeof(DynamicLevel1StringRequestHandler));
 			}
 		}
 
@@ -197,7 +233,9 @@ namespace Piccolo.UnitTests.Routing
 					typeof(RootRequestHandler),
 					typeof(StaticLevel1RequestHandler),
 					typeof(StaticLevel2RequestHandler),
-					typeof(DynamicLevel1RequestHandler),
+					typeof(DynamicLevel1Int32RequestHandler),
+					typeof(DynamicLevel1Int64RequestHandler),
+					typeof(DynamicLevel1StringRequestHandler),
 					typeof(DynamicLevel1RequestHandlerWithInputParameterNameMismatch),
 					typeof(DynamicLevel2RequestHandler),
 					typeof(DynamicMultiLevelRequestHandler)
@@ -258,8 +296,8 @@ namespace Piccolo.UnitTests.Routing
 			}
 		}
 
-		[Route("/{DynamicLevel1}")]
-		public class DynamicLevel1RequestHandler : IGet<string>
+		[Route("/DynamicLevel1Int32/{Value}")]
+		public class DynamicLevel1Int32RequestHandler : IGet<string>
 		{
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
@@ -267,7 +305,31 @@ namespace Piccolo.UnitTests.Routing
 				return new HttpResponseMessage<string>(new HttpResponseMessage());
 			}
 
-			public int DynamicLevel1 { get; set; }
+			public Int32 Value { get; set; }
+		}
+
+		[Route("/DynamicLevel1Int64/{Value}")]
+		public class DynamicLevel1Int64RequestHandler : IGet<string>
+		{
+			[ExcludeFromCodeCoverage]
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
+			public Int64 Value { get; set; }
+		}
+
+		[Route("/DynamicLevel1String/{Value}")]
+		public class DynamicLevel1StringRequestHandler : IGet<string>
+		{
+			[ExcludeFromCodeCoverage]
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
+			public string Value { get; set; }
 		}
 
 		[Route("/type-mismatch/{DynamicLevel1}")]
