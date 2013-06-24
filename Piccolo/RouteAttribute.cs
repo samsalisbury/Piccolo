@@ -1,6 +1,6 @@
 using System;
 
-namespace Piccolo.Routing
+namespace Piccolo
 {
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 	public class RouteAttribute : Attribute

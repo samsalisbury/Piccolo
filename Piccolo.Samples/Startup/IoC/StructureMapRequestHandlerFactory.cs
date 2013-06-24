@@ -1,5 +1,5 @@
 using System;
-using Piccolo.IoC;
+using Piccolo.Configuration;
 using StructureMap;
 
 namespace Piccolo.Samples.Startup.IoC

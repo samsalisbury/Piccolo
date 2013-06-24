@@ -1,6 +1,6 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 
-namespace Piccolo
+namespace Piccolo.Request.HandlerInvokers
 {
 	public interface IRequestHandlerInvoker
 	{

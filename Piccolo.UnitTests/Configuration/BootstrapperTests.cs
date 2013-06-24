@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Piccolo.Configuration;
-using Piccolo.IoC;
 using Shouldly;
 
 namespace Piccolo.UnitTests.Configuration

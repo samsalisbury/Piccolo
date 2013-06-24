@@ -7,8 +7,9 @@ using System.Net.Http;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
-using Piccolo.Abstractions;
 using Piccolo.Configuration;
+using Piccolo.Request;
+using Piccolo.Request.HandlerInvokers;
 
 namespace Piccolo
 {

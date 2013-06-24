@@ -1,6 +1,6 @@
 using System;
 
-namespace Piccolo.IoC
+namespace Piccolo.Configuration
 {
 	public interface IRequestHandlerFactory
 	{

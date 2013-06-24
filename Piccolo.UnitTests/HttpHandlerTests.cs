@@ -4,9 +4,8 @@ using System.Net.Http;
 using System.Reflection;
 using Moq;
 using NUnit.Framework;
-using Piccolo.Abstractions;
-using Piccolo.IoC;
-using Piccolo.Routing;
+using Piccolo.Configuration;
+using Piccolo.Request;
 using Shouldly;
 
 namespace Piccolo.UnitTests

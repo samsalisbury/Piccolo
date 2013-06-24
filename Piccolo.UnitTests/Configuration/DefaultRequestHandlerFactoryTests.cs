@@ -1,8 +1,8 @@
 using NUnit.Framework;
-using Piccolo.IoC;
+using Piccolo.Configuration;
 using Shouldly;
 
-namespace Piccolo.UnitTests.IoC
+namespace Piccolo.UnitTests.Configuration
 {
 	public class DefaultRequestHandlerFactoryTests
 	{

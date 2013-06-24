@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http;
 
-namespace Piccolo.Abstractions
+namespace Piccolo
 {
 	public class Response
 	{

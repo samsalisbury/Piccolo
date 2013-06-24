@@ -1,4 +1,4 @@
-﻿namespace Piccolo
+namespace Piccolo
 {
 	public interface IGet<TOutput> : IRequestHandler
 	{

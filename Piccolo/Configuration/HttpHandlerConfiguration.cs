@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using Piccolo.IoC;
 using Piccolo.Routing;
 
 namespace Piccolo.Configuration

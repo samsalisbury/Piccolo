@@ -1,6 +1,6 @@
 using System;
 
-namespace Piccolo.Abstractions
+namespace Piccolo.Request
 {
 	public interface IRequestContextWrapper
 	{

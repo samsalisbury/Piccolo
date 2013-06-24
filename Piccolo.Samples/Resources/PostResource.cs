@@ -1,7 +1,4 @@
-﻿using Piccolo.Abstractions;
-using Piccolo.Routing;
-
-namespace Piccolo.Samples.Resources
+﻿namespace Piccolo.Samples.Resources
 {
 	[Route("/resource")]
 	public class CreateResource : IPost<CreateResource.CreateResourceParams>
