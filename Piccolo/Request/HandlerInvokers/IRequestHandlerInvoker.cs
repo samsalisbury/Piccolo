@@ -4,6 +4,6 @@ namespace Piccolo.Request.HandlerInvokers
 {
 	public interface IRequestHandlerInvoker
 	{
-		HttpResponseMessage Execute(IRequestHandler requestHandler);
+		HttpResponseMessage Execute(IRequestHandler requestHandler, IRequestContextWrapper requestContext);
 	}
 }
