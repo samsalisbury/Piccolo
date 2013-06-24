@@ -48,7 +48,6 @@ namespace Piccolo
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestRouterResult);
 
-			// TODO: refactor the routing layer handles root routes (currently can't have more that one handler+verb combination)
 			// TODO: implement handler property verification
 			// TODO: refactor this mess
 			if (requestContext.Verb.Equals("GET", StringComparison.InvariantCultureIgnoreCase))
