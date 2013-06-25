@@ -66,7 +66,7 @@ namespace Piccolo.Routing
 		private RouteHandlerLookupNode FindChildNode(string headFragment)
 		{
 			var searchTerm = RemoveDynamicFragmentTokens(headFragment);
-			return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == searchTerm);
+			return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == searchTerm && x.IsStaticRouteTemplateFragment == IsStaticFragment(headFragment));
 		}
 
 		private static bool IsStaticFragment(string headFragment)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Net.Http;
 using NUnit.Framework;
 using Piccolo.Routing;
@@ -84,74 +83,20 @@ namespace Piccolo.UnitTests.Routing
 		}
 
 		[TestFixture]
-		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_int32_property : given_request_router_initialised_with_test_routes
+		public class when_searching_for_request_handler_that_matches_dynamic_level1_path : given_request_router_initialised_with_test_routes
 		{
 			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/DynamicLevel1Int32/1", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/DynamicLevel1/1", UriKind.Absolute));
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1Int32RequestHandler));
-			}
-
-			[Test]
-			public void it_should_return_parameter()
-			{
-				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "Value" && pair.Value == "1").ShouldBe(true);
-			}
-		}
-
-		[TestFixture]
-		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_int64_property : given_request_router_initialised_with_test_routes
-		{
-			private RouteHandlerLookupResult _routeHandlerLookupResult;
-
-			[SetUp]
-			public void SetUp()
-			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/DynamicLevel1Int64/1", UriKind.Absolute));
-			}
-
-			[Test]
-			public void it_should_return_request_handler()
-			{
-				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1Int64RequestHandler));
-			}
-
-			[Test]
-			public void it_should_return_parameter()
-			{
-				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "Value" && pair.Value == "1").ShouldBe(true);
-			}
-		}
-
-		[TestFixture]
-		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_string_property : given_request_router_initialised_with_test_routes
-		{
-			private RouteHandlerLookupResult _routeHandlerLookupResult;
-
-			[SetUp]
-			public void SetUp()
-			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/DynamicLevel1String/Text", UriKind.Absolute));
-			}
-
-			[Test]
-			public void it_should_return_request_handler()
-			{
-				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1StringRequestHandler));
-			}
-
-			[Test]
-			public void it_should_return_parameter()
-			{
-				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "Value" && pair.Value == "Text").ShouldBe(true);
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1RequestHandler));
 			}
 		}
 
@@ -217,7 +162,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/type-mismatch/1", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/type-mismatch", UriKind.Absolute));
 			}
 
 			[Test]
@@ -252,9 +197,7 @@ namespace Piccolo.UnitTests.Routing
 					typeof(RootRequestHandler),
 					typeof(StaticLevel1RequestHandler),
 					typeof(StaticLevel2RequestHandler),
-					typeof(DynamicLevel1Int32RequestHandler),
-					typeof(DynamicLevel1Int64RequestHandler),
-					typeof(DynamicLevel1StringRequestHandler),
+					typeof(DynamicLevel1RequestHandler),
 					typeof(DynamicLevel1RequestHandlerWithInputParameterNameMismatch),
 					typeof(DynamicLevel2RequestHandler),
 					typeof(DynamicMultiLevelRequestHandler)
@@ -315,8 +258,8 @@ namespace Piccolo.UnitTests.Routing
 			}
 		}
 
-		[Route("/DynamicLevel1Int32/{Value}")]
-		public class DynamicLevel1Int32RequestHandler : IGet<string>
+		[Route("/DynamicLevel1/{Value}")]
+		public class DynamicLevel1RequestHandler : IGet<string>
 		{
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
@@ -325,30 +268,6 @@ namespace Piccolo.UnitTests.Routing
 			}
 
 			public Int32 Value { get; set; }
-		}
-
-		[Route("/DynamicLevel1Int64/{Value}")]
-		public class DynamicLevel1Int64RequestHandler : IGet<string>
-		{
-			[ExcludeFromCodeCoverage]
-			public HttpResponseMessage<string> Get()
-			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
-			}
-
-			public Int64 Value { get; set; }
-		}
-
-		[Route("/DynamicLevel1String/{Value}")]
-		public class DynamicLevel1StringRequestHandler : IGet<string>
-		{
-			[ExcludeFromCodeCoverage]
-			public HttpResponseMessage<string> Get()
-			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
-			}
-
-			public string Value { get; set; }
 		}
 
 		[Route("/type-mismatch/{DynamicLevel1}")]
