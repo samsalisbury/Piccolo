@@ -27,30 +27,10 @@ namespace Piccolo.Routing
 					continue;
 
 				var remainingPathFragments = pathFragments.Skip(1).ToList();
+				if (remainingPathFragments.Count == 0)
+					return childNode.RequestHandler;
 
-				foreach (var grandChildNode in childNode.ChildNodes)
-				{
-					var requestHandler = Lookahead(grandChildNode, remainingPathFragments);
-					if (requestHandler != null)
-						return requestHandler;
-				}
-			}
-
-			return null;
-		}
-
-		private static Type Lookahead(RouteHandlerLookupNode node, IList<string> pathFragments)
-		{
-			if (IsMatch(node, pathFragments.First()) == false)
-				return null;
-
-			var remainingPathFragments = pathFragments.Skip(1).ToList();
-			if (remainingPathFragments.Count == 0)
-				return node.RequestHandler;
-
-			foreach (var childNode in node.ChildNodes)
-			{
-				var requestHandler = Lookahead(childNode, remainingPathFragments);
+				var requestHandler = FindNode(childNode, remainingPathFragments);
 				if (requestHandler != null)
 					return requestHandler;
 			}
