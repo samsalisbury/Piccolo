@@ -46,8 +46,7 @@ namespace Piccolo.Routing
 			if (node.IsVirtualRouteTemplateFragment)
 				return true;
 
-			Type propertyType;
-			if (node.RequestHandlerProperties.TryGetValue(node.RouteTemplateFragment, out propertyType))
+			if (node.RequestHandlerPropertyNames.Any(x => x == node.RouteTemplateFragment))
 			{
 				routeParameters.Add(node.RouteTemplateFragment, pathFragment);
 				return true;

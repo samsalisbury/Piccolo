@@ -19,12 +19,12 @@ namespace Piccolo.Routing
 			return requestHandler.GetCustomAttributes(typeof(RouteAttribute), true).Cast<RouteAttribute>().ToList();
 		}
 
-		public static Dictionary<string, Type> GetRequestHandlerProperties(Type requestHandler)
+		public static List<string> GetRequestHandlerPropertyNames(Type requestHandler)
 		{
 			if (requestHandler == null)
-				return new Dictionary<string, Type>();
+				return new List<string>();
 
-			return requestHandler.GetProperties().ToDictionary(x => x.Name.ToLower(), x => x.PropertyType);
+			return requestHandler.GetProperties().Select(x => x.Name.ToLower()).ToList();
 		}
 
 		public static string GetVerb(Type requestHandler)
