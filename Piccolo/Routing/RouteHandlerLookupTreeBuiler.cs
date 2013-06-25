@@ -32,7 +32,7 @@ namespace Piccolo.Routing
 			var distinctRouteFragmentSets = routeFragmentSets.GroupBy(x => x.Aggregate((a, b) => a + b)).Select(x => x.First());
 			if (distinctRouteFragmentSets.Count() != routeFragmentSets.Count())
 			{
-				string message = string.Format("Handler for route template [{0}] is already defined. Unable to register request handler [{1}] for lookup as it would be unreachable.", routeTemplate, requestHandler.FullName);
+				var message = string.Format("Handler for route template [{0}] is already defined. Unable to register request handler [{1}] for lookup as it would be unreachable.", routeTemplate, requestHandler.FullName);
 				throw new InvalidOperationException(message);
 			}
 		}
