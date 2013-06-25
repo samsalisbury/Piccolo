@@ -40,7 +40,7 @@ namespace Piccolo.Configuration
 		private static void ApplyDefaultConfiguration(HttpHandlerConfiguration configuration)
 		{
 			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
-			configuration.Router = new RequestRouter(configuration);
+			configuration.Router = new RequestRouter(configuration.RequestHandlers);
 
 			configuration.RouteParameterBinders = new Dictionary<Type, IRouteParameterBinder>
 				{

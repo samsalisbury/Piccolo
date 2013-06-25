@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Piccolo.Routing
 {
-	public static class RouteHandlerDescriptor
+	internal static class RequestHandlerDescriptor
 	{
 		private static readonly Dictionary<string, string> _requestHandlerVerbMap = new Dictionary<string, string>
 			{

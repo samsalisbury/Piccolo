@@ -13,9 +13,9 @@ namespace Piccolo.Routing
 
 			foreach (var requestHandler in requestHandlers)
 			{
-				var routeAttributes = RouteHandlerDescriptor.GetRouteAttributes(requestHandler);
-				var routeHandlerVerb = RouteHandlerDescriptor.GetVerb(requestHandler);
-				var routeFragmentSets = routeAttributes.Select(x => RouteHandlerIdentifierBuiler.BuildRouteHandlerIdentifier(routeHandlerVerb, x.Template)).ToList();
+				var routeAttributes = RequestHandlerDescriptor.GetRouteAttributes(requestHandler);
+				var routeHandlerVerb = RequestHandlerDescriptor.GetVerb(requestHandler);
+				var routeFragmentSets = routeAttributes.Select(x => RouteIdentifierBuiler.BuildIdentifier(routeHandlerVerb, x.Template)).ToList();
 
 				knownRouteFragmentSets.AddRange(routeFragmentSets);
 				ScanForUnreachableRouteHandlers(knownRouteFragmentSets, routeAttributes.First().Template, requestHandler);

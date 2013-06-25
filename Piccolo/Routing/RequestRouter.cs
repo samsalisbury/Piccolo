@@ -1,20 +1,58 @@
 using System;
-using Piccolo.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Piccolo.Routing
 {
 	public class RequestRouter : IRequestRouter
 	{
-		private readonly RouteHandlerLookup _routeHandlerLookup;
+		private readonly RouteHandlerLookupNode _tree;
 
-		public RequestRouter(HttpHandlerConfiguration configuration)
+		public RequestRouter(IEnumerable<Type> requestHandlers)
 		{
-			_routeHandlerLookup = new RouteHandlerLookup(configuration.RequestHandlers);
+			_tree = RouteHandlerLookupTreeBuiler.BuildRouteHandlerLookupTree(requestHandlers);
 		}
 
-		public RouteHandlerLookupResult FindRequestHandler(string verb, Uri requestUri)
+		public RouteHandlerLookupResult FindRequestHandler(string verb, Uri uri)
 		{
-			return _routeHandlerLookup.FindRequestHandler(verb, requestUri.AbsolutePath);
+			var handlerIdentifier = RouteIdentifierBuiler.BuildIdentifier(verb, uri.AbsolutePath);
+			return FindNode(_tree, handlerIdentifier, new Dictionary<string, string>());
+		}
+
+		private static RouteHandlerLookupResult FindNode(RouteHandlerLookupNode node, IList<string> pathFragments, Dictionary<string, string> routeParameters)
+		{
+			foreach (var childNode in node.ChildNodes)
+			{
+				if (IsMatch(childNode, pathFragments.First(), routeParameters) == false)
+					continue;
+
+				var remainingPathFragments = pathFragments.Skip(1).ToList();
+				if (remainingPathFragments.Count == 0)
+					return new RouteHandlerLookupResult(childNode.RequestHandler, routeParameters);
+
+				var requestHandler = FindNode(childNode, remainingPathFragments, routeParameters);
+				if (requestHandler != null)
+					return requestHandler;
+			}
+
+			return null;
+		}
+
+		private static bool IsMatch(RouteHandlerLookupNode node, string pathFragment, Dictionary<string, string> routeParameters)
+		{
+			if (node.IsStaticRouteTemplateFragment)
+				return node.RouteTemplateFragment.Equals(pathFragment, StringComparison.InvariantCultureIgnoreCase);
+
+			if (node.IsVirtualRouteTemplateFragment)
+				return true;
+
+			if (node.RequestHandlerPropertyNames.Any(x => x.Equals(node.RouteTemplateFragment, StringComparison.InvariantCultureIgnoreCase)))
+			{
+				routeParameters.Add(node.RouteTemplateFragment, pathFragment);
+				return true;
+			}
+
+			return false;
 		}
 	}
 }

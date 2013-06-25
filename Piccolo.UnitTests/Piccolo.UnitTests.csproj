@@ -41,7 +41,6 @@
     <Compile Include="Request\HandlerInvokers\PostRequestHandlerInvokerTests.cs" />
     <Compile Include="Request\HandlerInvokers\PutRequestHandlerInvokerTests.cs" />
     <Compile Include="Request\HandlerInvokers\GetRequestHandlerInvokerTests.cs" />
-    <Compile Include="Routing\RouteHandlerLookupTests.cs" />
     <Compile Include="Routing\RequestRouterTests.cs" />
     <Compile Include="TestRequestHandler.cs" />
   </ItemGroup>

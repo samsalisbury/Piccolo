@@ -62,9 +62,8 @@
     <Compile Include="Routing\IRequestRouter.cs" />
     <Compile Include="Routing\RouteHandlerLookupResult.cs" />
     <Compile Include="Routing\RequestRouter.cs" />
-    <Compile Include="Routing\RouteHandlerDescriptor.cs" />
-    <Compile Include="Routing\RouteHandlerIdentifierBuiler.cs" />
-    <Compile Include="Routing\RouteHandlerLookup.cs" />
+    <Compile Include="Routing\RequestHandlerDescriptor.cs" />
+    <Compile Include="Routing\RouteIdentifierBuiler.cs" />
     <Compile Include="Routing\RouteHandlerLookupNode.cs" />
     <Compile Include="Routing\RouteHandlerLookupTreeBuiler.cs" />
   </ItemGroup>

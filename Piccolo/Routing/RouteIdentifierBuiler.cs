@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Piccolo.Routing
 {
-	internal static class RouteHandlerIdentifierBuiler
+	internal static class RouteIdentifierBuiler
 	{
-		internal static IList<string> BuildRouteHandlerIdentifier(string verb, string uri)
+		internal static IList<string> BuildIdentifier(string verb, string uri)
 		{
 			var baseHandlerIdentifier = new List<string>(new[] {verb.ToLower(), "_root_"});
 

@@ -16,7 +16,7 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 			public void it_should_throw_exception()
 			{
 				var requestHandlers = new List<Type> {typeof(Handler1), typeof(Handler2)};
-				Should.Throw<InvalidOperationException>(() => new RouteHandlerLookup(requestHandlers));
+				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
 			}
 
 			[Route("/route")]
@@ -47,7 +47,7 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 			public void it_should_throw_exception()
 			{
 				var requestHandlers = new List<Type> {typeof(Handler)};
-				Should.Throw<InvalidOperationException>(() => new RouteHandlerLookup(requestHandlers));
+				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
 			}
 
 			[Route("/")]
