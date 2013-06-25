@@ -197,7 +197,7 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources/{Id}")]
-			public class UpdateTestResource : IDelete
+			public class DeleteTestResource : IDelete
 			{
 				public HttpResponseMessage<dynamic> Delete()
 				{

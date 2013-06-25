@@ -5,23 +5,22 @@ using System.Net.Http;
 using System.Reflection;
 using Piccolo.Request.RouteParameterBinders;
 
-namespace Piccolo.Request.HandlerInvokers
+namespace Piccolo.Request
 {
-	public abstract class BaseRequestHandlerInvoker : IRequestHandlerInvoker
+	public class RequestHandlerInvoker
 	{
 		private readonly Dictionary<Type, IRouteParameterBinder> _routeParameterBinders;
+		private BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
 
-		protected BaseRequestHandlerInvoker(Dictionary<Type, IRouteParameterBinder> routeParameterBinders)
+		public RequestHandlerInvoker(Dictionary<Type, IRouteParameterBinder> routeParameterBinders)
 		{
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public abstract string MethodName { get; }
-
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, Dictionary<string, string> routeParameters)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters)
 		{
 			var handlerType = requestHandler.GetType();
-			var handlerMethod = handlerType.GetMethod(MethodName);
+			var handlerMethod = handlerType.GetMethod(verb, bindingFlags);
 
 			BindRouteParameters(requestHandler, routeParameters, handlerType.GetProperties());
 

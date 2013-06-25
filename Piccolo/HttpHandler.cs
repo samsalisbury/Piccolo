@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -13,6 +11,8 @@ namespace Piccolo
 {
 	public class HttpHandler : IHttpHandler
 	{
+		private readonly RequestHandlerInvoker _requestHandlerInvoker;
+
 		[ExcludeFromCodeCoverage]
 		public HttpHandler() : this(true, BuildManager.GetGlobalAsaxType().BaseType.Assembly)
 		{
@@ -22,6 +22,7 @@ namespace Piccolo
 		{
 			var bootstrapper = new Bootstrapper(assembly);
 			Configuration = bootstrapper.ApplyConfiguration(applyCustomConfiguration);
+			_requestHandlerInvoker = new RequestHandlerInvoker(Configuration.RouteParameterBinders);
 		}
 
 		public HttpHandlerConfiguration Configuration { get; private set; }
@@ -50,9 +51,7 @@ namespace Piccolo
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-
-			var requestHandlerInvoker = Configuration.RequestHandlerInvokers.Single(pair => pair.Key.Equals(requestContext.Verb, StringComparison.InvariantCultureIgnoreCase)).Value;
-			return requestHandlerInvoker.Execute(requestHandler, lookupResult.RouteParameters);
+			return _requestHandlerInvoker.Execute(requestHandler, requestContext.Verb, lookupResult.RouteParameters);
 		}
 	}
 }

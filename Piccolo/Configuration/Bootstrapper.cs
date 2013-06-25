@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using Piccolo.Request.HandlerInvokers;
 using Piccolo.Request.RouteParameterBinders;
 using Piccolo.Routing;
 
@@ -41,19 +40,10 @@ namespace Piccolo.Configuration
 		{
 			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
 			configuration.Router = new RequestRouter(configuration.RequestHandlers);
-
 			configuration.RouteParameterBinders = new Dictionary<Type, IRouteParameterBinder>
 				{
 					{typeof(Int32), new Int32RouteParameterBinder()},
 					{typeof(String), new StringRouteParameterBinder()}
-				};
-
-			configuration.RequestHandlerInvokers = new Dictionary<string, IRequestHandlerInvoker>
-				{
-					{"GET", new GetRequestHandlerInvoker(configuration.RouteParameterBinders)},
-					{"PUT", new PutRequestHandlerInvoker(configuration.RouteParameterBinders)},
-					{"POST", new PostRequestHandlerInvoker(configuration.RouteParameterBinders)},
-					{"DELETE", new DeleteRequestHandlerInvoker(configuration.RouteParameterBinders)}
 				};
 		}
 
