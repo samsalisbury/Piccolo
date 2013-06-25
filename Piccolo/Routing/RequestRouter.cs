@@ -14,9 +14,7 @@ namespace Piccolo.Routing
 
 		public RouteHandlerLookupResult FindRequestHandler(string verb, Uri requestUri)
 		{
-			var absolutePath = requestUri.AbsolutePath.ToLower();
-
-			return _routeHandlerLookup.FindRequestHandler(verb, absolutePath);
+			return _routeHandlerLookup.FindRequestHandler(verb, requestUri.AbsolutePath);
 		}
 	}
 }

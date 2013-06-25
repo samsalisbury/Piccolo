@@ -103,7 +103,7 @@ namespace Piccolo.UnitTests.Routing
 			[Test]
 			public void it_should_return_parameter()
 			{
-				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "value" && pair.Value == "1").ShouldBe(true);
+				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "Value" && pair.Value == "1").ShouldBe(true);
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Piccolo.UnitTests.Routing
 			[Test]
 			public void it_should_return_parameter()
 			{
-				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "value" && pair.Value == "1").ShouldBe(true);
+				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "Value" && pair.Value == "1").ShouldBe(true);
 			}
 		}
 
@@ -139,7 +139,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1String/text");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1String/Text");
 			}
 
 			[Test]
@@ -151,7 +151,7 @@ namespace Piccolo.UnitTests.Routing
 			[Test]
 			public void it_should_return_parameter()
 			{
-				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "value" && pair.Value == "text").ShouldBe(true);
+				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "Value" && pair.Value == "Text").ShouldBe(true);
 			}
 		}
 

@@ -62,7 +62,7 @@ namespace Piccolo
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
 
 			var requestHandlerInvoker = _requestHandlerInvokerMap.Single(pair => pair.Key.Equals(requestContext.Verb, StringComparison.InvariantCultureIgnoreCase)).Value;
-			return requestHandlerInvoker.Execute(requestHandler, null);
+			return requestHandlerInvoker.Execute(requestHandler, lookupResult.RouteParameters);
 		}
 	}
 }

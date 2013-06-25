@@ -41,12 +41,12 @@ namespace Piccolo.Routing
 		private static bool IsMatch(RouteHandlerLookupNode node, string pathFragment, Dictionary<string, string> routeParameters)
 		{
 			if (node.IsStaticRouteTemplateFragment)
-				return node.RouteTemplateFragment == pathFragment;
+				return node.RouteTemplateFragment.Equals(pathFragment, StringComparison.InvariantCultureIgnoreCase);
 
 			if (node.IsVirtualRouteTemplateFragment)
 				return true;
 
-			if (node.RequestHandlerPropertyNames.Any(x => x == node.RouteTemplateFragment))
+			if (node.RequestHandlerPropertyNames.Any(x => x.Equals(node.RouteTemplateFragment, StringComparison.InvariantCultureIgnoreCase)))
 			{
 				routeParameters.Add(node.RouteTemplateFragment, pathFragment);
 				return true;

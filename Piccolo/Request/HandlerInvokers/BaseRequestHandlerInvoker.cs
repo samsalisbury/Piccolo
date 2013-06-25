@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace Piccolo.Request.HandlerInvokers
@@ -15,7 +16,7 @@ namespace Piccolo.Request.HandlerInvokers
 
 			foreach (var routeParameter in routeParameters)
 			{
-				var property = handlerType.GetProperty(routeParameter.Key);
+				var property = handlerType.GetProperties().Single(x => x.Name.Equals(routeParameter.Key, StringComparison.InvariantCultureIgnoreCase));
 				// TODO: Refactor and expose via config
 				if (property.PropertyType == typeof(Int32))
 				{
