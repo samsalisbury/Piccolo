@@ -63,7 +63,7 @@ namespace Piccolo.Routing
 			if (node.IsStaticRouteTemplateFragment)
 				return node.RouteTemplateFragment == pathFragment;
 
-			if (node.IsStaticRouteTemplateFragment == false && node.ChildNodes.Count > 0 && node.RequestHandlerProperties == null) // IsVirtualNode
+			if (node.IsVirtualRouteTemplateFragment)
 				return true;
 
 			Type propertyType;
