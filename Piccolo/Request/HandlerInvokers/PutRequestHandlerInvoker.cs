@@ -1,20 +1,10 @@
-using System.Linq;
-using System.Net.Http;
-
 namespace Piccolo.Request.HandlerInvokers
 {
-	public class PutRequestHandlerInvoker : IRequestHandlerInvoker
+	public class PutRequestHandlerInvoker : BaseRequestHandlerInvoker
 	{
-		public HttpResponseMessage Execute(IRequestHandler requestHandler)
+		public override string MethodName
 		{
-			// TODO: push properties
-			// TODO: pass post params
-			var method = requestHandler.GetType().GetMethod("Put");
-			var parameters = Enumerable.Repeat("", method.GetParameters().Count()).ToArray();
-			var result = method.Invoke(requestHandler, parameters);
-
-			var messageProperty = result.GetType().GetProperty("Message");
-			return messageProperty.GetValue(result, null) as HttpResponseMessage;
+			get { return "Put"; }
 		}
 	}
 }

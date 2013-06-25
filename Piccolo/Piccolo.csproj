@@ -46,6 +46,7 @@
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\HandlerInvokers\BaseRequestHandlerInvoker.cs" />
     <Compile Include="Request\HandlerInvokers\DeleteRequestHandlerInvoker.cs" />
     <Compile Include="Request\HandlerInvokers\GetRequestHandlerInvoker.cs" />
     <Compile Include="Request\HandlerInvokers\IRequestHandlerInvoker.cs" />
