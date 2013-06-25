@@ -14,7 +14,7 @@ namespace Piccolo.Request.HandlerInvokers
 	{
 		public abstract string MethodName { get; }
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, IRequestContextWrapper requestContext)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler)
 		{
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(MethodName);
