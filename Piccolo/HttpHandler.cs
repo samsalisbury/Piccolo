@@ -55,11 +55,11 @@ namespace Piccolo
 
 		public HttpResponseMessage HandleRequest(IRequestContextWrapper requestContext)
 		{
-			var requestHandlerType = Configuration.Router.FindRequestHandler(requestContext.Verb, requestContext.Uri);
-			if (requestHandlerType == null)
+			var lookupResult = Configuration.Router.FindRequestHandler(requestContext.Verb, requestContext.Uri);
+			if (lookupResult == null || lookupResult.RequestHandlerType == null)
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(requestHandlerType);
+			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
 
 			var requestHandlerInvoker = _requestHandlerInvokerMap.Single(pair => pair.Key.Equals(requestContext.Verb, StringComparison.InvariantCultureIgnoreCase)).Value;
 			return requestHandlerInvoker.Execute(requestHandler);

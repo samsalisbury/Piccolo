@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net.Http;
 using NUnit.Framework;
 using Piccolo.Routing;
@@ -13,216 +14,234 @@ namespace Piccolo.UnitTests.Routing
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_root : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(RootRequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(RootRequestHandler));
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_static_level1_path : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/level-1");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/level-1");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(StaticLevel1RequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(StaticLevel1RequestHandler));
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_static_level2_path : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/level-1/level-2");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/level-1/level-2");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(StaticLevel2RequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(StaticLevel2RequestHandler));
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_alternative_path : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/alternative-path");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/alternative-path");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(StaticLevel2RequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(StaticLevel2RequestHandler));
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_int32_property : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1Int32/1");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1Int32/1");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(DynamicLevel1Int32RequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1Int32RequestHandler));
+			}
+
+			[Test]
+			public void it_should_return_parameter()
+			{
+				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "value" && pair.Value == "1").ShouldBe(true);
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_int64_property : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1Int64/1");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1Int64/1");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(DynamicLevel1Int64RequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1Int64RequestHandler));
+			}
+
+			[Test]
+			public void it_should_return_parameter()
+			{
+				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "value" && pair.Value == "1").ShouldBe(true);
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_level1_path_with_string_property : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1String/text");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/DynamicLevel1String/text");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(DynamicLevel1StringRequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1StringRequestHandler));
+			}
+
+			[Test]
+			public void it_should_return_parameter()
+			{
+				_routeHandlerLookupResult.RouteParameters.Any(pair => pair.Key == "value" && pair.Value == "text").ShouldBe(true);
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_level2_path : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/level-1/2");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/level-1/2");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(DynamicLevel2RequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel2RequestHandler));
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_multi_level_path : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/1/2/3");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/1/2/3");
 			}
 
 			[Test]
 			public void it_should_return_request_handler()
 			{
-				_requestHandler.ShouldBe(typeof(DynamicMultiLevelRequestHandler));
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicMultiLevelRequestHandler));
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_multi_level_path_that_is_not_routed : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/1/2/3/is-not-routed");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/1/2/3/is-not-routed");
 			}
 
 			[Test]
 			public void it_should_return_null()
 			{
-				_requestHandler.ShouldBe(null);
+				_routeHandlerLookupResult.ShouldBe(null);
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler_that_does_not_match_parameter_name : given_route_handler_lookup_initialised_with_test_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler("get", "/type-mismatch/1");
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler("get", "/type-mismatch/1");
 			}
 
 			[Test]
 			public void it_should_return_null()
 			{
-				_requestHandler.ShouldBe(null);
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(null);
 			}
 		}
 
 		[TestFixture]
 		public class when_searching_for_request_handler : given_route_handler_lookup_initialised_with_0_routes
 		{
-			private Type _requestHandler;
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_requestHandler = RouteHandlerLookup.FindRequestHandler(string.Empty, string.Empty);
+				_routeHandlerLookupResult = RouteHandlerLookup.FindRequestHandler(string.Empty, string.Empty);
 			}
 
 			[Test]
 			public void it_should_return_null()
 			{
-				_requestHandler.ShouldBe(null);
+				_routeHandlerLookupResult.ShouldBe(null);
 			}
 		}
 
