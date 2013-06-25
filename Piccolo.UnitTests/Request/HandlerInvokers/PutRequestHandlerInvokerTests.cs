@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Reflection;
 using NUnit.Framework;
+using Piccolo.Configuration;
 using Piccolo.Request.HandlerInvokers;
 using Shouldly;
 
@@ -33,7 +35,8 @@ namespace Piccolo.UnitTests.Request.HandlerInvokers
 
 			protected given_put_request_handler_invoker()
 			{
-				Invoker = new PutRequestHandlerInvoker();
+				var configuration = new Bootstrapper(Assembly.GetExecutingAssembly()).ApplyConfiguration(false);
+				Invoker = new PutRequestHandlerInvoker(configuration.RouteParameterBinders);
 			}
 		}
 

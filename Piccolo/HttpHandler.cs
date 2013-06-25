@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
@@ -9,20 +8,11 @@ using System.Web;
 using System.Web.Compilation;
 using Piccolo.Configuration;
 using Piccolo.Request;
-using Piccolo.Request.HandlerInvokers;
 
 namespace Piccolo
 {
 	public class HttpHandler : IHttpHandler
 	{
-		private readonly IDictionary<string, IRequestHandlerInvoker> _requestHandlerInvokerMap = new Dictionary<string, IRequestHandlerInvoker>
-			{
-				{"GET", new GetRequestHandlerInvoker()},
-				{"PUT", new PutRequestHandlerInvoker()},
-				{"POST", new PostRequestHandlerInvoker()},
-				{"DELETE", new DeleteRequestHandlerInvoker()}
-			};
-
 		[ExcludeFromCodeCoverage]
 		public HttpHandler() : this(true, BuildManager.GetGlobalAsaxType().BaseType.Assembly)
 		{
@@ -61,7 +51,7 @@ namespace Piccolo
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
 
-			var requestHandlerInvoker = _requestHandlerInvokerMap.Single(pair => pair.Key.Equals(requestContext.Verb, StringComparison.InvariantCultureIgnoreCase)).Value;
+			var requestHandlerInvoker = Configuration.RequestHandlerInvokers.Single(pair => pair.Key.Equals(requestContext.Verb, StringComparison.InvariantCultureIgnoreCase)).Value;
 			return requestHandlerInvoker.Execute(requestHandler, lookupResult.RouteParameters);
 		}
 	}

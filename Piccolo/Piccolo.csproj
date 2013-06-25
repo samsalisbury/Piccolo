@@ -54,6 +54,9 @@
     <Compile Include="Request\HandlerInvokers\PutRequestHandlerInvoker.cs" />
     <Compile Include="Request\IRequestContextWrapper.cs" />
     <Compile Include="Request\RequestContextWrapper.cs" />
+    <Compile Include="Request\RouteParameterBinders\StringRouteParameterBinder.cs" />
+    <Compile Include="Request\RouteParameterBinders\Int32RouteParameterBinder.cs" />
+    <Compile Include="Request\RouteParameterBinders\IRouteParameterBinder.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="RouteAttribute.cs" />
     <Compile Include="Routing\IRequestRouter.cs" />
