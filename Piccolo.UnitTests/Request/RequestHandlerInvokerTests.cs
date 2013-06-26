@@ -37,7 +37,7 @@ namespace Piccolo.UnitTests.Request
 			[SetUp]
 			public void SetUp()
 			{
-				var routeParameters = new Dictionary<string, string> { { "param", "TEST" } };
+				var routeParameters = new Dictionary<string, string> {{"param", "TEST"}};
 				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
 			}
 
