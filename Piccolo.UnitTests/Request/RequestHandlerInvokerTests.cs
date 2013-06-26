@@ -30,6 +30,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_string_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> { { "param", "TEST" } };
+				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET TEST");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_int32_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -123,6 +142,17 @@ namespace Piccolo.UnitTests.Request
 			{
 				return Response.Success.Ok("TEST");
 			}
+		}
+
+		[Route("/RequestHandlerInvokerTests/String/{Param}")]
+		public class GetResourceString : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0}", Param));
+			}
+
+			public String Param { get; set; }
 		}
 
 		[Route("/RequestHandlerInvokerTests/Int32/{Param}")]
