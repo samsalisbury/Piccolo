@@ -42,8 +42,9 @@ namespace Piccolo.Configuration
 			configuration.Router = new RequestRouter(configuration.RequestHandlers);
 			configuration.RouteParameterBinders = new Dictionary<Type, IRouteParameterBinder>
 				{
-					{typeof(Int32), new Int32RouteParameterBinder()},
-					{typeof(String), new StringRouteParameterBinder()}
+					{typeof(String), new StringRouteParameterBinder()},
+					{typeof(Int16), new Int16RouteParameterBinder()},
+					{typeof(Int32), new Int32RouteParameterBinder()}
 				};
 		}
 
