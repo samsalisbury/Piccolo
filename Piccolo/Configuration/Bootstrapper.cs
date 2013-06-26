@@ -43,6 +43,7 @@ namespace Piccolo.Configuration
 			configuration.RouteParameterBinders = new Dictionary<Type, IRouteParameterBinder>
 				{
 					{typeof(String), new StringRouteParameterBinder()},
+					{typeof(Byte), new ByteRouteParameterBinder()},
 					{typeof(Int16), new Int16RouteParameterBinder()},
 					{typeof(Int32), new Int32RouteParameterBinder()}
 				};

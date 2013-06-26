@@ -49,6 +49,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_byte_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> {{"param", "1"}};
+				_result = Invoker.Execute(new GetResourceByte(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET 1");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_int16_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -172,6 +191,17 @@ namespace Piccolo.UnitTests.Request
 			}
 
 			public String Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/Byte/{Param}")]
+		public class GetResourceByte : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0}", Param));
+			}
+
+			public Byte Param { get; set; }
 		}
 
 		[Route("/RequestHandlerInvokerTests/Int16/{Param}")]
