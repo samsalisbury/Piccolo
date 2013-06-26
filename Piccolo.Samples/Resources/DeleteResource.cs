@@ -1,6 +1,6 @@
 ﻿namespace Piccolo.Samples.Resources
 {
-	[Route("/resource")]
+	[Route("/resources")]
 	public class DeleteResource : IDelete
 	{
 		public HttpResponseMessage<dynamic> Delete()

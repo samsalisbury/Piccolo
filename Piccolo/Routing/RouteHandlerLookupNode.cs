@@ -69,7 +69,12 @@ namespace Piccolo.Routing
 			return ChildNodes.SingleOrDefault(x => x.RouteTemplateFragment == searchTerm && x.IsStaticRouteTemplateFragment == IsStaticFragment(headFragment));
 		}
 
-		private static bool IsStaticFragment(string headFragment)
+		internal static string RemoveDynamicFragmentTokens(string headFragment)
+		{
+			return headFragment.Trim(new[] {'{', '}'});
+		}
+
+		internal static bool IsStaticFragment(string headFragment)
 		{
 			return headFragment.Contains('{') == false;
 		}
@@ -77,11 +82,6 @@ namespace Piccolo.Routing
 		private static bool IsVirtualFragment(IEnumerable<string> routeTemplateFragments)
 		{
 			return routeTemplateFragments.Any();
-		}
-
-		private static string RemoveDynamicFragmentTokens(string headFragment)
-		{
-			return headFragment.Trim(new[] {'{', '}'});
 		}
 	}
 }

@@ -7,10 +7,10 @@ using Shouldly;
 
 namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 {
-	public class RouteHandlerLookupTests
+	public class RequestRouterTests
 	{
 		[TestFixture]
-		public class when_initialising_route_handler_lookup_with_conflicting_routes
+		public class when_initialising_request_router_lookup_with_conflicting_routes
 		{
 			[Test]
 			public void it_should_throw_exception()
@@ -41,7 +41,7 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 		}
 
 		[TestFixture]
-		public class when_initialising_route_handler_lookup_with_route_handler_that_does_not_implement_correct_interface
+		public class when_initialising_request_router_with_route_handler_that_does_not_implement_correct_interface
 		{
 			[Test]
 			public void it_should_throw_exception()
@@ -53,6 +53,27 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 			[Route("/")]
 			public class Handler : IRequestHandler
 			{
+			}
+		}
+
+		[TestFixture]
+		public class when_initialising_request_router_with_route_handler_that_does_not_expose_properties_declared_as_route_parameters
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				var requestHandlers = new List<Type> {typeof(Handler)};
+				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
+			}
+
+			[Route("/{param}")]
+			public class Handler : IGet<string>
+			{
+				[ExcludeFromCodeCoverage]
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
 			}
 		}
 	}

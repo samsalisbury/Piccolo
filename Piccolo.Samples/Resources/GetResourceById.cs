@@ -1,6 +1,6 @@
 ﻿namespace Piccolo.Samples.Resources
 {
-	[Route("/resource/{id}")]
+	[Route("/resources/{id}")]
 	public class GetResourceById : IGet<string>
 	{
 		public HttpResponseMessage<string> Get()

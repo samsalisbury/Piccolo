@@ -1,6 +1,6 @@
 ﻿namespace Piccolo.Samples.Resources
 {
-	[Route("/resource")]
+	[Route("/resources")]
 	public class CreateResource : IPut<CreateResource.CreateResourceParams>
 	{
 		public HttpResponseMessage<dynamic> Put(CreateResourceParams parameters)

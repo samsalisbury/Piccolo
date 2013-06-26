@@ -155,24 +155,6 @@ namespace Piccolo.UnitTests.Routing
 		}
 
 		[TestFixture]
-		public class when_searching_for_request_handler_that_does_not_match_parameter_name : given_request_router_initialised_with_test_routes
-		{
-			private RouteHandlerLookupResult _routeHandlerLookupResult;
-
-			[SetUp]
-			public void SetUp()
-			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/type-mismatch", UriKind.Absolute));
-			}
-
-			[Test]
-			public void it_should_return_null()
-			{
-				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(null);
-			}
-		}
-
-		[TestFixture]
 		public class when_searching_for_request_handler : given_request_router_lookup_initialised_with_0_routes
 		{
 			private RouteHandlerLookupResult _routeHandlerLookupResult;
@@ -198,7 +180,6 @@ namespace Piccolo.UnitTests.Routing
 					typeof(StaticLevel1RequestHandler),
 					typeof(StaticLevel2RequestHandler),
 					typeof(DynamicLevel1RequestHandler),
-					typeof(DynamicLevel1RequestHandlerWithInputParameterNameMismatch),
 					typeof(DynamicLevel2RequestHandler),
 					typeof(DynamicMultiLevelRequestHandler)
 				};
@@ -268,18 +249,6 @@ namespace Piccolo.UnitTests.Routing
 			}
 
 			public Int32 Value { get; set; }
-		}
-
-		[Route("/type-mismatch/{DynamicLevel1}")]
-		public class DynamicLevel1RequestHandlerWithInputParameterNameMismatch : IGet<string>
-		{
-			[ExcludeFromCodeCoverage]
-			public HttpResponseMessage<string> Get()
-			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
-			}
-
-			public string NameDoesNotMatch { get; set; }
 		}
 
 		[Route("/level-1/{DynamicLevel2}")]
