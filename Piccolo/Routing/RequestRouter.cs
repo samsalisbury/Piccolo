@@ -46,13 +46,8 @@ namespace Piccolo.Routing
 			if (node.IsVirtualRouteTemplateFragment)
 				return true;
 
-			if (node.RequestHandlerPropertyNames.Any(x => x.Equals(node.RouteTemplateFragment, StringComparison.InvariantCultureIgnoreCase)))
-			{
-				routeParameters.Add(node.RouteTemplateFragment, pathFragment);
-				return true;
-			}
-
-			return false;
+			routeParameters.Add(node.RouteTemplateFragment, pathFragment);
+			return true;
 		}
 	}
 }

@@ -19,14 +19,6 @@ namespace Piccolo.Routing
 			return requestHandler.GetCustomAttributes(typeof(RouteAttribute), true).Cast<RouteAttribute>().ToList();
 		}
 
-		public static List<string> GetRequestHandlerPropertyNames(Type requestHandler)
-		{
-			if (requestHandler == null)
-				return new List<string>();
-
-			return requestHandler.GetProperties().Select(x => x.Name.ToLower()).ToList();
-		}
-
 		public static string GetVerb(Type requestHandler)
 		{
 			var interfaces = requestHandler.GetInterfaces();

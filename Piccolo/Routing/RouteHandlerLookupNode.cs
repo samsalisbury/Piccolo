@@ -20,10 +20,7 @@ namespace Piccolo.Routing
 			RouteTemplateFragment = RemoveDynamicFragmentTokens(headFragment);
 
 			if (IsVirtualRouteTemplateFragment == false)
-			{
-				RequestHandlerPropertyNames = RequestHandlerDescriptor.GetRequestHandlerPropertyNames(requestHandler);
 				RequestHandler = requestHandler;
-			}
 		}
 
 		internal IList<RouteHandlerLookupNode> ChildNodes { get; set; }
@@ -36,8 +33,6 @@ namespace Piccolo.Routing
 
 		internal Type RequestHandler { get; set; }
 
-		internal List<string> RequestHandlerPropertyNames { get; set; }
-
 		internal void AddNode(IList<string> routeTemplateFragments, Type requestHandler)
 		{
 			var headFragment = routeTemplateFragments.First();
@@ -49,10 +44,7 @@ namespace Piccolo.Routing
 				if (remainingTemplateFragments.Any())
 					childNode.AddNode(remainingTemplateFragments, requestHandler);
 				else
-				{
 					childNode.RequestHandler = requestHandler;
-					childNode.RequestHandlerPropertyNames = RequestHandlerDescriptor.GetRequestHandlerPropertyNames(requestHandler);
-				}
 			}
 			else
 			{
