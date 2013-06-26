@@ -74,6 +74,8 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 				{
 					return null;
 				}
+
+				public int SomeOtherParam { get; set; }
 			}
 		}
 	}
