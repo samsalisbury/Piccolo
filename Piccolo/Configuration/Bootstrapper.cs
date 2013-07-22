@@ -41,13 +41,14 @@ namespace Piccolo.Configuration
 			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
 			configuration.Router = new RequestRouter(configuration.RequestHandlers);
 			configuration.RouteParameterBinders = new Dictionary<Type, IRouteParameterBinder>
-				{
-					{typeof(String), new StringRouteParameterBinder()},
-					{typeof(Boolean), new BooleanRouteParameterBinder()},
-					{typeof(Byte), new ByteRouteParameterBinder()},
-					{typeof(Int16), new Int16RouteParameterBinder()},
-					{typeof(Int32), new Int32RouteParameterBinder()}
-				};
+			{
+				{typeof(String), new StringRouteParameterBinder()},
+				{typeof(Boolean), new BooleanRouteParameterBinder()},
+				{typeof(Byte), new ByteRouteParameterBinder()},
+				{typeof(Int16), new Int16RouteParameterBinder()},
+				{typeof(Int32), new Int32RouteParameterBinder()},
+				{typeof(DateTime), new DateTimeRouteParameterBinder()}
+			};
 		}
 
 		private static void RunStartupTasks(HttpHandlerConfiguration configuration, Assembly assembly)

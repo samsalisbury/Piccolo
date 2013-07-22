@@ -42,9 +42,9 @@ namespace Piccolo.Routing
 		private static void ScanForUnreachableRouteParameters(IEnumerable<IList<string>> routeFragmentSets, IEnumerable<RouteAttribute> routeAttributes, Type requestHandlerType)
 		{
 			var dynamicRouteFragments = (from routeFragmentSet in routeFragmentSets
-			                             from fragment in routeFragmentSet
-			                             where RouteHandlerLookupNode.IsStaticFragment(fragment) == false
-			                             select RouteHandlerLookupNode.RemoveDynamicFragmentTokens(fragment)).ToList();
+				from fragment in routeFragmentSet
+				where RouteHandlerLookupNode.IsStaticFragment(fragment) == false
+				select RouteHandlerLookupNode.RemoveDynamicFragmentTokens(fragment)).ToList();
 
 			if (dynamicRouteFragments.Count == 0)
 				return;

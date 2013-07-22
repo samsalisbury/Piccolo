@@ -7,12 +7,12 @@ namespace Piccolo.Routing
 	internal static class RequestHandlerDescriptor
 	{
 		private static readonly Dictionary<string, string> _requestHandlerVerbMap = new Dictionary<string, string>
-			{
-				{typeof(IGet<>).Name, "get"},
-				{typeof(IPost<>).Name, "post"},
-				{typeof(IPut<>).Name, "put"},
-				{typeof(IDelete).Name, "delete"}
-			};
+		{
+			{typeof(IGet<>).Name, "get"},
+			{typeof(IPost<>).Name, "post"},
+			{typeof(IPut<>).Name, "put"},
+			{typeof(IDelete).Name, "delete"}
+		};
 
 		public static List<RouteAttribute> GetRouteAttributes(Type requestHandler)
 		{

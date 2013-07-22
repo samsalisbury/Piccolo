@@ -175,14 +175,14 @@ namespace Piccolo.UnitTests.Routing
 		public abstract class given_request_router_initialised_with_test_routes : given_request_router
 		{
 			private static readonly IEnumerable<Type> _testRoutes = new List<Type>
-				{
-					typeof(RootRequestHandler),
-					typeof(StaticLevel1RequestHandler),
-					typeof(StaticLevel2RequestHandler),
-					typeof(DynamicLevel1RequestHandler),
-					typeof(DynamicLevel2RequestHandler),
-					typeof(DynamicMultiLevelRequestHandler)
-				};
+			{
+				typeof(RootRequestHandler),
+				typeof(StaticLevel1RequestHandler),
+				typeof(StaticLevel2RequestHandler),
+				typeof(DynamicLevel1RequestHandler),
+				typeof(DynamicLevel2RequestHandler),
+				typeof(DynamicMultiLevelRequestHandler)
+			};
 
 			protected given_request_router_initialised_with_test_routes() : base(_testRoutes)
 			{

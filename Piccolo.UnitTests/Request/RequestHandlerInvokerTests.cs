@@ -125,6 +125,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_datetime_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> {{"param", "2013-07-22"}};
+				_result = Invoker.Execute(new GetResourceDateTime(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET 2013-07-22T00:00:00");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_put_request : given_request_handler_invoker
 		{
 			private string _result;
@@ -254,6 +273,17 @@ namespace Piccolo.UnitTests.Request
 			}
 
 			public Int32 Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/DateTime/{Param}")]
+		public class GetResourceDateTime : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0:s}", Param));
+			}
+
+			public DateTime Param { get; set; }
 		}
 
 		[Route("/PutRequestHandlerInvokerTests/{Param}")]
