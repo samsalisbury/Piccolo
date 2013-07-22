@@ -5,7 +5,7 @@
 	{
 		public HttpResponseMessage<dynamic> Post(UpdateResourceParams parameters)
 		{
-			return Response.Success.NoContent();
+			return Response.Success.Created();
 		}
 
 		public class UpdateResourceParams
