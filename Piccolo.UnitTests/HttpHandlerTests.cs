@@ -79,7 +79,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_handling_put_request_to_test_resource : given_http_handler
+		public class when_handling_post_request_to_test_resource : given_http_handler
 		{
 			private HttpResponseMessage _responseMessage;
 
@@ -87,7 +87,7 @@ namespace Piccolo.UnitTests
 			public void SetUp()
 			{
 				var requestContext = new Mock<IRequestContextWrapper>();
-				requestContext.SetupGet(x => x.Verb).Returns("PUT");
+				requestContext.SetupGet(x => x.Verb).Returns("POST");
 				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources"));
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}
@@ -99,7 +99,7 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_return_status_reason_created()
+			public void it_should_return_status_reason_no_content()
 			{
 				_responseMessage.ReasonPhrase.ShouldBe("Created");
 			}
@@ -111,9 +111,9 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources")]
-			public class CreateTestResource : IPut<string>
+			public class CreateTestResource : IPost<string>
 			{
-				public HttpResponseMessage<dynamic> Put(string parameters)
+				public HttpResponseMessage<dynamic> Post(string parameters)
 				{
 					return Response.Success.Created();
 				}
@@ -121,7 +121,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_handling_post_request_to_test_resource : given_http_handler
+		public class when_handling_put_request_to_test_resource : given_http_handler
 		{
 			private HttpResponseMessage _responseMessage;
 
@@ -129,7 +129,7 @@ namespace Piccolo.UnitTests
 			public void SetUp()
 			{
 				var requestContext = new Mock<IRequestContextWrapper>();
-				requestContext.SetupGet(x => x.Verb).Returns("POST");
+				requestContext.SetupGet(x => x.Verb).Returns("PUT");
 				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources/1"));
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}
@@ -153,9 +153,9 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources/{Id}")]
-			public class UpdateTestResource : IPost<string>
+			public class UpdateTestResource : IPut<string>
 			{
-				public HttpResponseMessage<dynamic> Post(string parameters)
+				public HttpResponseMessage<dynamic> Put(string parameters)
 				{
 					return Response.Success.NoContent();
 				}
