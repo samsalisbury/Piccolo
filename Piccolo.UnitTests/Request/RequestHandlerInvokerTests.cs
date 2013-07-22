@@ -49,6 +49,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_boolean_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> {{"param", "true"}};
+				_result = Invoker.Execute(new GetResourceBoolean(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET True");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_byte_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -191,6 +210,17 @@ namespace Piccolo.UnitTests.Request
 			}
 
 			public String Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/Boolean/{Param}")]
+		public class GetResourceBoolean : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0}", Param));
+			}
+
+			public Boolean Param { get; set; }
 		}
 
 		[Route("/RequestHandlerInvokerTests/Byte/{Param}")]

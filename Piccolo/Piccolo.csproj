@@ -50,6 +50,7 @@
     <Compile Include="Request\RequestContextWrapper.cs" />
     <Compile Include="Request\RequestHandlerInvoker.cs" />
     <Compile Include="Request\RouteParameterBinders\ByteRouteParameterBinder.cs" />
+    <Compile Include="Request\RouteParameterBinders\BooleanRouteParameterBinder.cs" />
     <Compile Include="Request\RouteParameterBinders\Int16RouteParameterBinder.cs" />
     <Compile Include="Request\RouteParameterBinders\StringRouteParameterBinder.cs" />
     <Compile Include="Request\RouteParameterBinders\Int32RouteParameterBinder.cs" />

@@ -24,7 +24,7 @@ namespace Piccolo.Request
 
 			BindRouteParameters(requestHandler, routeParameters, handlerType.GetProperties());
 
-			// TODO: implement post binding
+			// TODO: implement post parameter binding
 			var parameters = handlerMethod.GetParameters();
 			var arguments = new object[parameters.Length];
 
