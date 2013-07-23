@@ -338,6 +338,82 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_optional_byte_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
+				_result = Invoker.Execute(new GetResourceOptionalByte(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET 1");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_get_request_with_optional_int16_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
+				_result = Invoker.Execute(new GetResourceOptionalInt16(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET 1");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_get_request_with_optional_int32_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
+				_result = Invoker.Execute(new GetResourceOptionalInt32(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET 1");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_get_request_with_optional_datetime_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "2013-07-22"}};
+				_result = Invoker.Execute(new GetResourceOptionalDateTime(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET 2013-07-22T00:00:00");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_redundant_query_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -366,6 +442,66 @@ namespace Piccolo.UnitTests.Request
 
 			[Optional]
 			public String Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/Boolean/Optional")]
+		public class GetResourceOptionalBoolean : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0}", Param));
+			}
+
+			[Optional]
+			public Boolean Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/Byte/Optional")]
+		public class GetResourceOptionalByte : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0}", Param));
+			}
+
+			[Optional]
+			public Byte Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/Int16/Optional")]
+		public class GetResourceOptionalInt16 : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0}", Param));
+			}
+
+			[Optional]
+			public Int16 Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/Int32/Optional")]
+		public class GetResourceOptionalInt32 : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0}", Param));
+			}
+
+			[Optional]
+			public Int32 Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/DateTime/Optional")]
+		public class GetResourceOptionalDateTime : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok(string.Format("GET {0:s}", Param));
+			}
+
+			[Optional]
+			public DateTime Param { get; set; }
 		}
 
 		#endregion
