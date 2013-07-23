@@ -30,6 +30,7 @@ namespace Piccolo
 		[ExcludeFromCodeCoverage]
 		public void ProcessRequest(HttpContext context)
 		{
+			// TODO: Implement response encoding
 			var responseMessage = HandleRequest(new RequestContextWrapper(context));
 
 			context.Response.StatusCode = (int)responseMessage.StatusCode;
@@ -53,7 +54,7 @@ namespace Piccolo
 			var queryParameters = HttpUtility.ParseQueryString(requestContext.Uri.Query).ToDictionary();
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-			return _requestHandlerInvoker.Execute(requestHandler, requestContext.Verb, lookupResult.RouteParameters, queryParameters);
+			return _requestHandlerInvoker.Execute(requestHandler, requestContext.Verb, lookupResult.RouteParameters, queryParameters, requestContext.Payload);
 		}
 	}
 }

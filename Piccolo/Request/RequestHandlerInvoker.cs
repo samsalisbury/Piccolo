@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using Newtonsoft.Json;
 using Piccolo.Request.ParameterBinders;
 
 namespace Piccolo.Request
@@ -17,7 +18,7 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters, Dictionary<string, string> queryParameters)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters, Dictionary<string, string> queryParameters, string payload)
 		{
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, bindingFlags);
@@ -26,9 +27,13 @@ namespace Piccolo.Request
 			BindRouteParameters(requestHandler, routeParameters, properties);
 			BindQueryParameters(requestHandler, queryParameters, properties);
 
-			// TODO: implement post parameter binding
 			var parameters = handlerMethod.GetParameters();
 			var arguments = new object[parameters.Length];
+			if (parameters.Length == 1)
+			{
+				var parameterType = parameters.First().ParameterType;
+				arguments[0] = JsonConvert.DeserializeObject(payload, parameterType); // TODO: move to config
+			}
 
 			var result = handlerMethod.Invoke(requestHandler, arguments);
 

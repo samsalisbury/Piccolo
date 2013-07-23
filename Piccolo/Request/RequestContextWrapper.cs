@@ -23,5 +23,10 @@ namespace Piccolo.Request
 		{
 			get { return _context.Request.Url; }
 		}
+
+		public string Payload
+		{
+			get { throw new NotImplementedException(); }
+		}
 	}
 }

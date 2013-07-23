@@ -89,6 +89,7 @@ namespace Piccolo.UnitTests
 				var requestContext = new Mock<IRequestContextWrapper>();
 				requestContext.SetupGet(x => x.Verb).Returns("POST");
 				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources"));
+				requestContext.SetupGet(x => x.Payload).Returns("{}");
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}
 
@@ -111,11 +112,15 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources")]
-			public class CreateTestResource : IPost<string>
+			public class CreateTestResource : IPost<CreateTestResource.Parameters>
 			{
-				public HttpResponseMessage<dynamic> Post(string parameters)
+				public HttpResponseMessage<dynamic> Post(Parameters parameters)
 				{
 					return Response.Success.Created();
+				}
+
+				public class Parameters
+				{
 				}
 			}
 		}
@@ -131,6 +136,7 @@ namespace Piccolo.UnitTests
 				var requestContext = new Mock<IRequestContextWrapper>();
 				requestContext.SetupGet(x => x.Verb).Returns("PUT");
 				requestContext.SetupGet(x => x.Uri).Returns(new Uri("https://api.com/test-resources/1"));
+				requestContext.SetupGet(x => x.Payload).Returns("{}");
 				_responseMessage = HttpHandler.HandleRequest(requestContext.Object);
 			}
 
@@ -153,11 +159,15 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources/{Id}")]
-			public class UpdateTestResource : IPut<string>
+			public class UpdateTestResource : IPut<UpdateTestResource.Parameters>
 			{
-				public HttpResponseMessage<dynamic> Put(string parameters)
+				public HttpResponseMessage<dynamic> Put(Parameters parameters)
 				{
 					return Response.Success.NoContent();
+				}
+
+				public class Parameters
+				{
 				}
 
 				public int Id { get; set; }

@@ -6,5 +6,6 @@ namespace Piccolo.Request
 	{
 		string Verb { get; }
 		Uri Uri { get; }
+		string Payload { get; }
 	}
 }

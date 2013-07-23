@@ -21,11 +21,11 @@ namespace Piccolo.UnitTests.Request
 			[SetUp]
 			public void SetUp()
 			{
-				_result = Invoker.Execute(new GetResource(), "GET", new Dictionary<string, string>(), new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResource(), "GET", new Dictionary<string, string>(), new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("TEST");
 			}
@@ -40,11 +40,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "post"}};
-				_result = Invoker.Execute(new PostResource(), "POST", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new PostResource(), "POST", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("post");
 			}
@@ -59,11 +59,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "put"}};
-				_result = Invoker.Execute(new PutResource(), "PUT", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new PutResource(), "PUT", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("put");
 			}
@@ -78,11 +78,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "delete"}};
-				_result = Invoker.Execute(new DeleteResource(), "DELETE", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new DeleteResource(), "DELETE", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("delete");
 			}
@@ -143,11 +143,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "TEST"}};
-				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET TEST");
 			}
@@ -162,11 +162,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "true"}};
-				_result = Invoker.Execute(new GetResourceBoolean(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceBoolean(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET True");
 			}
@@ -181,11 +181,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceByte(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceByte(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 1");
 			}
@@ -200,11 +200,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceInt16(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceInt16(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 1");
 			}
@@ -219,11 +219,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceInt32(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceInt32(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 1");
 			}
@@ -238,11 +238,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "2013-07-22"}};
-				_result = Invoker.Execute(new GetResourceDateTime(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceDateTime(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 2013-07-22T00:00:00");
 			}
@@ -327,11 +327,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "TEST"}};
-				_result = Invoker.Execute(new GetResourceOptionalString(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceOptionalString(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET TEST");
 			}
@@ -346,11 +346,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceOptionalByte(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceOptionalByte(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 1");
 			}
@@ -365,11 +365,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceOptionalInt16(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceOptionalInt16(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 1");
 			}
@@ -384,11 +384,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceOptionalInt32(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceOptionalInt32(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 1");
 			}
@@ -403,11 +403,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "2013-07-22"}};
-				_result = Invoker.Execute(new GetResourceOptionalDateTime(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceOptionalDateTime(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 2013-07-22T00:00:00");
 			}
@@ -422,11 +422,11 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var queryParameters = new Dictionary<string, string> {{"redundant", ""}};
-				_result = Invoker.Execute(new GetResourceOptionalString(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceOptionalString(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
-			public void it_should()
+			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET ");
 			}
@@ -502,6 +502,86 @@ namespace Piccolo.UnitTests.Request
 
 			[Optional]
 			public DateTime Param { get; set; }
+		}
+
+		#endregion
+
+		#region PUT/POST Parameters
+
+		[TestFixture]
+		public class when_executing_post_request_with_payload : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var payload = "{" +
+				              "\"A\":1," +
+				              "\"B\":\"2\"" +
+				              "}";
+				_result = Invoker.Execute(new PostResourceWithPayload(), "POST", new Dictionary<string, string>(), new Dictionary<string, string>(), payload).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("A: 1; B: 2");
+			}
+		}
+
+		[Route("/PutRequestHandlerInvokerTests/Payload")]
+		public class PostResourceWithPayload : IPost<PostResourceWithPayload.Parameters>
+		{
+			public HttpResponseMessage<dynamic> Post(Parameters parameters)
+			{
+				var content = string.Format("A: {0}; B: {1}", parameters.A, parameters.B);
+				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(content)});
+			}
+
+			public class Parameters
+			{
+				public int A { get; set; }
+				public string B { get; set; }
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_putt_request_with_payload : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var payload = "{" +
+				              "\"A\":1," +
+				              "\"B\":\"2\"" +
+				              "}";
+				_result = Invoker.Execute(new PutResourceWithPayload(), "PUT", new Dictionary<string, string>(), new Dictionary<string, string>(), payload).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("A: 1; B: 2");
+			}
+		}
+
+		[Route("/PutRequestHandlerInvokerTests/Payload")]
+		public class PutResourceWithPayload : IPut<PutResourceWithPayload.Parameters>
+		{
+			public HttpResponseMessage<dynamic> Put(Parameters parameters)
+			{
+				var content = string.Format("A: {0}; B: {1}", parameters.A, parameters.B);
+				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(content)});
+			}
+
+			public class Parameters
+			{
+				public int A { get; set; }
+				public string B { get; set; }
+			}
 		}
 
 		#endregion
