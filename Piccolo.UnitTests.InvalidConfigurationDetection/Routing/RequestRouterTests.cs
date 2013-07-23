@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
+using Piccolo.Request;
 using Piccolo.Routing;
 using Shouldly;
 
@@ -76,6 +77,9 @@ namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
 				}
 
 				public int SomeOtherParam { get; set; }
+
+				[Optional]
+				public string OptionalParam { get; set; }
 			}
 		}
 	}
