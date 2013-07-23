@@ -11,15 +11,17 @@ namespace Piccolo.UnitTests.Request
 {
 	public class RequestHandlerInvokerTests
 	{
+		#region Verbs
+
 		[TestFixture]
-		public class when_executing_get_request_with_0_parameters : given_request_handler_invoker
+		public class when_executing_get_request : given_request_handler_invoker
 		{
 			private string _result;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_result = Invoker.Execute(new GetResource(), "GET", new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResource(), "GET", new Dictionary<string, string>(), new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -30,6 +32,109 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_post_request : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> {{"param", "post"}};
+				_result = Invoker.Execute(new PostResource(), "POST", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("post");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_put_request : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> {{"param", "put"}};
+				_result = Invoker.Execute(new PutResource(), "PUT", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("put");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_delete_request : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> {{"param", "delete"}};
+				_result = Invoker.Execute(new DeleteResource(), "DELETE", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("delete");
+			}
+		}
+
+		[Route("/RequestHandlerInvokerTests")]
+		public class GetResource : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return Response.Success.Ok("TEST");
+			}
+		}
+
+		[Route("/PostRequestHandlerInvokerTests/{Param}")]
+		public class PostResource : IPost<string>
+		{
+			public HttpResponseMessage<dynamic> Post(string parameters)
+			{
+				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
+			}
+
+			public string Param { get; set; }
+		}
+
+		[Route("/PutRequestHandlerInvokerTests/{Param}")]
+		public class PutResource : IPut<string>
+		{
+			public HttpResponseMessage<dynamic> Put(string parameters)
+			{
+				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
+			}
+
+			public string Param { get; set; }
+		}
+
+		[Route("/DeleteRequestHandlerInvokerTests/{Param}")]
+		public class DeleteResource : IDelete
+		{
+			public HttpResponseMessage<dynamic> Delete()
+			{
+				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
+			}
+
+			public string Param { get; set; }
+		}
+
+		#endregion
+
+		#region Route Parameters
+
+		[TestFixture]
 		public class when_executing_get_request_with_string_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -38,7 +143,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "TEST"}};
-				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -57,7 +162,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "true"}};
-				_result = Invoker.Execute(new GetResourceBoolean(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceBoolean(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -76,7 +181,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceByte(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceByte(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -95,7 +200,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceInt16(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceInt16(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -114,7 +219,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "1"}};
-				_result = Invoker.Execute(new GetResourceInt32(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceInt32(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -133,90 +238,13 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "2013-07-22"}};
-				_result = Invoker.Execute(new GetResourceDateTime(), "GET", routeParameters).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new GetResourceDateTime(), "GET", routeParameters, new Dictionary<string, string>()).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
 			public void it_should()
 			{
 				_result.ShouldBe("GET 2013-07-22T00:00:00");
-			}
-		}
-
-		[TestFixture]
-		public class when_executing_put_request : given_request_handler_invoker
-		{
-			private string _result;
-
-			[SetUp]
-			public void SetUp()
-			{
-				var routeParameters = new Dictionary<string, string> {{"param", "put"}};
-				_result = Invoker.Execute(new PutResource(), "PUT", routeParameters).Content.ReadAsStringAsync().Result;
-			}
-
-			[Test]
-			public void it_should()
-			{
-				_result.ShouldBe("put");
-			}
-		}
-
-		[TestFixture]
-		public class when_executing_post_request : given_request_handler_invoker
-		{
-			private string _result;
-
-			[SetUp]
-			public void SetUp()
-			{
-				var routeParameters = new Dictionary<string, string> {{"param", "post"}};
-				_result = Invoker.Execute(new PostResource(), "POST", routeParameters).Content.ReadAsStringAsync().Result;
-			}
-
-			[Test]
-			public void it_should()
-			{
-				_result.ShouldBe("post");
-			}
-		}
-
-		[TestFixture]
-		public class when_executing_delete_request : given_request_handler_invoker
-		{
-			private string _result;
-
-			[SetUp]
-			public void SetUp()
-			{
-				var routeParameters = new Dictionary<string, string> {{"param", "delete"}};
-				_result = Invoker.Execute(new DeleteResource(), "DELETE", routeParameters).Content.ReadAsStringAsync().Result;
-			}
-
-			[Test]
-			public void it_should()
-			{
-				_result.ShouldBe("delete");
-			}
-		}
-
-		public abstract class given_request_handler_invoker
-		{
-			protected RequestHandlerInvoker Invoker;
-
-			protected given_request_handler_invoker()
-			{
-				var configuration = new Bootstrapper(Assembly.GetExecutingAssembly()).ApplyConfiguration(false);
-				Invoker = new RequestHandlerInvoker(configuration.RouteParameterBinders);
-			}
-		}
-
-		[Route("/RequestHandlerInvokerTests")]
-		public class GetResource : IGet<string>
-		{
-			public HttpResponseMessage<string> Get()
-			{
-				return Response.Success.Ok("TEST");
 			}
 		}
 
@@ -286,37 +314,52 @@ namespace Piccolo.UnitTests.Request
 			public DateTime Param { get; set; }
 		}
 
-		[Route("/PutRequestHandlerInvokerTests/{Param}")]
-		public class PutResource : IPut<string>
+		#endregion
+
+		#region Query Parameters
+
+		[TestFixture]
+		public class when_executing_get_request_with_optional_string_parameter : given_request_handler_invoker
 		{
-			public HttpResponseMessage<dynamic> Put(string parameters)
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
 			{
-				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
+				var queryParameters = new Dictionary<string, string> {{"param", "TEST"}};
+				_result = Invoker.Execute(new GetResourceOptionalString(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
 			}
 
-			public string Param { get; set; }
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET TEST");
+			}
 		}
 
-		[Route("/PostRequestHandlerInvokerTests/{Param}")]
-		public class PostResource : IPost<string>
+		[Route("/RequestHandlerInvokerTests/String/Optional")]
+		public class GetResourceOptionalString : IGet<string>
 		{
-			public HttpResponseMessage<dynamic> Post(string parameters)
+			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
+				return Response.Success.Ok(string.Format("GET {0}", Param));
 			}
 
-			public string Param { get; set; }
+			[Optional]
+			public String Param { get; set; }
 		}
 
-		[Route("/DeleteRequestHandlerInvokerTests/{Param}")]
-		public class DeleteResource : IDelete
-		{
-			public HttpResponseMessage<dynamic> Delete()
-			{
-				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
-			}
+		#endregion
 
-			public string Param { get; set; }
+		public abstract class given_request_handler_invoker
+		{
+			protected RequestHandlerInvoker Invoker;
+
+			protected given_request_handler_invoker()
+			{
+				var configuration = new Bootstrapper(Assembly.GetExecutingAssembly()).ApplyConfiguration(false);
+				Invoker = new RequestHandlerInvoker(configuration.RouteParameterBinders);
+			}
 		}
 	}
 }

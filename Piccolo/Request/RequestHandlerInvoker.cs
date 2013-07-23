@@ -17,12 +17,14 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters, Dictionary<string, string> queryParameters)
 		{
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, bindingFlags);
+			var properties = handlerType.GetProperties();
 
-			BindRouteParameters(requestHandler, routeParameters, handlerType.GetProperties());
+			BindRouteParameters(requestHandler, routeParameters, properties);
+			BindQueryParameters(requestHandler, queryParameters, properties);
 
 			// TODO: implement post parameter binding
 			var parameters = handlerMethod.GetParameters();
@@ -41,6 +43,18 @@ namespace Piccolo.Request
 				var property = properties.Single(x => x.Name.Equals(routeParameter.Key, StringComparison.InvariantCultureIgnoreCase));
 				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
 				binder.BindRouteParameter(requestHandler, property, routeParameter.Value);
+			}
+		}
+
+		private void BindQueryParameters(IRequestHandler requestHandler, Dictionary<string, string> queryParameters, IEnumerable<PropertyInfo> properties)
+		{
+			var optionalProperties = properties.Where(x => x.GetCustomAttributes(typeof(OptionalAttribute), true).Any());
+
+			foreach (var property in optionalProperties)
+			{
+				var queryParameter = queryParameters.Single(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
+				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
+				binder.BindRouteParameter(requestHandler, property, queryParameter.Value);
 			}
 		}
 	}

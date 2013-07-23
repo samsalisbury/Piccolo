@@ -50,8 +50,10 @@ namespace Piccolo
 			if (lookupResult == null || lookupResult.RequestHandlerType == null)
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
+			var queryParameters = HttpUtility.ParseQueryString(requestContext.Uri.Query).ToDictionary();
+
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-			return _requestHandlerInvoker.Execute(requestHandler, requestContext.Verb, lookupResult.RouteParameters);
+			return _requestHandlerInvoker.Execute(requestHandler, requestContext.Verb, lookupResult.RouteParameters, queryParameters);
 		}
 	}
 }
