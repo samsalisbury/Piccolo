@@ -338,6 +338,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_optional_boolean_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> { { "param", "true" } };
+				_result = Invoker.Execute(new GetResourceOptionalBoolean(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("GET True");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_optional_byte_parameter : given_request_handler_invoker
 		{
 			private string _result;
