@@ -22,7 +22,7 @@ namespace Piccolo
 		{
 			var bootstrapper = new Bootstrapper(assembly);
 			Configuration = bootstrapper.ApplyConfiguration(applyCustomConfiguration);
-			_requestHandlerInvoker = new RequestHandlerInvoker(Configuration.RouteParameterBinders);
+			_requestHandlerInvoker = new RequestHandlerInvoker(Configuration.JsonDecoder, Configuration.RouteParameterBinders);
 		}
 
 		public HttpHandlerConfiguration Configuration { get; private set; }

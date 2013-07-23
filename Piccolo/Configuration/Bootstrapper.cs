@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 using Piccolo.Request.ParameterBinders;
 using Piccolo.Routing;
 
@@ -49,6 +50,7 @@ namespace Piccolo.Configuration
 				{typeof(Int32), new Int32ParameterBinder()},
 				{typeof(DateTime), new DateTimeParameterBinder()}
 			};
+			configuration.JsonDecoder = (type, payload) => JsonConvert.DeserializeObject(payload, type);
 		}
 
 		private static void RunStartupTasks(HttpHandlerConfiguration configuration, Assembly assembly)

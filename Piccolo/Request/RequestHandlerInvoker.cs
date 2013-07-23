@@ -3,25 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using Newtonsoft.Json;
 using Piccolo.Request.ParameterBinders;
 
 namespace Piccolo.Request
 {
 	public class RequestHandlerInvoker
 	{
+		private const BindingFlags MethodLookupFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
+		private readonly Func<Type, string, object> _jsonDecoder;
 		private readonly Dictionary<Type, IRouteParameterBinder> _routeParameterBinders;
-		private BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
 
-		public RequestHandlerInvoker(Dictionary<Type, IRouteParameterBinder> routeParameterBinders)
+		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, Dictionary<Type, IRouteParameterBinder> routeParameterBinders)
 		{
+			_jsonDecoder = jsonDecoder;
 			_routeParameterBinders = routeParameterBinders;
 		}
 
+		// TODO: Refactoring candidate
 		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters, Dictionary<string, string> queryParameters, string payload)
 		{
 			var handlerType = requestHandler.GetType();
-			var handlerMethod = handlerType.GetMethod(verb, bindingFlags);
+			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
 			var properties = handlerType.GetProperties();
 
 			BindRouteParameters(requestHandler, routeParameters, properties);
@@ -32,7 +34,7 @@ namespace Piccolo.Request
 			if (parameters.Length == 1)
 			{
 				var parameterType = parameters.First().ParameterType;
-				arguments[0] = JsonConvert.DeserializeObject(payload, parameterType); // TODO: move to config
+				arguments[0] = _jsonDecoder(parameterType, payload);
 			}
 
 			var result = handlerMethod.Invoke(requestHandler, arguments);

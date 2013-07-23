@@ -345,7 +345,7 @@ namespace Piccolo.UnitTests.Request
 			[SetUp]
 			public void SetUp()
 			{
-				var queryParameters = new Dictionary<string, string> { { "param", "true" } };
+				var queryParameters = new Dictionary<string, string> {{"param", "true"}};
 				_result = Invoker.Execute(new GetResourceOptionalBoolean(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
@@ -612,7 +612,7 @@ namespace Piccolo.UnitTests.Request
 			protected given_request_handler_invoker()
 			{
 				var configuration = new Bootstrapper(Assembly.GetExecutingAssembly()).ApplyConfiguration(false);
-				Invoker = new RequestHandlerInvoker(configuration.RouteParameterBinders);
+				Invoker = new RequestHandlerInvoker(configuration.JsonDecoder, configuration.RouteParameterBinders);
 			}
 		}
 	}
