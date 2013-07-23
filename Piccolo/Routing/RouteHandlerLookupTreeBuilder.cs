@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Piccolo.Routing
 {
-	internal static class RouteHandlerLookupTreeBuiler
+	internal static class RouteHandlerLookupTreeBuilder
 	{
 		internal static RouteHandlerLookupNode BuildRouteHandlerLookupTree(IEnumerable<Type> requestHandlers)
 		{

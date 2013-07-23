@@ -10,7 +10,7 @@ namespace Piccolo.Routing
 
 		public RequestRouter(IEnumerable<Type> requestHandlers)
 		{
-			_tree = RouteHandlerLookupTreeBuiler.BuildRouteHandlerLookupTree(requestHandlers);
+			_tree = RouteHandlerLookupTreeBuilder.BuildRouteHandlerLookupTree(requestHandlers);
 		}
 
 		public RouteHandlerLookupResult FindRequestHandler(string verb, Uri uri)
