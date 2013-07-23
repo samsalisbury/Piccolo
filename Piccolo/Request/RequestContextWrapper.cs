@@ -26,7 +26,7 @@ namespace Piccolo.Request
 
 		public string Payload
 		{
-			get { throw new NotImplementedException(); }
+			get { return _context.Request.Form.Count > 0 ? _context.Request.Form[0] : string.Empty; }
 		}
 	}
 }
