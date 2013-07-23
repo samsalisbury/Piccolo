@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Piccolo.Request.RouteParameterBinders
+namespace Piccolo.Request.ParameterBinders
 {
 	public interface IRouteParameterBinder
 	{

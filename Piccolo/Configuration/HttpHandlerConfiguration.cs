@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Piccolo.Request.RouteParameterBinders;
+using Piccolo.Request.ParameterBinders;
 using Piccolo.Routing;
 
 namespace Piccolo.Configuration

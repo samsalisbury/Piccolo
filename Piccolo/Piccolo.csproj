@@ -51,13 +51,13 @@
     <Compile Include="Request\OptionalAttribute.cs" />
     <Compile Include="Request\RequestContextWrapper.cs" />
     <Compile Include="Request\RequestHandlerInvoker.cs" />
-    <Compile Include="Request\RouteParameterBinders\ByteRouteParameterBinder.cs" />
-    <Compile Include="Request\RouteParameterBinders\BooleanRouteParameterBinder.cs" />
-    <Compile Include="Request\RouteParameterBinders\DateTimeRouteParameterBinder.cs" />
-    <Compile Include="Request\RouteParameterBinders\Int16RouteParameterBinder.cs" />
-    <Compile Include="Request\RouteParameterBinders\StringRouteParameterBinder.cs" />
-    <Compile Include="Request\RouteParameterBinders\Int32RouteParameterBinder.cs" />
-    <Compile Include="Request\RouteParameterBinders\IRouteParameterBinder.cs" />
+    <Compile Include="Request\ParameterBinders\ByteParameterBinder.cs" />
+    <Compile Include="Request\ParameterBinders\BooleanParameterBinder.cs" />
+    <Compile Include="Request\ParameterBinders\DateTimeParameterBinder.cs" />
+    <Compile Include="Request\ParameterBinders\Int16ParameterBinder.cs" />
+    <Compile Include="Request\ParameterBinders\StringParameterBinder.cs" />
+    <Compile Include="Request\ParameterBinders\Int32ParameterBinder.cs" />
+    <Compile Include="Request\ParameterBinders\IRouteParameterBinder.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="RouteAttribute.cs" />
     <Compile Include="Routing\IRequestRouter.cs" />
@@ -66,7 +66,7 @@
     <Compile Include="Routing\RequestHandlerDescriptor.cs" />
     <Compile Include="Routing\RouteIdentifierBuiler.cs" />
     <Compile Include="Routing\RouteHandlerLookupNode.cs" />
-    <Compile Include="Routing\RouteHandlerLookupTreeBuiler.cs" />
+    <Compile Include="Routing\RouteHandlerLookupTreeBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

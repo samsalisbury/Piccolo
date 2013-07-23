@@ -1,9 +1,9 @@
 using System;
 using System.Reflection;
 
-namespace Piccolo.Request.RouteParameterBinders
+namespace Piccolo.Request.ParameterBinders
 {
-	public class Int16RouteParameterBinder : IRouteParameterBinder
+	public class Int16ParameterBinder : IRouteParameterBinder
 	{
 		public void BindRouteParameter(IRequestHandler requestHandler, PropertyInfo property, string rawValue)
 		{

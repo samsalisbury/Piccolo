@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using Piccolo.Request.RouteParameterBinders;
+using Piccolo.Request.ParameterBinders;
 using Piccolo.Routing;
 
 namespace Piccolo.Configuration
@@ -42,12 +42,12 @@ namespace Piccolo.Configuration
 			configuration.Router = new RequestRouter(configuration.RequestHandlers);
 			configuration.RouteParameterBinders = new Dictionary<Type, IRouteParameterBinder>
 			{
-				{typeof(String), new StringRouteParameterBinder()},
-				{typeof(Boolean), new BooleanRouteParameterBinder()},
-				{typeof(Byte), new ByteRouteParameterBinder()},
-				{typeof(Int16), new Int16RouteParameterBinder()},
-				{typeof(Int32), new Int32RouteParameterBinder()},
-				{typeof(DateTime), new DateTimeRouteParameterBinder()}
+				{typeof(String), new StringParameterBinder()},
+				{typeof(Boolean), new BooleanParameterBinder()},
+				{typeof(Byte), new ByteParameterBinder()},
+				{typeof(Int16), new Int16ParameterBinder()},
+				{typeof(Int32), new Int32ParameterBinder()},
+				{typeof(DateTime), new DateTimeParameterBinder()}
 			};
 		}
 
