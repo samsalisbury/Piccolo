@@ -52,7 +52,10 @@ namespace Piccolo.Request
 
 			foreach (var property in optionalProperties)
 			{
-				var queryParameter = queryParameters.Single(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
+				var queryParameter = queryParameters.SingleOrDefault(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
+				if (queryParameter.Equals(default(KeyValuePair<string, string>)))
+					continue;
+
 				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
 				binder.BindRouteParameter(requestHandler, property, queryParameter.Value);
 			}

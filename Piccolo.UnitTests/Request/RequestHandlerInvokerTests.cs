@@ -337,6 +337,25 @@ namespace Piccolo.UnitTests.Request
 			}
 		}
 
+		[TestFixture]
+		public class when_executing_get_request_with_redundant_query_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"redundant", ""}};
+				_result = Invoker.Execute(new GetResourceOptionalString(), "GET", new Dictionary<string, string>(), queryParameters).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should()
+			{
+				_result.ShouldBe("GET ");
+			}
+		}
+
 		[Route("/RequestHandlerInvokerTests/String/Optional")]
 		public class GetResourceOptionalString : IGet<string>
 		{

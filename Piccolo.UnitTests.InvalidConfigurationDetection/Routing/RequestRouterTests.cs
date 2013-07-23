@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
-using Piccolo.Request;
 using Piccolo.Routing;
 using Shouldly;
 
