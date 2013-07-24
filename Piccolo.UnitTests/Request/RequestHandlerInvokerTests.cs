@@ -93,7 +93,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok("TEST");
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent("TEST")});
 			}
 		}
 
@@ -253,7 +253,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			public String Param { get; set; }
@@ -264,7 +264,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			public Boolean Param { get; set; }
@@ -275,7 +275,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			public Byte Param { get; set; }
@@ -286,7 +286,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			public Int16 Param { get; set; }
@@ -297,7 +297,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			public Int32 Param { get; set; }
@@ -308,7 +308,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0:s}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0:s}", Param))});
 			}
 
 			public DateTime Param { get; set; }
@@ -456,7 +456,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			[Optional]
@@ -468,7 +468,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			[Optional]
@@ -480,7 +480,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			[Optional]
@@ -492,7 +492,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			[Optional]
@@ -504,7 +504,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
 			}
 
 			[Optional]
@@ -516,7 +516,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Get()
 			{
-				return Response.Success.Ok(string.Format("GET {0:s}", Param));
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0:s}", Param))});
 			}
 
 			[Optional]

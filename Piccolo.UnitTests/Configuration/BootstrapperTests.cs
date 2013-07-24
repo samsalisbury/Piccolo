@@ -26,6 +26,24 @@ namespace Piccolo.UnitTests.Configuration
 			{
 				_handlerConfiguration.RequestHandlerFactory.ShouldBeTypeOf<DefaultRequestHandlerFactory>();
 			}
+
+			[Test]
+			public void it_should_autodetect_request_handlers()
+			{
+				_handlerConfiguration.RequestHandlers.Any(x => x == typeof(TestRequestHandler)).ShouldBe(true);
+			}
+
+			[Test]
+			public void it_should_condfigure_json_encoder()
+			{
+				_handlerConfiguration.JsonEncoder.ShouldNotBe(null);
+			}
+
+			[Test]
+			public void it_should_condfigure_json_decoder()
+			{
+				_handlerConfiguration.JsonDecoder.ShouldNotBe(null);
+			}
 		}
 
 		[TestFixture]
@@ -43,12 +61,6 @@ namespace Piccolo.UnitTests.Configuration
 			public void it_should_configure_custom_request_handler_factory()
 			{
 				_handlerConfiguration.RequestHandlerFactory.ShouldBeTypeOf<CustomRequestHandlerFactory>();
-			}
-
-			[Test]
-			public void it_should_autodetect_request_handlers()
-			{
-				_handlerConfiguration.RequestHandlers.Any(x => x == typeof(TestRequestHandler)).ShouldBe(true);
 			}
 		}
 

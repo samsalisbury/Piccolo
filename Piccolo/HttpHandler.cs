@@ -30,13 +30,17 @@ namespace Piccolo
 		[ExcludeFromCodeCoverage]
 		public void ProcessRequest(HttpContext context)
 		{
-			// TODO: Implement response encoding
 			var responseMessage = HandleRequest(new RequestContextWrapper(context));
 
 			context.Response.StatusCode = (int)responseMessage.StatusCode;
 			context.Response.StatusDescription = responseMessage.ReasonPhrase;
+
 			if (responseMessage.Content != null)
-				context.Response.Write(responseMessage.Content.ReadAsStringAsync().Result);
+			{
+				var objectContent = (ObjectContent)responseMessage.Content;
+				var encodedPayload = Configuration.JsonEncoder(objectContent.Content);
+				context.Response.Write(encodedPayload);
+			}
 		}
 
 		[ExcludeFromCodeCoverage]

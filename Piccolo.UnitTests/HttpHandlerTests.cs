@@ -63,18 +63,24 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_content()
 			{
-				_responseMessage.Content.ReadAsStringAsync().Result.ShouldBe("TEST");
+				((ObjectContent)_responseMessage.Content).ShouldNotBe(null);
 			}
 
 			[Route("/test-resources/{id}")]
-			public class GetTestResourceById : IGet<string>
+			public class GetTestResourceById : IGet<GetTestResourceById.Model>
 			{
-				public HttpResponseMessage<string> Get()
+				public HttpResponseMessage<Model> Get()
 				{
-					return Response.Success.Ok("TEST");
+					return Response.Success.Ok(new Model {A = "1", B = 2});
 				}
 
 				public int Id { get; set; }
+
+				public class Model
+				{
+					public string A { get; set; }
+					public int B { get; set; }
+				}
 			}
 		}
 

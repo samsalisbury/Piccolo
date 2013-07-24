@@ -50,6 +50,7 @@ namespace Piccolo.Configuration
 				{typeof(Int32), new Int32ParameterBinder()},
 				{typeof(DateTime), new DateTimeParameterBinder()}
 			};
+			configuration.JsonEncoder = content => JsonConvert.SerializeObject(content, Formatting.Indented);
 			configuration.JsonDecoder = (type, payload) => JsonConvert.DeserializeObject(payload, type);
 		}
 

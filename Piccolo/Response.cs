@@ -9,7 +9,7 @@ namespace Piccolo
 		{
 			public static HttpResponseMessage<TOutput> Ok<TOutput>(TOutput content)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(content.ToString())};
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.OK) {Content = new ObjectContent(content)};
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 

@@ -46,6 +46,7 @@
     <Compile Include="IPost.cs" />
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
+    <Compile Include="ObjectContent.cs" />
     <Compile Include="OptionalAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request\IRequestContextWrapper.cs" />

@@ -12,6 +12,7 @@ namespace Piccolo.Configuration
 		public ReadOnlyCollection<Type> RequestHandlers { get; set; }
 		public Dictionary<Type, IRouteParameterBinder> RouteParameterBinders { get; set; }
 		public IRequestRouter Router { get; set; }
+		public Func<object, string> JsonEncoder { get; set; }
 		public Func<Type, string, object> JsonDecoder { get; set; }
 	}
 }
