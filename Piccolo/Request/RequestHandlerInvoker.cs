@@ -19,7 +19,6 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		// TODO: Refactoring candidate
 		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters, Dictionary<string, string> queryParameters, string payload)
 		{
 			var handlerType = requestHandler.GetType();
@@ -28,19 +27,11 @@ namespace Piccolo.Request
 
 			BindRouteParameters(requestHandler, routeParameters, properties);
 			BindQueryParameters(requestHandler, queryParameters, properties);
+			var postParameter = DeserialisePostParameter(payload, handlerMethod);
 
-			var parameters = handlerMethod.GetParameters();
-			var arguments = new object[parameters.Length];
-			if (parameters.Length == 1)
-			{
-				var parameterType = parameters.First().ParameterType;
-				arguments[0] = _jsonDecoder(parameterType, payload);
-			}
+			var result = handlerMethod.Invoke(requestHandler, postParameter);
 
-			var result = handlerMethod.Invoke(requestHandler, arguments);
-
-			var messageProperty = result.GetType().GetProperty("Message");
-			return messageProperty.GetValue(result, null) as HttpResponseMessage;
+			return GetResponseMessage(result);
 		}
 
 		private void BindRouteParameters(IRequestHandler requestHandler, Dictionary<string, string> routeParameters, PropertyInfo[] properties)
@@ -66,6 +57,24 @@ namespace Piccolo.Request
 				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
 				binder.BindRouteParameter(requestHandler, property, queryParameter.Value);
 			}
+		}
+
+		private object[] DeserialisePostParameter(string payload, MethodInfo handlerMethod)
+		{
+			var parameters = handlerMethod.GetParameters();
+			var arguments = new object[parameters.Length];
+			if (parameters.Length == 1)
+			{
+				var parameterType = parameters.First().ParameterType;
+				arguments[0] = _jsonDecoder(parameterType, payload);
+			}
+			return arguments;
+		}
+
+		private static HttpResponseMessage GetResponseMessage(object result)
+		{
+			var messageProperty = result.GetType().GetProperty("Message");
+			return messageProperty.GetValue(result, null) as HttpResponseMessage;
 		}
 	}
 }
