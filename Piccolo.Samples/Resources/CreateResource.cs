@@ -1,14 +1,14 @@
 ﻿namespace Piccolo.Samples.Resources
 {
 	[Route("/resources")]
-	public class CreateResource : IPost<CreateResource.UpdateResourceParams>
+	public class CreateResource : IPost<CreateResource.Parameters>
 	{
-		public HttpResponseMessage<dynamic> Post(UpdateResourceParams parameters)
+		public HttpResponseMessage<dynamic> Post(Parameters parameters)
 		{
 			return Response.Success.Created();
 		}
 
-		public class UpdateResourceParams
+		public class Parameters
 		{
 		}
 	}
