@@ -15,7 +15,7 @@ namespace Piccolo.Routing
 
 		public RouteHandlerLookupResult FindRequestHandler(string verb, Uri uri)
 		{
-			var handlerIdentifier = RouteIdentifierBuiler.BuildIdentifier(verb, uri.AbsolutePath);
+			var handlerIdentifier = RouteIdentifierBuilder.BuildIdentifier(verb, uri.AbsolutePath);
 			return FindNode(_tree, handlerIdentifier, new Dictionary<string, string>());
 		}
 

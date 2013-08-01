@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Piccolo.Routing
 {
-	internal static class RouteIdentifierBuiler
+	internal static class RouteIdentifierBuilder
 	{
 		internal static IList<string> BuildIdentifier(string verb, string uri)
 		{

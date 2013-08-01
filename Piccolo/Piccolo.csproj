@@ -33,7 +33,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Configuration\Bootstrapper.cs" />
     <Compile Include="Configuration\DefaultRequestHandlerFactory.cs" />
     <Compile Include="Configuration\HttpHandlerConfiguration.cs" />
@@ -43,6 +42,8 @@
     <Compile Include="HttpResponseMessage.cs" />
     <Compile Include="IDelete.cs" />
     <Compile Include="IGet.cs" />
+    <Compile Include="Internal\CollectionExtensions.cs" />
+    <Compile Include="Internal\ExceptionMessageBuilder.cs" />
     <Compile Include="IPost.cs" />
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="Routing\RouteHandlerLookupResult.cs" />
     <Compile Include="Routing\RequestRouter.cs" />
     <Compile Include="Routing\RequestHandlerDescriptor.cs" />
-    <Compile Include="Routing\RouteIdentifierBuiler.cs" />
+    <Compile Include="Routing\RouteIdentifierBuilder.cs" />
     <Compile Include="Routing\RouteHandlerLookupNode.cs" />
     <Compile Include="Routing\RouteHandlerLookupTreeBuilder.cs" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piccolo.Internal;
 
 namespace Piccolo.Routing
 {
@@ -25,7 +26,7 @@ namespace Piccolo.Routing
 			var match = _requestHandlerVerbMap.SingleOrDefault(pair => interfaces.Any(x => x.Name == pair.Key));
 
 			if (match.Key == null)
-				throw new InvalidOperationException(string.Format("Request handler [{0}] does not implement any of the following supported interfaces: IGet<T>, IPut<T>, IPost<T>, IDelete.", requestHandler.FullName));
+				throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidRequestHandlerImplementationMessage(requestHandler));
 
 			return match.Value;
 		}

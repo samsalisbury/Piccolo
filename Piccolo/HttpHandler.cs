@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
 using Piccolo.Configuration;
+using Piccolo.Internal;
 using Piccolo.Request;
 
 namespace Piccolo
