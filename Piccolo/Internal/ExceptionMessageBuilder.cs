@@ -19,7 +19,7 @@ namespace Piccolo.Internal
 			messageBuilder.AppendFormat("request handler [{0}] does not expose property {1}.", requestHandlerType.FullName, unreachableParameter);
 			messageBuilder.AppendLine();
 			messageBuilder.AppendLine();
-			messageBuilder.AppendLine("Routes Templates:");
+			messageBuilder.AppendLine("Route Templates:");
 			foreach (var routeTemplate in routeAttributes.Select(x => x.Template))
 			{
 				messageBuilder.AppendLine(string.Format(" - {0}", routeTemplate));
