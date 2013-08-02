@@ -111,7 +111,7 @@ namespace Piccolo.UnitTests.Request
 		[Route("/PutRequestHandlerInvokerTests/{Param}")]
 		public class PutResource : IPut<string>
 		{
-			public HttpResponseMessage<dynamic> Put(string parameters)
+			public HttpResponseMessage<dynamic> Put(string task)
 			{
 				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
 			}
@@ -590,9 +590,9 @@ namespace Piccolo.UnitTests.Request
 		[Route("/PutRequestHandlerInvokerTests/Payload")]
 		public class PutResourceWithPayload : IPut<PutResourceWithPayload.Parameters>
 		{
-			public HttpResponseMessage<dynamic> Put(Parameters parameters)
+			public HttpResponseMessage<dynamic> Put(Parameters task)
 			{
-				var content = string.Format("A: {0}; B: {1}", parameters.A, parameters.B);
+				var content = string.Format("A: {0}; B: {1}", task.A, task.B);
 				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(content)});
 			}
 

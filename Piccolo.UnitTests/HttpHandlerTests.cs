@@ -167,7 +167,7 @@ namespace Piccolo.UnitTests
 			[Route("/test-resources/{Id}")]
 			public class UpdateTestResource : IPut<UpdateTestResource.Parameters>
 			{
-				public HttpResponseMessage<dynamic> Put(Parameters parameters)
+				public HttpResponseMessage<dynamic> Put(Parameters task)
 				{
 					return Response.Success.NoContent();
 				}

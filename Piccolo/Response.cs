@@ -25,5 +25,14 @@ namespace Piccolo
 				return new HttpResponseMessage<dynamic>(responseMessage);
 			}
 		}
+
+		public class Error
+		{
+			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
+			{
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
+				return new HttpResponseMessage<TOutput>(responseMessage);
+			}
+		}
 	}
 }
