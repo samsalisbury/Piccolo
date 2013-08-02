@@ -1,10 +1,21 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
 namespace Piccolo
 {
+	[ExcludeFromCodeCoverage]
 	public class Response
 	{
+		public class Error
+		{
+			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
+			{
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
+				return new HttpResponseMessage<TOutput>(responseMessage);
+			}
+		}
+
 		public class Success
 		{
 			public static HttpResponseMessage<TOutput> Ok<TOutput>(TOutput content)
@@ -23,15 +34,6 @@ namespace Piccolo
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.NoContent);
 				return new HttpResponseMessage<dynamic>(responseMessage);
-			}
-		}
-
-		public class Error
-		{
-			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
-			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
-				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 		}
 	}
