@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Piccolo.Samples.Models;
+using Piccolo.Tasks.Models;
 
-namespace Piccolo.Samples.Repositories
+namespace Piccolo.Tasks.Repositories
 {
 	public interface ITaskRepository
 	{

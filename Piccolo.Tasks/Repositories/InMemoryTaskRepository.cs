@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Piccolo.Samples.Models;
+using Piccolo.Tasks.Models;
 
-namespace Piccolo.Samples.Repositories
+namespace Piccolo.Tasks.Repositories
 {
 	// Created for demo purposes. Ignore obvious concurrency issues, etc.
 	public class InMemoryTaskRepository : ITaskRepository

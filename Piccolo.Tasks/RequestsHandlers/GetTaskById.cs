@@ -1,7 +1,7 @@
-﻿using Piccolo.Samples.Models;
-using Piccolo.Samples.Repositories;
+﻿using Piccolo.Tasks.Models;
+using Piccolo.Tasks.Repositories;
 
-namespace Piccolo.Samples.RequestsHandlers
+namespace Piccolo.Tasks.RequestsHandlers
 {
 	[Route("/tasks/{id}")]
 	public class GetTaskById : IGet<Task>

@@ -1,6 +1,6 @@
-﻿using Piccolo.Samples.Repositories;
+﻿using Piccolo.Tasks.Repositories;
 
-namespace Piccolo.Samples.RequestsHandlers
+namespace Piccolo.Tasks.RequestsHandlers
 {
 	[Route("/tasks/{id}")]
 	public class DeleteTaskById : IDelete

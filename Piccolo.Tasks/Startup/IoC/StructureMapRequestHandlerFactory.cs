@@ -2,7 +2,7 @@ using System;
 using Piccolo.Configuration;
 using StructureMap;
 
-namespace Piccolo.Samples.Startup.IoC
+namespace Piccolo.Tasks.Startup.IoC
 {
 	public class StructureMapRequestHandlerFactory : IRequestHandlerFactory
 	{

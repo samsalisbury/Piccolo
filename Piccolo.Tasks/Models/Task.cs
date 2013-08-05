@@ -1,4 +1,4 @@
-﻿namespace Piccolo.Samples.Models
+﻿namespace Piccolo.Tasks.Models
 {
 	public class Task
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Web;
 
-namespace Piccolo.Samples
+namespace Piccolo.Tasks
 {
 	public class Global : HttpApplication
 	{

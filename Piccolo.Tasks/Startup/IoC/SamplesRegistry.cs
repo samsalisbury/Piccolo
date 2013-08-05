@@ -1,7 +1,7 @@
-﻿using Piccolo.Samples.Repositories;
+﻿using Piccolo.Tasks.Repositories;
 using StructureMap.Configuration.DSL;
 
-namespace Piccolo.Samples.Startup.IoC
+namespace Piccolo.Tasks.Startup.IoC
 {
 	public class SamplesRegistry : Registry
 	{
