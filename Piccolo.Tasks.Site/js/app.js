@@ -9,12 +9,10 @@ angular.module('piccoloClient', ['piccoloServices']).
   }]);
 
 function TaskListController($scope, Tasks) {
-	$scope.tasks = Tasks.query();
+	$scope.tasks = Tasks.list();
 
 	$scope.addTask = function () {
-		var newId = $scope.tasks[$scope.tasks.length - 1].id + 1;
-		$scope.tasks.push({ id: newId, title: $scope.newTaskTitle, isCompleted: false });
-		$scope.newTaskTitle = "";
+		Tasks.add({ Title: $scope.newTaskTitle, IsCompleted: false });
 	};
 
 	$scope.toggleCompletion = function (taskId) {
