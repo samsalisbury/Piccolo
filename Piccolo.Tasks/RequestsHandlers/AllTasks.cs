@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Web;
 using Piccolo.Tasks.Models;
 using Piccolo.Tasks.Repositories;
 
@@ -18,9 +17,6 @@ namespace Piccolo.Tasks.RequestsHandlers
 		public HttpResponseMessage<IList<Task>> Get()
 		{
 			var tasks = _taskRepository.Get(1, 10);
-
-			// TODO: Implemented CORS support
-			HttpContext.Current.Response.Headers["Access-Control-Allow-Origin"] = "*";
 
 			return Response.Success.Ok(tasks);
 		}
