@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Web;
 
 namespace Piccolo.Request
@@ -26,7 +27,14 @@ namespace Piccolo.Request
 
 		public string Payload
 		{
-			get { return _context.Request.Form.Count > 0 ? _context.Request.Form[0] : string.Empty; }
+			get
+			{
+				if (_context.Request.InputStream.CanRead == false)
+					return string.Empty;
+
+				using (var reader = new StreamReader(_context.Request.InputStream))
+					return reader.ReadToEnd();
+			}
 		}
 	}
 }
