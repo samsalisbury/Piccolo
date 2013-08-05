@@ -24,10 +24,10 @@ namespace Piccolo
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 
-			public static HttpResponseMessage<dynamic> Created()
+			public static HttpResponseMessage<TOutput> Created<TOutput>(TOutput content)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.Created);
-				return new HttpResponseMessage<dynamic>(responseMessage);
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.Created) {Content = new ObjectContent(content)};
+				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 
 			public static HttpResponseMessage<dynamic> NoContent()

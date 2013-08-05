@@ -112,17 +112,17 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_not_return_content()
+			public void it_should_return_content()
 			{
-				_responseMessage.Content.ShouldBe(null);
+				_responseMessage.Content.ShouldNotBe(null);
 			}
 
 			[Route("/test-resources")]
 			public class CreateTestResource : IPost<CreateTestResource.Parameters>
 			{
-				public HttpResponseMessage<dynamic> Post(Parameters parameters)
+				public HttpResponseMessage<Parameters> Post(Parameters parameters)
 				{
-					return Response.Success.Created();
+					return Response.Success.Created(parameters);
 				}
 
 				public class Parameters

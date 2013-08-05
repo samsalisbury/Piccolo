@@ -13,11 +13,11 @@ namespace Piccolo.Tasks.RequestsHandlers
 			_taskRepository = taskRepository;
 		}
 
-		public HttpResponseMessage<dynamic> Post(Task task)
+		public HttpResponseMessage<Task> Post(Task task)
 		{
 			_taskRepository.Add(task);
 
-			return Response.Success.Created();
+			return Response.Success.Created(task);
 		}
 	}
 }

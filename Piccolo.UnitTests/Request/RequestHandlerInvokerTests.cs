@@ -100,9 +100,9 @@ namespace Piccolo.UnitTests.Request
 		[Route("/PostRequestHandlerInvokerTests/{Param}")]
 		public class PostResource : IPost<string>
 		{
-			public HttpResponseMessage<dynamic> Post(string parameters)
+			public HttpResponseMessage<string> Post(string parameters)
 			{
-				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
+				return new HttpResponseMessage<string>(new HttpResponseMessage { Content = new StringContent(Param) });
 			}
 
 			public string Param { get; set; }
@@ -552,10 +552,10 @@ namespace Piccolo.UnitTests.Request
 		[Route("/PutRequestHandlerInvokerTests/Payload")]
 		public class PostResourceWithPayload : IPost<PostResourceWithPayload.Parameters>
 		{
-			public HttpResponseMessage<dynamic> Post(Parameters parameters)
+			public HttpResponseMessage<PostResourceWithPayload.Parameters> Post(Parameters parameters)
 			{
 				var content = string.Format("A: {0}; B: {1}", parameters.A, parameters.B);
-				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(content)});
+				return new HttpResponseMessage<Parameters>(new HttpResponseMessage { Content = new StringContent(content) });
 			}
 
 			public class Parameters

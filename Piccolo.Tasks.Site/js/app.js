@@ -13,6 +13,8 @@ function TaskListController($scope, Tasks) {
 
 	$scope.addTask = function () {
 		Tasks.add({ Title: $scope.newTaskTitle, IsCompleted: false });
+		$scope.newTaskTitle = "";
+		$scope.tasks = Tasks.list();
 	};
 
 	$scope.toggleCompletion = function (taskId) {
