@@ -52,7 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\InMemoryTaskRepository.cs" />
     <Compile Include="Repositories\ITaskRepository.cs" />
-    <Compile Include="RequestsHandlers\SearchTasks.cs" />
+    <Compile Include="RequestsHandlers\AllTasks.cs" />
     <Compile Include="RequestsHandlers\DeleteTaskById.cs" />
     <Compile Include="RequestsHandlers\UpdateTask.cs" />
     <Compile Include="RequestsHandlers\AddTask.cs" />

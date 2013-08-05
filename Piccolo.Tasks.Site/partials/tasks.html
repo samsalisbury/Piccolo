@@ -1,0 +1,32 @@
+﻿<div class="container">
+	<div class="row">
+		<div class="col-lg-8">
+			<h2>Tasks</h2>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Title</th>
+						<th>Is Completed?</th>
+					</tr>
+				</thead>
+				<tr ng-repeat="task in tasks">
+					<td>{{task.Id}}</td>
+					<td>{{task.Title}}</td>
+					<td>
+						<input ng-model="task.IsCompleted" ng-click="toggleCompletion(task.Id)" type="checkbox" />
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-lg-4">
+			<h2>Add New Task</h2>
+			<form ng-submit="addTask()">
+				<div class="form-group">
+					<input ng-model="newTaskTitle" type="text" class="form-control" placeholder="take over the world?">
+				</div>
+				<button type="submit" class="btn btn-primary">Add Task</button>
+			</form>
+		</div>
+	</div>
+</div>
