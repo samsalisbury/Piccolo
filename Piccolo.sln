@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CB6B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.Tasks", "Piccolo.Tasks\Piccolo.Tasks.csproj", "{A17AE55B-3660-43CC-9432-97ECE3C974CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.Tasks.Site", "Piccolo.Tasks.Site\Piccolo.Tasks.Site.csproj", "{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,11 +35,16 @@ Global
 		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A17AE55B-3660-43CC-9432-97ECE3C974CC} = {CB6B68A8-DEE1-4D3F-B697-4D6AEE9CBEAF}
+		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94} = {CB6B68A8-DEE1-4D3F-B697-4D6AEE9CBEAF}
 	EndGlobalSection
 EndGlobal

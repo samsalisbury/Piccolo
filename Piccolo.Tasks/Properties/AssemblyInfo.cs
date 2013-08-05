@@ -1,3 +1,3 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Piccolo.Samples")]
+[assembly: AssemblyTitle("Piccolo.Tasks")]
