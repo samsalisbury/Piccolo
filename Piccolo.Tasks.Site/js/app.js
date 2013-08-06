@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('piccoloClient', ['piccoloServices']).
+angular.module('piccoloClient', []).
   config(['$routeProvider', function ($routeProvider) {
   	$routeProvider.
 		when('/', { templateUrl: '/partials/tasks.html', controller: TaskListController }).
@@ -8,13 +8,43 @@ angular.module('piccoloClient', ['piccoloServices']).
 		otherwise({ redirectTo: '/' });
   }]);
 
-function TaskListController($scope, Tasks) {
-	$scope.tasks = Tasks.list();
+function TaskListController($scope) {
+	$scope.refreshTasks = function () {
+		$.getJSON("http://piccolo.com/tasks").done(function (data) {
+			$scope.$apply(function () {
+				$scope.tasks = data;
+			});
+		});
+	};
+
+	$scope.createTask = function (task) {
+		$.ajax({
+			type: "POST",
+			url: "http://piccolo.com/tasks",
+			data: JSON.stringify(task)
+		}).done(function () {
+			$scope.refreshTasks();
+		});
+	};
+
+	$scope.deleteTask = function (id) {
+		$.ajax({
+			type: "DELETE",
+			url: "http://piccolo.com/tasks/" + id
+		}).done(function () {
+			$scope.refreshTasks();
+		});
+	};
+
+	$scope.tasks = $scope.refreshTasks();
 
 	$scope.addTask = function () {
-		Tasks.add({ Title: $scope.newTaskTitle, IsCompleted: false });
+		$scope.createTask({ Title: $scope.newTaskTitle, IsCompleted: false });
 		$scope.newTaskTitle = "";
-		$scope.tasks = Tasks.list();
+	};
+
+	$scope.removeTask = function (id) {
+		$scope.deleteTask(id);
 	};
 
 	$scope.toggleCompletion = function (taskId) {
