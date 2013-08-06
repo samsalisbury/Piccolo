@@ -15,7 +15,7 @@
 					<td>{{task.Id}}</td>
 					<td>{{task.Title}}</td>
 					<td>
-						<input ng-model="task.IsCompleted" ng-click="toggleCompletion(task.Id)" type="checkbox" />
+						<input ng-model="task.IsCompleted" ng-click="toggleCompletion(task.Id, task.IsCompleted == true)" type="checkbox" />
 					</td>
 					<td>
 						<a ng-click="removeTask(task.Id)" href="#" class="text-danger">delete</a>

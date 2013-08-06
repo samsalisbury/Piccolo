@@ -16,11 +16,33 @@ function TaskListController($scope) {
 			});
 		});
 	};
+	
+	$scope.getTask = function (id) {
+		var task;
+		$.ajax({
+			type: "GET",
+			url: "http://piccolo.com/tasks/" + id,
+			async: false
+		}).done(function (data) {
+			task = JSON.parse(data);
+		});
+		return task;
+	};
 
 	$scope.createTask = function (task) {
 		$.ajax({
 			type: "POST",
 			url: "http://piccolo.com/tasks",
+			data: JSON.stringify(task)
+		}).done(function () {
+			$scope.refreshTasks();
+		});
+	};
+
+	$scope.updateTask = function (task) {
+		$.ajax({
+			type: "PUT",
+			url: "http://piccolo.com/tasks/" + task.Id,
 			data: JSON.stringify(task)
 		}).done(function () {
 			$scope.refreshTasks();
@@ -47,8 +69,10 @@ function TaskListController($scope) {
 		$scope.deleteTask(id);
 	};
 
-	$scope.toggleCompletion = function (taskId) {
-		console.log("Task " + taskId + " is completed: " + $scope.tasks[taskId - 1].isCompleted);
+	$scope.toggleCompletion = function (id, isCompleted) {
+		var task = $scope.getTask(id);
+		task.IsCompleted = isCompleted;
+		$scope.updateTask(task);
 	};
 }
 
