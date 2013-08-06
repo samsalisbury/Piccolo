@@ -8,6 +8,7 @@
 						<th>Id</th>
 						<th>Title</th>
 						<th>Is Completed?</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tr ng-repeat="task in tasks">
@@ -15,6 +16,9 @@
 					<td>{{task.Title}}</td>
 					<td>
 						<input ng-model="task.IsCompleted" ng-click="toggleCompletion(task.Id)" type="checkbox" />
+					</td>
+					<td>
+						<a ng-click="removeTask(task.Id)" href="#" class="text-danger">delete</a>
 					</td>
 				</tr>
 			</table>
