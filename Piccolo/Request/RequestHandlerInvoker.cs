@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using Piccolo.Internal;
 using Piccolo.Request.ParameterBinders;
 
 namespace Piccolo.Request
@@ -11,9 +12,9 @@ namespace Piccolo.Request
 	{
 		private const BindingFlags MethodLookupFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
 		private readonly Func<Type, string, object> _jsonDecoder;
-		private readonly Dictionary<Type, IRouteParameterBinder> _routeParameterBinders;
+		private readonly Dictionary<Type, IParameterBinder> _routeParameterBinders;
 
-		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, Dictionary<Type, IRouteParameterBinder> routeParameterBinders)
+		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, Dictionary<Type, IParameterBinder> routeParameterBinders)
 		{
 			_jsonDecoder = jsonDecoder;
 			_routeParameterBinders = routeParameterBinders;
@@ -24,7 +25,7 @@ namespace Piccolo.Request
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
 			var properties = handlerType.GetProperties();
-
+			
 			BindRouteParameters(requestHandler, routeParameters, properties);
 			BindQueryParameters(requestHandler, queryParameters, properties);
 			var postParameter = DeserialisePostParameter(payload, handlerMethod);
@@ -54,7 +55,10 @@ namespace Piccolo.Request
 				if (queryParameter.Equals(default(KeyValuePair<string, string>)))
 					continue;
 
-				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
+				var binder = _routeParameterBinders.SingleOrDefault(x => x.Key == property.PropertyType).Value;
+				if (binder == null)
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedQueryParameterTypeMessage(property));
+
 				binder.BindRouteParameter(requestHandler, property, queryParameter.Value);
 			}
 		}

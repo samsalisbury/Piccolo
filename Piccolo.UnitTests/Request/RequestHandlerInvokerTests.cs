@@ -102,7 +102,7 @@ namespace Piccolo.UnitTests.Request
 		{
 			public HttpResponseMessage<string> Post(string parameters)
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage { Content = new StringContent(Param) });
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(Param)});
 			}
 
 			public string Param { get; set; }
@@ -357,6 +357,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_optional_nullable_boolean_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "true"}};
+				_result = Invoker.Execute(new GetResourceOptionalNullableBoolean(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("GET True");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_optional_byte_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -366,6 +385,25 @@ namespace Piccolo.UnitTests.Request
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
 				_result = Invoker.Execute(new GetResourceOptionalByte(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("GET 1");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_get_request_with_optional_nullable_byte_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
+				_result = Invoker.Execute(new GetResourceOptionalNullableByte(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -395,6 +433,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_optional_nullable_int16_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
+				_result = Invoker.Execute(new GetResourceOptionalNullableInt16(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("GET 1");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_optional_int32_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -414,6 +471,25 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
+		public class when_executing_get_request_with_optional_nullable_int32_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "1"}};
+				_result = Invoker.Execute(new GetResourceOptionalNullableInt32(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("GET 1");
+			}
+		}
+
+		[TestFixture]
 		public class when_executing_get_request_with_optional_datetime_parameter : given_request_handler_invoker
 		{
 			private string _result;
@@ -423,6 +499,25 @@ namespace Piccolo.UnitTests.Request
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "2013-07-22"}};
 				_result = Invoker.Execute(new GetResourceOptionalDateTime(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("GET 2013-07-22T00:00:00");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_get_request_with_optional_nullable_datetime_parameter : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "2013-07-22"}};
+				_result = Invoker.Execute(new GetResourceOptionalNullableDateTime(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -475,6 +570,18 @@ namespace Piccolo.UnitTests.Request
 			public Boolean Param { get; set; }
 		}
 
+		[Route("/RequestHandlerInvokerTests/Boolean/OptionalNullable")]
+		public class GetResourceOptionalNullableBoolean : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
+			}
+
+			[Optional]
+			public Boolean? Param { get; set; }
+		}
+
 		[Route("/RequestHandlerInvokerTests/Byte/Optional")]
 		public class GetResourceOptionalByte : IGet<string>
 		{
@@ -485,6 +592,18 @@ namespace Piccolo.UnitTests.Request
 
 			[Optional]
 			public Byte Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/Byte/OptionalNullable")]
+		public class GetResourceOptionalNullableByte : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
+			}
+
+			[Optional]
+			public Byte? Param { get; set; }
 		}
 
 		[Route("/RequestHandlerInvokerTests/Int16/Optional")]
@@ -499,6 +618,18 @@ namespace Piccolo.UnitTests.Request
 			public Int16 Param { get; set; }
 		}
 
+		[Route("/RequestHandlerInvokerTests/Int16/OptionalNullable")]
+		public class GetResourceOptionalNullableInt16 : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
+			}
+
+			[Optional]
+			public Int16? Param { get; set; }
+		}
+
 		[Route("/RequestHandlerInvokerTests/Int32/Optional")]
 		public class GetResourceOptionalInt32 : IGet<string>
 		{
@@ -511,6 +642,18 @@ namespace Piccolo.UnitTests.Request
 			public Int32 Param { get; set; }
 		}
 
+		[Route("/RequestHandlerInvokerTests/Int32/OptionalNullable")]
+		public class GetResourceOptionalNullableInt32 : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0}", Param))});
+			}
+
+			[Optional]
+			public Int32? Param { get; set; }
+		}
+
 		[Route("/RequestHandlerInvokerTests/DateTime/Optional")]
 		public class GetResourceOptionalDateTime : IGet<string>
 		{
@@ -521,6 +664,18 @@ namespace Piccolo.UnitTests.Request
 
 			[Optional]
 			public DateTime Param { get; set; }
+		}
+
+		[Route("/RequestHandlerInvokerTests/DateTime/OptionalNullable")]
+		public class GetResourceOptionalNullableDateTime : IGet<string>
+		{
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(string.Format("GET {0:s}", Param))});
+			}
+
+			[Optional]
+			public DateTime? Param { get; set; }
 		}
 
 		#endregion
@@ -552,10 +707,10 @@ namespace Piccolo.UnitTests.Request
 		[Route("/PutRequestHandlerInvokerTests/Payload")]
 		public class PostResourceWithPayload : IPost<PostResourceWithPayload.Parameters>
 		{
-			public HttpResponseMessage<PostResourceWithPayload.Parameters> Post(Parameters parameters)
+			public HttpResponseMessage<Parameters> Post(Parameters parameters)
 			{
 				var content = string.Format("A: {0}; B: {1}", parameters.A, parameters.B);
-				return new HttpResponseMessage<Parameters>(new HttpResponseMessage { Content = new StringContent(content) });
+				return new HttpResponseMessage<Parameters>(new HttpResponseMessage {Content = new StringContent(content)});
 			}
 
 			public class Parameters

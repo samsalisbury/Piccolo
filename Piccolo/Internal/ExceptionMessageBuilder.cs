@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Piccolo.Internal
@@ -16,7 +17,7 @@ namespace Piccolo.Internal
 		{
 			var messageBuilder = new StringBuilder();
 			messageBuilder.Append("Unreachable route parameter detected: ");
-			messageBuilder.AppendFormat("request handler [{0}] does not expose property {1}.", requestHandlerType.FullName, unreachableParameter);
+			messageBuilder.AppendFormat("request handler [{0}] does not expose property [{1}].", requestHandlerType.FullName, unreachableParameter);
 			messageBuilder.AppendLine();
 			messageBuilder.AppendLine();
 			messageBuilder.AppendLine("Route Templates:");
@@ -37,6 +38,22 @@ namespace Piccolo.Internal
 		internal static string BuildInvalidRequestHandlerImplementationMessage(Type requestHandler)
 		{
 			return string.Format("Request handler [{0}] does not implement any of the following supported interfaces: IGet<T>, IPut<T>, IPost<T>, IDelete.", requestHandler.FullName);
+		}
+
+		public static string BuildUnsupportedQueryParameterTypeMessage(PropertyInfo property)
+		{
+			return string.Format("Query parameter [{0}.{1}] is of type {2} which is not supported.. Supported types are:" +
+			                     "{3} - System.String" +
+			                     "{3} - System.Boolean" +
+			                     "{3} - System.Boolean?" +
+			                     "{3} - System.Byte" +
+			                     "{3} - System.Byte?" +
+			                     "{3} - System.Int16" +
+			                     "{3} - System.Int16?" +
+			                     "{3} - System.Int32" +
+			                     "{3} - System.Int32?" +
+			                     "{3} - System.DateTime" +
+			                     "{3} - System.DateTime?", property.DeclaringType.FullName, property.Name, property.PropertyType, Environment.NewLine);
 		}
 	}
 }
