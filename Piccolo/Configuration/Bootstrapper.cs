@@ -41,14 +41,19 @@ namespace Piccolo.Configuration
 		{
 			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
 			configuration.Router = new RequestRouter(configuration.RequestHandlers);
-			configuration.RouteParameterBinders = new Dictionary<Type, IRouteParameterBinder>
+			configuration.RouteParameterBinders = new Dictionary<Type, IParameterBinder>
 			{
 				{typeof(String), new StringParameterBinder()},
 				{typeof(Boolean), new BooleanParameterBinder()},
+				{typeof(Boolean?), new NullableBooleanParameterBinder()},
 				{typeof(Byte), new ByteParameterBinder()},
+				{typeof(Byte?), new NullableByteParameterBinder()},
 				{typeof(Int16), new Int16ParameterBinder()},
+				{typeof(Int16?), new NullableInt16ParameterBinder()},
 				{typeof(Int32), new Int32ParameterBinder()},
-				{typeof(DateTime), new DateTimeParameterBinder()}
+				{typeof(Int32?), new NullableInt32ParameterBinder()},
+				{typeof(DateTime), new DateTimeParameterBinder()},
+				{typeof(DateTime?), new NullableDateTimeParameterBinder()}
 			};
 			configuration.JsonEncoder = content => JsonConvert.SerializeObject(content, Formatting.Indented);
 			configuration.JsonDecoder = (type, payload) => JsonConvert.DeserializeObject(payload, type);

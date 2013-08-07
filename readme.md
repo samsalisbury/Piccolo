@@ -11,6 +11,7 @@ A modular micro-framework for creating APIs.
 - [ ] Validation
 - [ ] CORS
 - [ ] IoC
+- [ ] Nullable optional parameters in request handlers
 - [x] JSON encoding/decoding
 - [ ] NuGet package
 - [ ] Public nightly build

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Piccolo.Request.ParameterBinders
 {
-	public class Int16ParameterBinder : IRouteParameterBinder
+	public class Int16ParameterBinder : IParameterBinder
 	{
 		public void BindRouteParameter(IRequestHandler requestHandler, PropertyInfo property, string rawValue)
 		{
