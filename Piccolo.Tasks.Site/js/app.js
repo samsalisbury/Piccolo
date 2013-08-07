@@ -9,10 +9,13 @@ angular.module('piccoloClient', []).
   }]);
 
 function TaskListController($scope) {
+	$scope.pageSize = 5;
+	
 	$scope.refreshTasks = function () {
-		$.getJSON("http://piccolo.com/tasks").done(function (data) {
+		$.getJSON("http://piccolo.com/tasks?pageSize=" + $scope.pageSize).done(function (data) {
 			$scope.$apply(function () {
-				$scope.tasks = data;
+				$scope.tasks = data.Tasks;
+				$scope.totalCount = data.TotalCount;
 			});
 		});
 	};

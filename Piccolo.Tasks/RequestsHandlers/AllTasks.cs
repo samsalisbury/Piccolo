@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Piccolo.Tasks.Models;
-using Piccolo.Tasks.Repositories;
+﻿using Piccolo.Tasks.Repositories;
+using Piccolo.Tasks.ViewModels;
 
 namespace Piccolo.Tasks.RequestsHandlers
 {
 	[Route("/tasks")]
-	public class AllTasks : IGet<IList<Task>>
+	public class AllTasks : IGet<TaskCollection>
 	{
 		private readonly ITaskRepository _taskRepository;
 
@@ -14,11 +13,18 @@ namespace Piccolo.Tasks.RequestsHandlers
 			_taskRepository = taskRepository;
 		}
 
-		public HttpResponseMessage<IList<Task>> Get()
-		{
-			var tasks = _taskRepository.Get(1, 10);
+		[Optional]
+		public int? Page { get; set; }
 
-			return Response.Success.Ok(tasks);
+		[Optional]
+		public int? PageSize { get; set; }
+
+		public HttpResponseMessage<TaskCollection> Get()
+		{
+			var tasks = _taskRepository.Get(Page ?? 1, PageSize ?? 10);
+			var totalCount = _taskRepository.Count();
+
+			return Response.Success.Ok(new TaskCollection(tasks, totalCount));
 		}
 	}
 }

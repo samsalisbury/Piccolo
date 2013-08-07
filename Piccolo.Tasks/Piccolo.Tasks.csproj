@@ -60,6 +60,7 @@
     <Compile Include="Startup\IoC\SamplesRegistry.cs" />
     <Compile Include="Startup\IoC\StructureMapRequestHandlerFactory.cs" />
     <Compile Include="RequestsHandlers\GetTaskById.cs" />
+    <Compile Include="ViewModels\TaskCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

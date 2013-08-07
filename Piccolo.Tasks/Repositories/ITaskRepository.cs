@@ -10,5 +10,6 @@ namespace Piccolo.Tasks.Repositories
 		IList<Task> Get(int page, int pageSize);
 		void Update(Task task);
 		void Delete(int id);
+		int Count();
 	}
 }

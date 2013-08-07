@@ -1,7 +1,11 @@
 ﻿<div class="container">
 	<div class="row">
 		<div class="col-lg-8">
-			<h2>Tasks</h2>
+			<h2>
+				Tasks
+				<small ng-if="pageSize >= totalCount">Showing all tasks</small>
+				<small ng-if="pageSize < totalCount">Showing {{pageSize}} of {{totalCount}} tasks</small>
+			</h2>
 			<table class="table table-hover">
 				<thead>
 					<tr>

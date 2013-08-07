@@ -46,5 +46,10 @@ namespace Piccolo.Tasks.Repositories
 		{
 			_tasks.RemoveAll(x => x.Id == id);
 		}
+
+		public int Count()
+		{
+			return _tasks.Count;
+		}
 	}
 }
