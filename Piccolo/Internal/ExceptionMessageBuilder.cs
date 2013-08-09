@@ -55,5 +55,10 @@ namespace Piccolo.Internal
 			                     "{3} - System.DateTime" +
 			                     "{3} - System.DateTime?", property.DeclaringType.FullName, property.Name, property.PropertyType, Environment.NewLine);
 		}
+
+		public static string BuildInvalidParameterAssignmentMessage(PropertyInfo property, string value)
+		{
+			return string.Format("Value \"{0}\" could not be assigned to parameter [{1}.{2}] of type {3}.", value, property.DeclaringType.FullName, property.Name, property.PropertyType);
+		}
 	}
 }

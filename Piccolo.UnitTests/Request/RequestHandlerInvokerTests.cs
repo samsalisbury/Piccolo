@@ -248,6 +248,17 @@ namespace Piccolo.UnitTests.Request
 			}
 		}
 
+		[TestFixture]
+		public class when_executing_get_request_with_invalid_parameter_value : given_request_handler_invoker
+		{
+			[Test]
+			public void it_should_thrown_exception()
+			{
+				var routeParameters = new Dictionary<string, string> {{"param", "undefined"}};
+				Assert.Throws<InvalidOperationException>(() => Invoker.Execute(new GetResourceInt32(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty));
+			}
+		}
+
 		[Route("/RequestHandlerInvokerTests/String/{Param}")]
 		public class GetResourceString : IGet<string>
 		{
@@ -543,6 +554,17 @@ namespace Piccolo.UnitTests.Request
 			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET ");
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_get_request_with_invalid_optional_parameter_value : given_request_handler_invoker
+		{
+			[Test]
+			public void it_should_thrown_exception()
+			{
+				var queryParameters = new Dictionary<string, string> {{"param", "undefined"}};
+				Assert.Throws<InvalidOperationException>(() => Invoker.Execute(new GetResourceOptionalInt32(), "GET", new Dictionary<string, string>(), queryParameters, string.Empty));
 			}
 		}
 

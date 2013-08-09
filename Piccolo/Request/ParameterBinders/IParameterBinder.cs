@@ -4,6 +4,6 @@ namespace Piccolo.Request.ParameterBinders
 {
 	public interface IParameterBinder
 	{
-		void BindRouteParameter(IRequestHandler requestHandler, PropertyInfo property, string rawValue);
+		void BindParameter(IRequestHandler requestHandler, PropertyInfo property, string rawValue);
 	}
 }

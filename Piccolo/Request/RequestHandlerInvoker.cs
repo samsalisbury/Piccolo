@@ -25,7 +25,7 @@ namespace Piccolo.Request
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
 			var properties = handlerType.GetProperties();
-			
+
 			BindRouteParameters(requestHandler, routeParameters, properties);
 			BindQueryParameters(requestHandler, queryParameters, properties);
 			var postParameter = DeserialisePostParameter(payload, handlerMethod);
@@ -41,7 +41,15 @@ namespace Piccolo.Request
 			{
 				var property = properties.Single(x => x.Name.Equals(routeParameter.Key, StringComparison.InvariantCultureIgnoreCase));
 				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
-				binder.BindRouteParameter(requestHandler, property, routeParameter.Value);
+
+				try
+				{
+					binder.BindParameter(requestHandler, property, routeParameter.Value);
+				}
+				catch (FormatException)
+				{
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, routeParameter.Value));
+				}
 			}
 		}
 
@@ -59,7 +67,14 @@ namespace Piccolo.Request
 				if (binder == null)
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedQueryParameterTypeMessage(property));
 
-				binder.BindRouteParameter(requestHandler, property, queryParameter.Value);
+				try
+				{
+					binder.BindParameter(requestHandler, property, queryParameter.Value);
+				}
+				catch (FormatException)
+				{
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, queryParameter.Value));
+				}
 			}
 		}
 
