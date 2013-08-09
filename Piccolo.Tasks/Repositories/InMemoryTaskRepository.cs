@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Piccolo.Tasks.Models;
+using Piccolo.Tasks.ViewModels;
 
 namespace Piccolo.Tasks.Repositories
 {
@@ -19,10 +20,24 @@ namespace Piccolo.Tasks.Repositories
 			_tasks.Add(new Task {Id = 5, Title = "Push NuGet package", IsCompleted = false});
 		}
 
-		public void Add(Task task)
+		public IList<Task> GetAll(int pageNumber, int pageSize)
 		{
-			task.Id = _tasks.Max(x => x.Id) + 1;
-			_tasks.Add(task);
+			return _tasks.Skip((pageNumber - 1)*pageSize).Take(pageSize).ToList();
+		}
+
+		public TaskCollection Search(string term, int pageNumber, int pageSize)
+		{
+			var normalisedTerm = term.ToLower();
+			var filteredSubset = _tasks.Where(x => x.Title.ToLower().Contains(normalisedTerm)).ToArray();
+			var page = filteredSubset.Skip((pageNumber - 1)*pageSize).Take(pageSize).ToArray();
+			var count = filteredSubset.Count();
+
+			return new TaskCollection(page, count);
+		}
+
+		public int Count()
+		{
+			return _tasks.Count;
 		}
 
 		public Task Get(int id)
@@ -30,9 +45,10 @@ namespace Piccolo.Tasks.Repositories
 			return _tasks.SingleOrDefault(x => x.Id == id);
 		}
 
-		public IList<Task> Get(int page, int pageSize)
+		public void Add(Task task)
 		{
-			return _tasks.Skip((page - 1)*pageSize).Take(pageSize).ToList();
+			task.Id = _tasks.Max(x => x.Id) + 1;
+			_tasks.Add(task);
 		}
 
 		public void Update(Task task)
@@ -45,11 +61,6 @@ namespace Piccolo.Tasks.Repositories
 		public void Delete(int id)
 		{
 			_tasks.RemoveAll(x => x.Id == id);
-		}
-
-		public int Count()
-		{
-			return _tasks.Count;
 		}
 	}
 }

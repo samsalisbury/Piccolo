@@ -1,8 +1,7 @@
 ﻿<div class="container">
 	<div class="row">
 		<div class="col-lg-8">
-			<h1>
-				Tasks
+			<h1>Tasks
 				<small ng-show="pageSize >= totalCount">Showing all tasks</small>
 				<small ng-show="pageSize < totalCount">Showing {{pageSize}} of {{totalCount}} tasks</small>
 			</h1>
@@ -39,13 +38,28 @@
 			</div>
 		</div>
 		<div class="col-lg-4">
-			<h2>Add New Task</h2>
-			<form ng-submit="addTask()">
-				<div class="form-group">
-					<input ng-model="newTaskTitle" type="text" class="form-control" placeholder="take over the world?">
-				</div>
-				<button type="submit" class="btn btn-primary">Add Task</button>
-			</form>
+			<section>
+				<h1>Search</h1>
+				<form ng-submit="search()">
+					<div class="input-group">
+						<input ng-model="searchTerm" type="text" class="form-control input-small">
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-primary btn-small">Search</button>
+						</span>
+					</div>
+				</form>
+			</section>
+			<section>
+				<h1>Add New Task</h1>
+				<form ng-submit="addTask()">
+					<div class="input-group">
+						<input ng-model="newTaskTitle" type="text" class="form-control input-small" placeholder="take over the world?">
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-default btn-small">Add Task</button>
+						</span>
+					</div>
+				</form>
+			</section>
 		</div>
 	</div>
 </div>

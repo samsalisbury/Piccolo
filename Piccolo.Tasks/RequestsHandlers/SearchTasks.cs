@@ -3,12 +3,12 @@ using Piccolo.Tasks.ViewModels;
 
 namespace Piccolo.Tasks.RequestsHandlers
 {
-	[Route("/tasks")]
-	public class AllTasks : IGet<TaskCollection>
+	[Route("/tasks/search")]
+	public class SearchTasks : IGet<TaskCollection>
 	{
 		private readonly ITaskRepository _taskRepository;
 
-		public AllTasks(ITaskRepository taskRepository)
+		public SearchTasks(ITaskRepository taskRepository)
 		{
 			_taskRepository = taskRepository;
 		}
@@ -19,12 +19,14 @@ namespace Piccolo.Tasks.RequestsHandlers
 		[Optional]
 		public int? PageSize { get; set; }
 
+		[Optional]
+		public string Term { get; set; }
+
 		public HttpResponseMessage<TaskCollection> Get()
 		{
-			var tasks = _taskRepository.GetAll(PageNumber ?? 1, PageSize ?? 10);
-			var totalCount = _taskRepository.Count();
+			var searchResults = _taskRepository.Search(Term ?? "", PageNumber ?? 1, PageSize ?? 10);
 
-			return Response.Success.Ok(new TaskCollection(tasks, totalCount));
+			return Response.Success.Ok(searchResults);
 		}
 	}
 }

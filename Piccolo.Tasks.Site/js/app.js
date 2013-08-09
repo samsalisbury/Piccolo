@@ -13,7 +13,7 @@ function TaskListController($scope) {
 	$scope.pageSize = 5;
 	
 	$scope.showTasks = function () {
-		$.getJSON("http://piccolo.com/tasks?page=" + $scope.page + "&pageSize=" + $scope.pageSize).done(function (data) {
+		$.getJSON("http://piccolo.com/tasks?pageNumber=" + $scope.page + "&pageSize=" + $scope.pageSize).done(function (data) {
 			$scope.$apply(function () {
 				$scope.tasks = data.Tasks;
 				$scope.totalCount = data.TotalCount;
@@ -26,6 +26,21 @@ function TaskListController($scope) {
 
 				if ($scope.tasks.length == 0) {
 					$scope.showPreviousPage();
+				}
+			});
+		});
+	};
+
+	$scope.search = function () {
+		$.getJSON("http://piccolo.com/tasks/search?term=" + $scope.searchTerm + "&pageNumber=" + $scope.page + "&pageSize=" + $scope.pageSize).done(function (data) {
+			$scope.$apply(function () {
+				$scope.tasks = data.Tasks;
+				$scope.totalCount = data.TotalCount;
+
+				$scope.totalPages = Math.ceil(data.TotalCount / $scope.pageSize);
+				$scope.pageNumbers = [];
+				for (var pageNumber = 0; pageNumber < $scope.totalPages; pageNumber++) {
+					$scope.pageNumbers.push(pageNumber + 1);
 				}
 			});
 		});
