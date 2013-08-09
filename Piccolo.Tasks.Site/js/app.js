@@ -9,13 +9,24 @@ angular.module('piccoloClient', []).
   }]);
 
 function TaskListController($scope) {
+	$scope.page = 1;
 	$scope.pageSize = 5;
 	
-	$scope.refreshTasks = function () {
-		$.getJSON("http://piccolo.com/tasks?pageSize=" + $scope.pageSize).done(function (data) {
+	$scope.showTasks = function () {
+		$.getJSON("http://piccolo.com/tasks?page=" + $scope.page + "&pageSize=" + $scope.pageSize).done(function (data) {
 			$scope.$apply(function () {
 				$scope.tasks = data.Tasks;
 				$scope.totalCount = data.TotalCount;
+
+				$scope.totalPages = Math.ceil(data.TotalCount / $scope.pageSize);
+				$scope.pageNumbers = [];
+				for (var pageNumber = 0; pageNumber < $scope.totalPages; pageNumber++) {
+					$scope.pageNumbers.push(pageNumber + 1);
+				}
+
+				if ($scope.tasks.length == 0) {
+					$scope.showPreviousPage();
+				}
 			});
 		});
 	};
@@ -38,7 +49,7 @@ function TaskListController($scope) {
 			url: "http://piccolo.com/tasks",
 			data: JSON.stringify(task)
 		}).done(function () {
-			$scope.refreshTasks();
+			$scope.showTasks();
 		});
 	};
 
@@ -48,7 +59,7 @@ function TaskListController($scope) {
 			url: "http://piccolo.com/tasks/" + task.Id,
 			data: JSON.stringify(task)
 		}).done(function () {
-			$scope.refreshTasks();
+			$scope.showTasks();
 		});
 	};
 
@@ -57,11 +68,30 @@ function TaskListController($scope) {
 			type: "DELETE",
 			url: "http://piccolo.com/tasks/" + id
 		}).done(function () {
-			$scope.refreshTasks();
+			$scope.showTasks();
 		});
 	};
 
-	$scope.tasks = $scope.refreshTasks();
+	$scope.tasks = $scope.showTasks();
+	
+	$scope.showPreviousPage = function () {
+		if ($scope.page > 1) {
+			$scope.page--;
+			$scope.showTasks();
+		}
+	};
+
+	$scope.showNextPage = function() {
+		if ($scope.page < $scope.totalPages) {
+			$scope.page++;
+			$scope.showTasks();
+		}
+	};
+
+	$scope.showPage = function (pageNumber) {
+		$scope.page = pageNumber;
+		$scope.showTasks();
+	};
 
 	$scope.addTask = function () {
 		$scope.createTask({ Title: $scope.newTaskTitle, IsCompleted: false });

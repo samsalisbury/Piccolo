@@ -3,8 +3,8 @@
 		<div class="col-lg-8">
 			<h2>
 				Tasks
-				<small ng-if="pageSize >= totalCount">Showing all tasks</small>
-				<small ng-if="pageSize < totalCount">Showing {{pageSize}} of {{totalCount}} tasks</small>
+				<small ng-show="pageSize >= totalCount">Showing all tasks</small>
+				<small ng-show="pageSize < totalCount">Showing {{pageSize}} of {{totalCount}} tasks</small>
 			</h2>
 			<table class="table table-hover">
 				<thead>
@@ -22,10 +22,19 @@
 						<input ng-model="task.IsCompleted" ng-click="toggleCompletion(task.Id, task.IsCompleted == true)" type="checkbox" />
 					</td>
 					<td>
-						<a ng-click="removeTask(task.Id)" href="#" class="text-danger">delete</a>
+						<a ng-click="removeTask(task.Id)" href="javascript:" class="text-danger">delete</a>
 					</td>
 				</tr>
 			</table>
+			<div ng-show="pageSize < totalCount" class="text-center">
+				<ul class="pagination">
+					<li><a ng-click="showPreviousPage()" class="prev" href="javascript:">&laquo;</a></li>
+					<li ng-repeat="pageNumber in pageNumbers">
+						<a ng-click="showPage(pageNumber)" href="javascript:">{{pageNumber}}</a>
+					</li>
+					<li><a ng-click="showNextPage()" class="next" href="javascript:">&raquo;</a></li>
+				</ul>
+			</div>
 		</div>
 		<div class="col-lg-4">
 			<h2>Add New Task</h2>
