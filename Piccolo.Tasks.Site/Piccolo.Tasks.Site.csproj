@@ -52,6 +52,7 @@
     <Content Include="js\lib\bootstrap.min.js" />
     <Content Include="js\lib\jquery-2.0.3.min.js" />
     <Content Include="js\app.js" />
+    <Content Include="partials\task.html" />
     <Content Include="partials\tasks.html" />
     <Content Include="web.config">
       <SubType>Designer</SubType>

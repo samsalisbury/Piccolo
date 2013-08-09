@@ -110,5 +110,18 @@ function TaskListController($scope) {
 }
 
 
-function TaskDetailController($scope, Tasks) {
+function TaskDetailController($scope, $routeParams) {
+	$scope.getTask = function (id) {
+		var task;
+		$.ajax({
+			type: "GET",
+			url: "http://piccolo.com/tasks/" + id,
+			async: false
+		}).done(function (data) {
+			task = JSON.parse(data);
+		});
+		return task;
+	};
+	
+	$scope.task = $scope.getTask($routeParams.taskId);
 }
