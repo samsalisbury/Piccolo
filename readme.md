@@ -10,7 +10,7 @@ A modular micro-framework for creating APIs.
 - [x] Samples
 - [ ] Validation
 - [ ] CORS
-- [ ] IoC
+- [x] IoC
 - [ ] Nullable optional parameters in request handlers
 - [x] JSON encoding/decoding
 - [ ] NuGet package
