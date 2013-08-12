@@ -1,7 +1,5 @@
 framework "4.0"
 
-. .\helpers.ps1
-
 properties {
 	$build_dir = split-path $psake.build_script_file
 	$project_dir = "$build_dir\.."
@@ -25,9 +23,7 @@ taskSetup {
 }
 
 task compile -depends clean {
-	exec {
-		msbuild $solution_file /m /property:"Configuration=TEST;OutputPath=$build_output_dir" /nologo
-	}
+	exec { msbuild $solution_file /m /property:"Configuration=TEST;OutputPath=$build_output_dir" /nologo }
 }
 
 task clean {
