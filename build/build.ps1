@@ -23,7 +23,7 @@ taskSetup {
 }
 
 task compile -depends clean {
-	exec { msbuild $solution_file /m /property:"Configuration=TEST;OutputPath=$build_output_dir" /nologo }
+	exec { msbuild $solution_file /m /property:"Configuration=$build_configuration;OutputPath=$build_output_dir" /nologo }
 }
 
 task clean {
