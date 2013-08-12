@@ -1,5 +1,7 @@
 framework "4.0"
 
+.\helpers.ps1
+
 properties {
 	$build_dir = split-path $psake.build_script_file
 	$project_dir = "$build_dir\.."
@@ -23,15 +25,13 @@ taskSetup {
 }
 
 task compile -depends clean {
-	try {
-		exec {
-			msbuild $solution_file /m /property:"Configuration=$build_configuration;OutputPath=$build_output_dir" /nologo
-		}
-	} catch {
-		write-output "##teamcity[buildStatus status='FAILURE' ]"
+	exec {
+		msbuild $solution_file /m /property:"Configuration=$build_configuration;OutputPath=$build_output_dir" /nologo
 	}
 }
 
 task clean {
-	remove-item -recurse -force $build_output_dir
+	exec {
+		remove-item -recurse -force $build_output_dir
+	}
 }
