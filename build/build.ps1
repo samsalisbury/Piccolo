@@ -11,9 +11,7 @@ properties {
 	$build_configuration = "Release"
 	$version_major = 0
 	$version_minor = 1
-	
-	Get-Variable -Name version_build -Scope Global -ea SilentlyContinue | out-null
-	$version_build = if ($? -eq "") { 0 } else { $? }
+	$version_build = 0
 }
 
 task default -depends compile
