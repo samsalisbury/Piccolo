@@ -9,10 +9,10 @@ properties {
 	$assembly_info_file = "$project_dir\GlobalAssemblyInfo.cs"
 	
 	$build_configuration = "Release"
-	$version_major = 0;
-	$version_minor = 1;
-	$version_build = ($version_build == "") ? 0 : $version_build;
-	$version_revision = 0;
+	$version_major = 0
+	$version_minor = 1
+	$version_build = if ($version_build -eq "") { 0 } else { $version_build }
+	$version_revision = 0
 }
 
 task default -depends compile
