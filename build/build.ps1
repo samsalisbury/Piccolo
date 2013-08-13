@@ -11,7 +11,7 @@ properties {
 	$build_configuration = "Release"
 	$version_major = 0;
 	$version_minor = 1;
-	$version_build = 999;
+	$version_build = ($version_build == "") ? 0 : $version_build;
 	$version_revision = 0;
 }
 
