@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
-		<id>$id$</id>
-		<version>$version$</version>
-		<authors>$author$</authors>
-		<owners>$author$</owners>
+		<id>Piccolo</id>
+		<version>0.0.0.0</version>
+		<authors>Arnold Zokas</authors>
+		<owners>OpenTable, Inc.</owners>
 		<licenseUrl>https://github.com/opentable/Piccolo/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://github.com/opentable/Piccolo</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>$description$</description>
-		<tags>rest api</tags>
+		<description>A modular micro-framework for creating APIs.</description>
+		<tags>api rest</tags>
 		<dependencies>
 			<group>
 				<dependency id="Microsoft.Net.Http" version="2.0.20710.0" />
