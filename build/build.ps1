@@ -11,8 +11,9 @@ properties {
 	$build_configuration = "Release"
 	$version_major = 0
 	$version_minor = 1
-	$version_build = if ($version_build -eq "") { 0 } else { $version_build }
-	$version_revision = 0
+	
+	Get-Variable -Name version_build -Scope Global -ea SilentlyContinue | out-null
+	$version_build = if ($? -eq "") { 0 } else { $? }
 }
 
 task default -depends compile
@@ -33,8 +34,11 @@ task compile -depends set-version-number {
 }
 
 task set-version-number -depends clean {
-	$version = "$version_major.$version_minor.$version_build.$version_revision"
+	$version = "$version_major.$version_minor.$version_build.0"
 	write-host Setting assembly version to $version
+	
+	$package_version = "$version_major.$version_minor.$version_build"
+	write-host "##teamcity[setParameter name='package.version' value='$package_version']"
 	
 	$versionPattern = 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
 	$versionAssembly = 'AssemblyVersion("' + $version + '")';
