@@ -87,7 +87,13 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Web.config.uninstall.xdt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+    <None Include="Web.config.install.xdt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
