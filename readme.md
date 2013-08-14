@@ -17,5 +17,8 @@ A modular micro-framework for creating APIs.
 
 **4)** Build and run
 
+## Roadmap
+- [Roadmap](https://github.com/opentable/Piccolo/wiki/Roadmap)
+
 ## License
 MIT - see [license file](https://github.com/opentable/Piccolo/blob/master/LICENSE) for more information
