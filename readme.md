@@ -16,23 +16,3 @@ A modular micro-framework for creating APIs.
     		}
     	}
 4. Build and run
-
-## Roadmap
-*IN-PROGRESS*
-
-*MOVE TO WIKI*
-
-*LINK TO WIKI*
-
-- [x] Core HTTP verbs: GET, POST, PUT, DELETE
-- [x] Static routing
-- [x] Dynamic routing
-- [x] Samples
-- [ ] Validation
-- [ ] CORS
-- [x] IoC
-- [ ] Nullable optional parameters in request handlers
-- [x] JSON encoding/decoding
-- [ ] NuGet package
-- [ ] Public nightly build
-- [ ] Awesome documentation!
