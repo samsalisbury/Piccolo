@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-	<system.web>
-		<httpHandlers>
+	<system.web xdt:Transform="InsertIfMissing">
+		<httpHandlers xdt:Transform="InsertIfMissing">
 			<add path="*." verb="*" type="Piccolo.HttpHandler" xdt:Transform="Insert" />
 		</httpHandlers>
 	</system.web>
 
-	<system.webServer>
-		<handlers>
-			<remove name="OPTIONSVerbHandler" xdt:Transform="Insert" />
+	<system.webServer xdt:Transform="InsertIfMissing">
+		<handlers xdt:Transform="InsertIfMissing">
+			<remove name="OPTIONSVerbHandler" xdt:Transform="InsertIfMissing" />
 			<add path="*." verb="*" name="Piccolo.HttpHandler" type="Piccolo.HttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="Insert" />
 		</handlers>
 
-		<httpErrors existingResponse="PassThrough" xdt:Transform="Insert" />
+		<httpErrors existingResponse="PassThrough" xdt:Transform="InsertIfMissing" />
 
-		<validation validateIntegratedModeConfiguration="false" xdt:Transform="Insert" />
+		<validation validateIntegratedModeConfiguration="false" xdt:Transform="InsertIfMissing" />
 	</system.webServer>
 </configuration>
