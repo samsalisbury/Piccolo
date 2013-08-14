@@ -1,18 +1,18 @@
 # Piccolo
-
 A modular micro-framework for creating APIs.
 
 ## Quickstart
-1. File > New Project (.NET 4.0+)
-2. `Install-Package Piccolo -Pre`
-3. Create handler:
+**1)** Create new project (.net 4.0+)<br />
+**2)** Run command `Install-Package Piccolo -Pre` in [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console)<br />
+**3)** Add class:<br />
 
-		[Route("/")]
-    	public class Hello : IGet<string>
+    [Route("/")]
+    public class Hello : IGet<string>
+    {
+    	public HttpResponseMessage<string> Get()
     	{
-	    	public HttpResponseMessage<string> Get()
-    		{
-    			return Response.Success.Ok("Hello, Piccolo!");
-    		}
+    		return Response.Success.Ok("Hello, Piccolo!");
     	}
-4. Build and run
+    }
+
+**4)** Build and run
