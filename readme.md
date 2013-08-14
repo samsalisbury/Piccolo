@@ -16,3 +16,6 @@ A modular micro-framework for creating APIs.
     }
 
 **4)** Build and run
+
+## License
+MIT - see [license file](https://github.com/opentable/Piccolo/blob/master/LICENSE) for more information
