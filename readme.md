@@ -3,7 +3,7 @@ A modular micro-framework for creating APIs.
 
 ## Quickstart
 **1)** Create new project (.net 4.0+)<br />
-**2)** Run command `Install-Package Piccolo -Pre` in [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console)<br />
+**2)** Run command `Install-Package Piccolo -Pre` in [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console) (you will need NuGet v2.6+)<br />
 **3)** Add class:<br />
 
     [Route("/")]
