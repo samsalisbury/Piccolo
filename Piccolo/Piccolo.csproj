@@ -87,11 +87,11 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Web.config.uninstall.xdt">
+    <None Include="NuGet\Web.config.uninstall.xdt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Web.config.install.xdt">
+    <None Include="NuGet\Web.config.install.xdt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

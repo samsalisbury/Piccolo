@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<system.web>
+		<httpHandlers>
+			<add path="*." verb="*" type="Piccolo.HttpHandler" xdt:Transform="Remove" xdt:Locator="Match(type)" />
+		</httpHandlers>
+	</system.web>
+
+	<system.webServer>
+		<handlers>
+			<remove name="OPTIONSVerbHandler" xdt:Transform="Remove" xdt:Locator="Match(name)" />
+			<add path="*." verb="*" name="Piccolo.HttpHandler" type="Piccolo.HttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="Insert" />
+		</handlers>
+
+		<httpErrors existingResponse="PassThrough" xdt:Transform="RemoveAttributes(existingResponse)" />
+
+		<validation validateIntegratedModeConfiguration="false" xdt:Transform="RemoveAttributes(validateIntegratedModeConfiguration)" />
+	</system.webServer>
+</configuration>
