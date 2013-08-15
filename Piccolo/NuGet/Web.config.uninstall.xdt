@@ -10,7 +10,7 @@
 	<system.webServer>
 		<handlers>
 			<remove name="OPTIONSVerbHandler" xdt:Transform="Remove" xdt:Locator="Match(name)" />
-			<add path="*." verb="*" name="Piccolo.HttpHandler" type="Piccolo.HttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="Insert" />
+			<add path="*." verb="*" name="Piccolo.HttpHandler" type="Piccolo.HttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="Remove" xdt:Locator="Match(name)" />
 		</handlers>
 
 		<httpErrors existingResponse="PassThrough" xdt:Transform="RemoveAttributes(existingResponse)" />
