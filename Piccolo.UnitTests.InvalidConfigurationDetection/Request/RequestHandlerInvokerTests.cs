@@ -6,7 +6,7 @@ using Piccolo.Request;
 using Piccolo.Request.ParameterBinders;
 using Shouldly;
 
-namespace Piccolo.UnitTests.DuplicateRouteDetection.Request
+namespace Piccolo.UnitTests.InvalidConfigurationDetection.Request
 {
 	[TestFixture]
 	public class when_binding_query_parameter_of_unsupported_type

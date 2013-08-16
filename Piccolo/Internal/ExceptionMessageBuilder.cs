@@ -60,5 +60,10 @@ namespace Piccolo.Internal
 		{
 			return string.Format("Value \"{0}\" could not be assigned to parameter [{1}.{2}] of type {3}.", value, property.DeclaringType.FullName, property.Name, property.PropertyType);
 		}
+
+		public static string BuildMissingGlobalAsaxMessage()
+		{
+			return "Global.asax could not be found.";
+		}
 	}
 }

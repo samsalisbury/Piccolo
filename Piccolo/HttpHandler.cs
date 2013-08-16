@@ -23,6 +23,8 @@ namespace Piccolo
 
 		public HttpHandler(bool applyCustomConfiguration, Assembly assembly)
 		{
+			EnsureValidAssembly(assembly);
+
 			var bootstrapper = new Bootstrapper(assembly);
 			Configuration = bootstrapper.ApplyConfiguration(applyCustomConfiguration);
 			_requestHandlerInvoker = new RequestHandlerInvoker(Configuration.JsonDeserialiser, Configuration.RouteParameterBinders);
@@ -79,6 +81,12 @@ namespace Piccolo
 
 			using (var reader = new StreamReader(httpContext.Request.InputStream))
 				return reader.ReadToEnd();
+		}
+
+		private static void EnsureValidAssembly(Assembly assembly)
+		{
+			if (assembly == typeof(HttpApplication).Assembly)
+				throw new InvalidOperationException(ExceptionMessageBuilder.BuildMissingGlobalAsaxMessage());
 		}
 	}
 }

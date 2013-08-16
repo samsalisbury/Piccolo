@@ -7,8 +7,8 @@
     <ProjectGuid>{FB896841-B2A6-46DE-8563-3CECB6B529A2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Piccolo.UnitTests.DuplicateRouteDetection</RootNamespace>
-    <AssemblyName>Piccolo.UnitTests.DuplicateRouteDetection</AssemblyName>
+    <RootNamespace>Piccolo.UnitTests.InvalidConfigurationDetection</RootNamespace>
+    <AssemblyName>Piccolo.UnitTests.InvalidConfigurationDetection</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,6 +34,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HttpHandlerTests.cs" />
     <Compile Include="Request\RequestHandlerInvokerTests.cs" />
     <Compile Include="Routing\RequestRouterTests.cs" />
   </ItemGroup>
@@ -48,6 +49,7 @@
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

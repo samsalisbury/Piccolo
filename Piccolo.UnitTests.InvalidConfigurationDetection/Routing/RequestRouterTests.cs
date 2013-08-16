@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Piccolo.Routing;
 using Shouldly;
 
-namespace Piccolo.UnitTests.DuplicateRouteDetection.Routing
+namespace Piccolo.UnitTests.InvalidConfigurationDetection.Routing
 {
 	public class RequestRouterTests
 	{
