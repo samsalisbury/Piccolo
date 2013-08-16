@@ -47,6 +47,10 @@
     <Compile Include="IPost.cs" />
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
+    <None Include="NuGet\Global.asax.cs.pp">
+      <DependentUpon>Global.asax.pp</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="ObjectContent.cs" />
     <Compile Include="OptionalAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,7 +99,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="NuGet\Global.asax.pp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
