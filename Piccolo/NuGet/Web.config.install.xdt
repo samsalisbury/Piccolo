@@ -13,10 +13,8 @@
 			<add path="*." verb="*" name="Piccolo.HttpHandler" type="Piccolo.HttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="InsertIfMissing" />
 		</handlers>
 
-		<httpErrors xdt:Transform="InsertIfMissing" />
 		<httpErrors existingResponse="PassThrough" xdt:Transform="SetAttributes(existingResponse)" />
 
-		<validation xdt:Transform="InsertIfMissing" />
 		<validation validateIntegratedModeConfiguration="false" xdt:Transform="SetAttributes(validateIntegratedModeConfiguration)" />
 	</system.webServer>
 </configuration>
