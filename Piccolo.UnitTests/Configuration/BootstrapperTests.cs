@@ -34,15 +34,15 @@ namespace Piccolo.UnitTests.Configuration
 			}
 
 			[Test]
-			public void it_should_configure_json_encoder()
+			public void it_should_configure_json_serialiser()
 			{
-				_handlerConfiguration.JsonEncoder("Test").ShouldBe("\"Test\"");
+				_handlerConfiguration.JsonSerialiser("Test").ShouldBe("\"Test\"");
 			}
 
 			[Test]
-			public void it_should_configure_json_decoder()
+			public void it_should_configure_json_deserialiser()
 			{
-				_handlerConfiguration.JsonDecoder(typeof(string), "\"Test\"").ShouldBe("Test");
+				_handlerConfiguration.JsonDeserialiser(typeof(string), "\"Test\"").ShouldBe("Test");
 			}
 		}
 

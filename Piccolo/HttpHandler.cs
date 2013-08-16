@@ -23,7 +23,7 @@ namespace Piccolo
 		{
 			var bootstrapper = new Bootstrapper(assembly);
 			Configuration = bootstrapper.ApplyConfiguration(applyCustomConfiguration);
-			_requestHandlerInvoker = new RequestHandlerInvoker(Configuration.JsonDecoder, Configuration.RouteParameterBinders);
+			_requestHandlerInvoker = new RequestHandlerInvoker(Configuration.JsonDeserialiser, Configuration.RouteParameterBinders);
 		}
 
 		public HttpHandlerConfiguration Configuration { get; private set; }
@@ -39,8 +39,8 @@ namespace Piccolo
 			if (responseMessage.Content != null)
 			{
 				var objectContent = (ObjectContent)responseMessage.Content;
-				var encodedPayload = Configuration.JsonEncoder(objectContent.Content);
-				context.Response.Write(encodedPayload);
+				var serialisedPayload = Configuration.JsonSerialiser(objectContent.Content);
+				context.Response.Write(serialisedPayload);
 			}
 		}
 

@@ -55,8 +55,8 @@ namespace Piccolo.Configuration
 				{typeof(DateTime), new DateTimeParameterBinder()},
 				{typeof(DateTime?), new NullableDateTimeParameterBinder()}
 			};
-			configuration.JsonEncoder = content => JsonConvert.SerializeObject(content, Formatting.Indented);
-			configuration.JsonDecoder = (type, payload) => JsonConvert.DeserializeObject(payload, type);
+			configuration.JsonSerialiser = content => JsonConvert.SerializeObject(content, Formatting.Indented);
+			configuration.JsonDeserialiser = (type, payload) => JsonConvert.DeserializeObject(payload, type);
 		}
 
 		private static void RunStartupTasks(HttpHandlerConfiguration configuration, Assembly assembly)
