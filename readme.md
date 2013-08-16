@@ -6,14 +6,16 @@ A modular micro-framework for creating APIs.
 **2)** Run command `Install-Package Piccolo -Pre` in [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console) (you will need NuGet v2.6+)<br />
 **3)** New class:<br />
 
-    [Route("/")]
-    public class Hello : IGet<string>
-    {
-    	public HttpResponseMessage<string> Get()
-    	{
-    		return Response.Success.Ok("Hello, Piccolo!");
-    	}
-    }
+```csharp
+[Route("/")]
+public class Hello : IGet<string>
+{
+	public HttpResponseMessage<string> Get()
+	{
+		return Response.Success.Ok("Hello, Piccolo!");
+	}
+}
+```
 
 **4)** Build and run
 
