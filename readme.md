@@ -20,10 +20,18 @@ public class Hello : IGet<string>
 **4)** Build and run
 
 ## Documentation
+1. [Installation](https://github.com/opentable/Piccolo/wiki/Installation)
 1. Basic Concepts
+    1. GET Request Handlers
+    1. POST Request Handlers
+    1. PUT Request Handlers
+    1. DELETE Request Handlers
+    1. Routing
+    1. Optional Parameters
     1. [JSON Serialisation](https://github.com/opentable/Piccolo/wiki/JSON-Serialisation)
     1. [JSON Deserialisation](https://github.com/opentable/Piccolo/wiki/JSON-Deserialisation)
 1. Advanced Concepts
+    1. High-Level Architecture
     1. [Start-up Tasks](https://github.com/opentable/Piccolo/wiki/Startup-Tasks)
     1. [Overriding JSON Serialisation](https://github.com/opentable/Piccolo/wiki/Overriding-JSON-Serialisation)
     1. [Overriding JSON Deserialisation](https://github.com/opentable/Piccolo/wiki/Overriding-JSON-Deserialisation)
