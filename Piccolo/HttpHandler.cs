@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -31,17 +33,7 @@ namespace Piccolo
 		[ExcludeFromCodeCoverage]
 		public void ProcessRequest(HttpContext context)
 		{
-			var responseMessage = HandleRequest(new RequestContextWrapper(context));
-
-			context.Response.StatusCode = (int)responseMessage.StatusCode;
-			context.Response.StatusDescription = responseMessage.ReasonPhrase;
-
-			if (responseMessage.Content != null)
-			{
-				var objectContent = (ObjectContent)responseMessage.Content;
-				var serialisedPayload = Configuration.JsonSerialiser(objectContent.Content);
-				context.Response.Write(serialisedPayload);
-			}
+			ProcessRequest(new HttpContextWrapper(context));
 		}
 
 		[ExcludeFromCodeCoverage]
@@ -50,16 +42,43 @@ namespace Piccolo
 			get { return true; }
 		}
 
-		public HttpResponseMessage HandleRequest(IRequestContextWrapper requestContext)
+		public void ProcessRequest(HttpContextBase httpContext)
 		{
-			var lookupResult = Configuration.Router.FindRequestHandler(requestContext.Verb, requestContext.Uri);
+			var verb = httpContext.Request.HttpMethod;
+			var requestUri = httpContext.Request.Url;
+			var payload = GetPayload(httpContext);
+			var responseMessage = HandleRequest(verb, requestUri, payload);
+
+			httpContext.Response.StatusCode = (int)responseMessage.StatusCode;
+			httpContext.Response.StatusDescription = responseMessage.ReasonPhrase;
+
+			if (responseMessage.Content != null)
+			{
+				var objectContent = (ObjectContent)responseMessage.Content;
+				var serialisedPayload = Configuration.JsonSerialiser(objectContent.Content);
+				httpContext.Response.Write(serialisedPayload);
+			}
+		}
+
+		private HttpResponseMessage HandleRequest(string verb, Uri requestUri, string payload)
+		{
+			var lookupResult = Configuration.Router.FindRequestHandler(verb, requestUri);
 			if (lookupResult == null || lookupResult.RequestHandlerType == null)
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-			var queryParameters = HttpUtility.ParseQueryString(requestContext.Uri.Query).ToDictionary();
+			var queryParameters = HttpUtility.ParseQueryString(requestUri.Query).ToDictionary();
 
 			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-			return _requestHandlerInvoker.Execute(requestHandler, requestContext.Verb, lookupResult.RouteParameters, queryParameters, requestContext.Payload);
+			return _requestHandlerInvoker.Execute(requestHandler, verb, lookupResult.RouteParameters, queryParameters, payload);
+		}
+
+		private static string GetPayload(HttpContextBase httpContext)
+		{
+			if (httpContext.Request.InputStream.CanRead == false)
+				return string.Empty;
+
+			using (var reader = new StreamReader(httpContext.Request.InputStream))
+				return reader.ReadToEnd();
 		}
 	}
 }

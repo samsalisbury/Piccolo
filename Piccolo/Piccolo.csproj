@@ -54,14 +54,12 @@
     <Compile Include="ObjectContent.cs" />
     <Compile Include="OptionalAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Request\IRequestContextWrapper.cs" />
     <Compile Include="Request\ParameterBinders\NullableBooleanParameterBinder.cs" />
     <Compile Include="Request\ParameterBinders\NullableByteParameterBinder.cs" />
     <Compile Include="Request\ParameterBinders\NullableDateTimeParameterBinder.cs" />
     <Compile Include="Request\ParameterBinders\NullableInt16ParameterBinder.cs" />
     <Compile Include="Request\ParameterBinders\IParameterBinder.cs" />
     <Compile Include="Request\ParameterBinders\NullableInt32ParameterBinder.cs" />
-    <Compile Include="Request\RequestContextWrapper.cs" />
     <Compile Include="Request\RequestHandlerInvoker.cs" />
     <Compile Include="Request\ParameterBinders\ByteParameterBinder.cs" />
     <Compile Include="Request\ParameterBinders\BooleanParameterBinder.cs" />

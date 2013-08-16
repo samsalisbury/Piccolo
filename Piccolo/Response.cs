@@ -4,11 +4,11 @@ using System.Net.Http;
 
 namespace Piccolo
 {
-	[ExcludeFromCodeCoverage]
 	public class Response
 	{
 		public class Error
 		{
+			[ExcludeFromCodeCoverage]
 			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
