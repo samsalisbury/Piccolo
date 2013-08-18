@@ -109,7 +109,7 @@ function TaskListController($scope) {
 	};
 
 	$scope.addTask = function () {
-		$scope.createTask({ title: $scope.newTaskTitle, isCompleted: false });
+		$scope.createTask({ title: $scope.newTaskTitle });
 		$scope.newTaskTitle = "";
 	};
 

@@ -1,10 +1,11 @@
 ﻿using Piccolo.Tasks.Models;
 using Piccolo.Tasks.Repositories;
+using Piccolo.Tasks.ViewModels;
 
 namespace Piccolo.Tasks.RequestsHandlers
 {
 	[Route("/tasks")]
-	public class AddTask : IPost<Task>
+	public class AddTask : IPost<AddTaskParameters, Task>
 	{
 		private readonly ITaskRepository _taskRepository;
 
@@ -13,8 +14,13 @@ namespace Piccolo.Tasks.RequestsHandlers
 			_taskRepository = taskRepository;
 		}
 
-		public HttpResponseMessage<Task> Post(Task task)
+		public HttpResponseMessage<Task> Post(AddTaskParameters parameters)
 		{
+			var task = new Task
+			{
+				Title = parameters.Title
+			};
+
 			_taskRepository.Add(task);
 
 			return Response.Success.Created(task);
