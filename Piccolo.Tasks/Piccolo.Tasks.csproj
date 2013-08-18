@@ -65,6 +65,7 @@
     <Compile Include="RequestsHandlers\GetTaskById.cs" />
     <Compile Include="ViewModels\AddTaskParameters.cs" />
     <Compile Include="ViewModels\TaskCollection.cs" />
+    <Compile Include="ViewModels\UpdateTaskParameters.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -16,11 +16,7 @@ namespace Piccolo.Tasks.RequestsHandlers
 
 		public HttpResponseMessage<Task> Post(AddTaskParameters parameters)
 		{
-			var task = new Task
-			{
-				Title = parameters.Title
-			};
-
+			var task = new Task {Title = parameters.Title};
 			_taskRepository.Add(task);
 
 			return Response.Success.Created(task);
