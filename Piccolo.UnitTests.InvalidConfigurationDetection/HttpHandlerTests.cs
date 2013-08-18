@@ -13,7 +13,7 @@ namespace Piccolo.UnitTests.InvalidConfigurationDetection
 			[Test]
 			public void it_should_throw_exception()
 			{
-				Should.Throw<InvalidOperationException>(() => new HttpHandler(false, typeof(HttpApplication).Assembly));
+				Should.Throw<InvalidOperationException>(() => new HttpHandler(false, typeof(HttpApplication).BaseType.Assembly));
 			}
 		}
 	}

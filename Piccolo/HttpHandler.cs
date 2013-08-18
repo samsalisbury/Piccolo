@@ -85,7 +85,7 @@ namespace Piccolo
 
 		private static void EnsureValidAssembly(Assembly assembly)
 		{
-			if (assembly == typeof(HttpApplication).Assembly)
+			if (assembly == typeof(HttpApplication).BaseType.Assembly)
 				throw new InvalidOperationException(ExceptionMessageBuilder.BuildMissingGlobalAsaxMessage());
 		}
 	}
