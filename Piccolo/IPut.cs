@@ -1,7 +1,7 @@
 namespace Piccolo
 {
-	public interface IPut<in TInput> : IRequestHandler
+	public interface IPut<in TInput, TOutput> : IRequestHandler
 	{
-		HttpResponseMessage<dynamic> Put(TInput task);
+		HttpResponseMessage<TOutput> Put(TInput task);
 	}
 }

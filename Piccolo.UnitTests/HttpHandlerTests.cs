@@ -164,7 +164,7 @@ namespace Piccolo.UnitTests
 				var httpContext = new Mock<HttpContextBase>();
 				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("PUT");
 				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/test-resources/1"));
-				httpContext.SetupGet(x => x.Request.InputStream).Returns(new MemoryStream(Encoding.Unicode.GetBytes("")));
+				httpContext.SetupGet(x => x.Request.InputStream).Returns(new MemoryStream(Encoding.UTF8.GetBytes("{\"Test\":\"Test\"}")));
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
 				HttpHandler.ProcessRequest(httpContext.Object);
 			}
@@ -172,31 +172,38 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_status_204()
 			{
-				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NoContent);
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.OK);
 			}
 
 			[Test]
 			public void it_should_return_status_reason_no_content()
 			{
-				_httpResponse.VerifySet(x => x.StatusDescription = "No Content");
+				_httpResponse.VerifySet(x => x.StatusDescription = "OK");
 			}
 
 			[Test]
-			public void it_should_not_return_content()
+			public void it_should_set_mime_type_to_application_json()
 			{
-				_httpResponse.Verify(x => x.Write(It.IsAny<string>()), Times.Never());
+				_httpResponse.Verify(x => x.AddHeader("Content-Type", "application/json"));
+			}
+
+			[Test]
+			public void it_should_return_content()
+			{
+				_httpResponse.Verify(x => x.Write("{\"test\":\"Test\"}"));
 			}
 
 			[Route("/test-resources/{Id}")]
-			public class UpdateTestResource : IPut<UpdateTestResource.Parameters>
+			public class UpdateTestResource : IPut<UpdateTestResource.Parameters, UpdateTestResource.Parameters>
 			{
-				public HttpResponseMessage<dynamic> Put(Parameters task)
+				public HttpResponseMessage<Parameters> Put(Parameters task)
 				{
-					return Response.Success.NoContent();
+					return Response.Success.Ok(task);
 				}
 
 				public class Parameters
 				{
+					public string Test { get; set; }
 				}
 
 				public int Id { get; set; }

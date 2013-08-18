@@ -11,7 +11,7 @@ namespace Piccolo.Routing
 		{
 			{typeof(IGet<>).Name, "get"},
 			{typeof(IPost<,>).Name, "post"},
-			{typeof(IPut<>).Name, "put"},
+			{typeof(IPut<,>).Name, "put"},
 			{typeof(IDelete).Name, "delete"}
 		};
 
