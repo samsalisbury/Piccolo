@@ -15,15 +15,15 @@
 					</tr>
 				</thead>
 				<tr ng-repeat="task in tasks">
-					<td>{{task.Id}}</td>
+					<td>{{task.id}}</td>
 					<td>
-						<a href="#/{{task.Id}}">{{task.Title}}</a>
+						<a href="#/{{task.id}}">{{task.title}}</a>
 					</td>
 					<td>
-						<input ng-model="task.IsCompleted" ng-click="toggleCompletion(task.Id, task.IsCompleted == true)" type="checkbox" />
+						<input ng-model="task.isCompleted" ng-click="toggleCompletion(task.id, task.isCompleted == true)" type="checkbox" />
 					</td>
 					<td>
-						<a ng-click="removeTask(task.Id)" href="javascript:" class="text-danger">delete</a>
+						<a ng-click="removeTask(task.id)" href="javascript:" class="text-danger">delete</a>
 					</td>
 				</tr>
 			</table>

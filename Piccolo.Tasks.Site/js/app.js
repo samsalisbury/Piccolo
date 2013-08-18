@@ -15,10 +15,10 @@ function TaskListController($scope) {
 	$scope.showTasks = function () {
 		$.getJSON("http://piccolo.com/tasks?pageNumber=" + $scope.page + "&pageSize=" + $scope.pageSize).done(function (data) {
 			$scope.$apply(function () {
-				$scope.tasks = data.Tasks;
-				$scope.totalCount = data.TotalCount;
+				$scope.tasks = data.tasks;
+				$scope.totalCount = data.totalCount;
 
-				$scope.totalPages = Math.ceil(data.TotalCount / $scope.pageSize);
+				$scope.totalPages = Math.ceil(data.totalCount / $scope.pageSize);
 				$scope.pageNumbers = [];
 				for (var pageNumber = 0; pageNumber < $scope.totalPages; pageNumber++) {
 					$scope.pageNumbers.push(pageNumber + 1);
@@ -34,10 +34,10 @@ function TaskListController($scope) {
 	$scope.search = function () {
 		$.getJSON("http://piccolo.com/tasks/search?term=" + $scope.searchTerm + "&pageNumber=" + $scope.page + "&pageSize=" + $scope.pageSize).done(function (data) {
 			$scope.$apply(function () {
-				$scope.tasks = data.Tasks;
-				$scope.totalCount = data.TotalCount;
+				$scope.tasks = data.tasks;
+				$scope.totalCount = data.totalCount;
 
-				$scope.totalPages = Math.ceil(data.TotalCount / $scope.pageSize);
+				$scope.totalPages = Math.ceil(data.totalCount / $scope.pageSize);
 				$scope.pageNumbers = [];
 				for (var pageNumber = 0; pageNumber < $scope.totalPages; pageNumber++) {
 					$scope.pageNumbers.push(pageNumber + 1);
@@ -71,7 +71,7 @@ function TaskListController($scope) {
 	$scope.updateTask = function (task) {
 		$.ajax({
 			type: "PUT",
-			url: "http://piccolo.com/tasks/" + task.Id,
+			url: "http://piccolo.com/tasks/" + task.id,
 			data: JSON.stringify(task)
 		}).done(function () {
 			$scope.showTasks();
@@ -109,7 +109,7 @@ function TaskListController($scope) {
 	};
 
 	$scope.addTask = function () {
-		$scope.createTask({ Title: $scope.newTaskTitle, IsCompleted: false });
+		$scope.createTask({ title: $scope.newTaskTitle, isCompleted: false });
 		$scope.newTaskTitle = "";
 	};
 
@@ -119,7 +119,7 @@ function TaskListController($scope) {
 
 	$scope.toggleCompletion = function (id, isCompleted) {
 		var task = $scope.getTask(id);
-		task.IsCompleted = isCompleted;
+		task.isCompleted = isCompleted;
 		$scope.updateTask(task);
 	};
 }
