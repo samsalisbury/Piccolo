@@ -56,6 +56,8 @@ namespace Piccolo
 
 			if (responseMessage.Content != null)
 			{
+				httpContext.Response.AddHeader("Content-Type", "application/json");
+
 				var objectContent = (ObjectContent)responseMessage.Content;
 				var serialisedPayload = Configuration.JsonSerialiser(objectContent.Content);
 				httpContext.Response.Write(serialisedPayload);

@@ -66,6 +66,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_set_mime_type_to_application_json()
+			{
+				_httpResponse.Verify(x => x.AddHeader("Content-Type", "application/json"));
+			}
+
+			[Test]
 			public void it_should_return_content()
 			{
 				_httpResponse.Verify(x => x.Write("{\"test\":\"Test\"}"));
@@ -116,6 +122,12 @@ namespace Piccolo.UnitTests
 			public void it_should_return_status_reason_no_content()
 			{
 				_httpResponse.VerifySet(x => x.StatusDescription = "Created");
+			}
+
+			[Test]
+			public void it_should_set_mime_type_to_application_json()
+			{
+				_httpResponse.Verify(x => x.AddHeader("Content-Type", "application/json"));
 			}
 
 			[Test]
