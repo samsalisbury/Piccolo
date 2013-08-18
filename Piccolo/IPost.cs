@@ -1,7 +1,7 @@
 namespace Piccolo
 {
-	public interface IPost<TInput> : IRequestHandler
+	public interface IPost<in TInput, TOutput> : IRequestHandler
 	{
-		HttpResponseMessage<TInput> Post(TInput parameters);
+		HttpResponseMessage<TOutput> Post(TInput parameters);
 	}
 }

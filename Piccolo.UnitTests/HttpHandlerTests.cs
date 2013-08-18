@@ -137,7 +137,7 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources")]
-			public class CreateTestResource : IPost<CreateTestResource.Parameters>
+			public class CreateTestResource : IPost<CreateTestResource.Parameters, CreateTestResource.Parameters>
 			{
 				public HttpResponseMessage<Parameters> Post(Parameters parameters)
 				{

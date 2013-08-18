@@ -10,7 +10,7 @@ namespace Piccolo.Routing
 		private static readonly Dictionary<string, string> _requestHandlerVerbMap = new Dictionary<string, string>
 		{
 			{typeof(IGet<>).Name, "get"},
-			{typeof(IPost<>).Name, "post"},
+			{typeof(IPost<,>).Name, "post"},
 			{typeof(IPut<>).Name, "put"},
 			{typeof(IDelete).Name, "delete"}
 		};

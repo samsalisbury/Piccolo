@@ -98,7 +98,7 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[Route("/PostRequestHandlerInvokerTests/{Param}")]
-		public class PostResource : IPost<string>
+		public class PostResource : IPost<string, string>
 		{
 			public HttpResponseMessage<string> Post(string parameters)
 			{
@@ -727,7 +727,7 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[Route("/PutRequestHandlerInvokerTests/Payload")]
-		public class PostResourceWithPayload : IPost<PostResourceWithPayload.Parameters>
+		public class PostResourceWithPayload : IPost<PostResourceWithPayload.Parameters, PostResourceWithPayload.Parameters>
 		{
 			public HttpResponseMessage<Parameters> Post(Parameters parameters)
 			{
