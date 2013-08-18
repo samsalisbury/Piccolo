@@ -12,9 +12,9 @@ namespace Piccolo.Request
 	{
 		private const BindingFlags MethodLookupFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
 		private readonly Func<Type, string, object> _jsonDecoder;
-		private readonly Dictionary<Type, IParameterBinder> _routeParameterBinders;
+		private readonly IDictionary<Type, IParameterBinder> _routeParameterBinders;
 
-		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, Dictionary<Type, IParameterBinder> routeParameterBinders)
+		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, IDictionary<Type, IParameterBinder> routeParameterBinders)
 		{
 			_jsonDecoder = jsonDecoder;
 			_routeParameterBinders = routeParameterBinders;
