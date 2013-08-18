@@ -68,7 +68,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_content()
 			{
-				_httpResponse.Verify(x => x.Write("{\"Test\":\"Test\"}"));
+				_httpResponse.Verify(x => x.Write("{\"test\":\"Test\"}"));
 			}
 
 			[Route("/test-resources/{id}")]
@@ -121,7 +121,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_content()
 			{
-				_httpResponse.Verify(x => x.Write("{\"Test\":\"Test\"}"));
+				_httpResponse.Verify(x => x.Write("{\"test\":\"Test\"}"));
 			}
 
 			[Route("/test-resources")]

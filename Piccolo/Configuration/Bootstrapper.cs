@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Piccolo.Request.ParameterBinders;
 using Piccolo.Routing;
 
@@ -55,7 +56,13 @@ namespace Piccolo.Configuration
 				{typeof(DateTime), new DateTimeParameterBinder()},
 				{typeof(DateTime?), new NullableDateTimeParameterBinder()}
 			};
-			configuration.JsonSerialiser = JsonConvert.SerializeObject;
+			configuration.JsonSerialiser = (model) =>
+			{
+				var jsonSerializerSettings = new JsonSerializerSettings();
+				jsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+				return JsonConvert.SerializeObject(model, jsonSerializerSettings);
+			};
 			configuration.JsonDeserialiser = (type, payload) => JsonConvert.DeserializeObject(payload, type);
 		}
 
