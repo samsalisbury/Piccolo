@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-	<system.web xdt:Transform="InsertIfMissing">
-		<httpHandlers xdt:Transform="InsertIfMissing">
-			<add path="*." verb="*" type="Piccolo.HttpHandler" xdt:Transform="InsertIfMissing" />
-		</httpHandlers>
-	</system.web>
-
 	<system.webServer xdt:Transform="InsertIfMissing">
 		<handlers xdt:Transform="InsertIfMissing">
 			<remove name="OPTIONSVerbHandler" xdt:Transform="InsertIfMissing" />
