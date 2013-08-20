@@ -26,6 +26,7 @@ public class Hello : IGet<string>
 1. [PUT Request Handlers](https://github.com/opentable/Piccolo/wiki/PUT-Request-Handlers)
 1. [DELETE Request Handlers](https://github.com/opentable/Piccolo/wiki/DELETE-Request-Handlers)
 1. [Routing](https://github.com/opentable/Piccolo/wiki/Routing)
+1. [Response Helpers](https://github.com/opentable/Piccolo/wiki/Response-Helpers)
 1. [JSON Serialisation](https://github.com/opentable/Piccolo/wiki/JSON-Serialisation)
 1. [JSON Deserialisation](https://github.com/opentable/Piccolo/wiki/JSON-Deserialisation)
 1. [Configuration](https://github.com/opentable/Piccolo/wiki/Configuration)
