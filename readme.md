@@ -21,10 +21,10 @@ public class Hello : IGet<string>
 
 ## Documentation
 1. [Installation](https://github.com/opentable/Piccolo/wiki/Installation)
-1. GET Request Handlers
-1. POST Request Handlers
-1. PUT Request Handlers
-1. DELETE Request Handlers
+1. [GET Request Handlers](https://github.com/opentable/Piccolo/wiki/GET-Request-Handlers)
+1. [POST Request Handlers](https://github.com/opentable/Piccolo/wiki/POST-Request-Handlers)
+1. [PUT Request Handlers](https://github.com/opentable/Piccolo/wiki/PUT-Request-Handlers)
+1. [DELETE Request Handlers](https://github.com/opentable/Piccolo/wiki/DELETE-Request-Handlers)
 1. [Routing](https://github.com/opentable/Piccolo/wiki/Routing)
 1. [JSON Serialisation](https://github.com/opentable/Piccolo/wiki/JSON-Serialisation)
 1. [JSON Deserialisation](https://github.com/opentable/Piccolo/wiki/JSON-Deserialisation)
