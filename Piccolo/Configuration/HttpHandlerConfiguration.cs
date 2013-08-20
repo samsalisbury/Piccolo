@@ -9,7 +9,7 @@ namespace Piccolo.Configuration
 	{
 		public IRequestHandlerFactory RequestHandlerFactory { get; set; }
 		public IList<Type> RequestHandlers { get; internal set; }
-		public IDictionary<Type, IParameterBinder> RouteParameterBinders { get; internal set; }
+		public IDictionary<Type, IParameterBinder> ParameterBinders { get; internal set; }
 		public IRequestRouter Router { get; internal set; }
 		public Func<object, string> JsonSerialiser { get; set; }
 		public Func<Type, string, object> JsonDeserialiser { get; set; }

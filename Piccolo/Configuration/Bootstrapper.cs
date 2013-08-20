@@ -42,7 +42,7 @@ namespace Piccolo.Configuration
 		{
 			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
 			configuration.Router = new RequestRouter(configuration.RequestHandlers);
-			configuration.RouteParameterBinders = new Dictionary<Type, IParameterBinder>
+			configuration.ParameterBinders = new Dictionary<Type, IParameterBinder>
 			{
 				{typeof(String), new StringParameterBinder()},
 				{typeof(Boolean), new BooleanParameterBinder()},
