@@ -32,6 +32,7 @@ public class Hello : IGet<string>
 1. [Configuration](https://github.com/opentable/Piccolo/wiki/Configuration)
 1. Advanced Concepts
     1. [Start-up Tasks](https://github.com/opentable/Piccolo/wiki/Startup-Tasks)
+    1. [Implementing Custom Request Handler Factory](https://github.com/opentable/Piccolo/wiki/Implementing-Custom-Request-Handler-Factory)
     1. [Implementing Custom Parameter Binders](https://github.com/opentable/Piccolo/wiki/Implementing-Custom-Parameter-Binders)
     1. [Overriding JSON Serialisation](https://github.com/opentable/Piccolo/wiki/Overriding-JSON-Serialisation)
     1. [Overriding JSON Deserialisation](https://github.com/opentable/Piccolo/wiki/Overriding-JSON-Deserialisation)
