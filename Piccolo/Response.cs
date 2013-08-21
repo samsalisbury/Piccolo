@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
@@ -8,7 +7,6 @@ namespace Piccolo
 	{
 		public class Error
 		{
-			[ExcludeFromCodeCoverage]
 			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);

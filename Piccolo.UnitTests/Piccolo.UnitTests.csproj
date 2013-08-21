@@ -38,6 +38,7 @@
     <Compile Include="HttpHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request\RequestHandlerInvokerTests.cs" />
+    <Compile Include="ResponseTests.cs" />
     <Compile Include="Routing\RequestRouterTests.cs" />
     <Compile Include="TestRequestHandler.cs" />
   </ItemGroup>
