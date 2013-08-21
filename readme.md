@@ -2,7 +2,7 @@
 A modular micro-framework for creating APIs.
 
 ## Quickstart
-**1)** New project (.net 4.0+)<br />
+**1)** New web application project (.net 4.0+)<br />
 **2)** Run command `Install-Package Piccolo -Pre` in [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console) (you will need NuGet v2.6+)<br />
 **3)** New class:<br />
 
