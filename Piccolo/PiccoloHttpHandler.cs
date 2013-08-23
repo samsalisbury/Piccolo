@@ -16,8 +16,8 @@ namespace Piccolo
 	public class PiccoloHttpHandler : IHttpHandler
 	{
 		private readonly PiccoloConfiguration _configuration;
-		private readonly RequestRouter _requestRouter;
 		private readonly RequestHandlerInvoker _requestHandlerInvoker;
+		private readonly RequestRouter _requestRouter;
 
 		[ExcludeFromCodeCoverage]
 		public PiccoloHttpHandler() : this(BuildManager.GetGlobalAsaxType().BaseType.Assembly, true)
@@ -26,8 +26,6 @@ namespace Piccolo
 
 		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration)
 		{
-			EnsureValidAssembly(assembly);
-
 			_configuration = new Bootstrapper().ApplyConfiguration(assembly, applyCustomConfiguration);
 			_requestRouter = new RequestRouter(_configuration.RequestHandlers);
 			_requestHandlerInvoker = new RequestHandlerInvoker(_configuration.JsonDeserialiser, _configuration.ParameterBinders);
@@ -88,12 +86,6 @@ namespace Piccolo
 
 			using (var reader = new StreamReader(httpContext.Request.InputStream))
 				return reader.ReadToEnd();
-		}
-
-		private static void EnsureValidAssembly(Assembly assembly)
-		{
-			if (assembly == typeof(HttpApplication).BaseType.Assembly)
-				throw new InvalidOperationException(ExceptionMessageBuilder.BuildMissingGlobalAsaxMessage());
 		}
 	}
 }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Piccolo.Internal;
 using Piccolo.Request.ParameterBinders;
 
 namespace Piccolo.Configuration
@@ -13,6 +15,9 @@ namespace Piccolo.Configuration
 	{
 		public PiccoloConfiguration ApplyConfiguration(Assembly assembly, bool applyCustomConfiguration)
 		{
+			if (AutomaticAssemblyDetectionFailed(assembly))
+				throw new InvalidOperationException(ExceptionMessageBuilder.BuildMissingGlobalAsaxMessage());
+
 			var configuration = new PiccoloConfiguration();
 
 			DiscoverRequestHandlers(configuration, assembly);
@@ -66,6 +71,11 @@ namespace Piccolo.Configuration
 				var instance = (IStartupTask)Activator.CreateInstance(bootstrapperType);
 				instance.Run(configuration);
 			}
+		}
+
+		private static bool AutomaticAssemblyDetectionFailed(Assembly assembly)
+		{
+			return assembly == typeof(HttpApplication).BaseType.Assembly;
 		}
 	}
 }

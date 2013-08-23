@@ -6,7 +6,6 @@ using System.Text;
 using System.Web;
 using Moq;
 using NUnit.Framework;
-using Piccolo.Configuration;
 
 namespace Piccolo.UnitTests
 {
