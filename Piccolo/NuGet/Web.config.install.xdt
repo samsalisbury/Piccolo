@@ -3,14 +3,14 @@
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<system.web xdt:Transform="InsertIfMissing">
 		<httpHandlers xdt:Transform="InsertIfMissing">
-			<add path="*" verb="*" type="Piccolo.HttpHandler" xdt:Transform="InsertIfMissing" />
+			<add path="*" verb="*" type="Piccolo.PiccoloHttpHandler" xdt:Transform="InsertIfMissing" />
 		</httpHandlers>
 	</system.web>
 	
 	<system.webServer xdt:Transform="InsertIfMissing">
 		<handlers xdt:Transform="InsertIfMissing">
 			<remove name="OPTIONSVerbHandler" xdt:Transform="InsertIfMissing" />
-			<add path="*." verb="*" name="Piccolo.HttpHandler" type="Piccolo.HttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="InsertIfMissing" />
+			<add path="*." verb="*" name="Piccolo.PiccoloHttpHandler" type="Piccolo.PiccoloHttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="InsertIfMissing" />
 		</handlers>
 
 		<httpErrors existingResponse="PassThrough" xdt:Transform="SetAttributes(existingResponse)" />
