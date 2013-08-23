@@ -5,7 +5,7 @@ namespace Piccolo.Tasks.Startup.IoC
 {
 	public class StartupTask : IStartupTask
 	{
-		public void Run(HttpHandlerConfiguration configuration)
+		public void Run(PiccoloConfiguration configuration)
 		{
 			ObjectFactory.Initialize(c => c.IncludeRegistry<SamplesRegistry>());
 

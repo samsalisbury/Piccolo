@@ -35,10 +35,10 @@
     </Compile>
     <Compile Include="Configuration\Bootstrapper.cs" />
     <Compile Include="Configuration\DefaultRequestHandlerFactory.cs" />
-    <Compile Include="Configuration\HttpHandlerConfiguration.cs" />
+    <Compile Include="Configuration\PiccoloConfiguration.cs" />
     <Compile Include="Configuration\IRequestHandlerFactory.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
-    <Compile Include="HttpHandler.cs" />
+    <Compile Include="PiccoloHttpHandler.cs" />
     <Compile Include="HttpResponseMessage.cs" />
     <Compile Include="IDelete.cs" />
     <Compile Include="IGet.cs" />
@@ -69,7 +69,6 @@
     <Compile Include="Request\ParameterBinders\Int32ParameterBinder.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="RouteAttribute.cs" />
-    <Compile Include="Routing\IRequestRouter.cs" />
     <Compile Include="Routing\RouteHandlerLookupResult.cs" />
     <Compile Include="Routing\RequestRouter.cs" />
     <Compile Include="Routing\RequestHandlerDescriptor.cs" />

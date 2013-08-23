@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Piccolo.Routing
 {
-	public class RequestRouter : IRequestRouter
+	public class RequestRouter
 	{
 		private readonly RouteHandlerLookupNode _tree;
 

@@ -6,42 +6,33 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Piccolo.Request.ParameterBinders;
-using Piccolo.Routing;
 
 namespace Piccolo.Configuration
 {
 	public class Bootstrapper
 	{
-		private readonly Assembly _assembly;
-
-		public Bootstrapper(Assembly assembly)
+		public PiccoloConfiguration ApplyConfiguration(Assembly assembly, bool applyCustomConfiguration)
 		{
-			_assembly = assembly;
-		}
+			var configuration = new PiccoloConfiguration();
 
-		public HttpHandlerConfiguration ApplyConfiguration(bool applyCustomConfiguration)
-		{
-			var configuration = new HttpHandlerConfiguration();
-
-			DiscoverRequestHandlers(configuration, _assembly);
+			DiscoverRequestHandlers(configuration, assembly);
 			ApplyDefaultConfiguration(configuration);
 
 			if (applyCustomConfiguration)
-				RunStartupTasks(configuration, _assembly);
+				RunStartupTasks(configuration, assembly);
 
 			return configuration;
 		}
 
-		private static void DiscoverRequestHandlers(HttpHandlerConfiguration configuration, Assembly assembly)
+		private static void DiscoverRequestHandlers(PiccoloConfiguration configuration, Assembly assembly)
 		{
 			var requestHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IRequestHandler)));
 			configuration.RequestHandlers = new ReadOnlyCollection<Type>(requestHandlers.ToList());
 		}
 
-		private static void ApplyDefaultConfiguration(HttpHandlerConfiguration configuration)
+		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)
 		{
 			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
-			configuration.Router = new RequestRouter(configuration.RequestHandlers);
 			configuration.ParameterBinders = new Dictionary<Type, IParameterBinder>
 			{
 				{typeof(String), new StringParameterBinder()},
@@ -66,7 +57,7 @@ namespace Piccolo.Configuration
 			configuration.JsonDeserialiser = (type, payload) => JsonConvert.DeserializeObject(payload, type);
 		}
 
-		private static void RunStartupTasks(HttpHandlerConfiguration configuration, Assembly assembly)
+		private static void RunStartupTasks(PiccoloConfiguration configuration, Assembly assembly)
 		{
 			var bootstrapperTypes = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IStartupTask)));
 

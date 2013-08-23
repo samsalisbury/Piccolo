@@ -13,12 +13,12 @@ namespace Piccolo.UnitTests.Configuration
 		[TestFixture]
 		public class when_instantiated_with_default_configuration : given_bootstrapper
 		{
-			private HttpHandlerConfiguration _handlerConfiguration;
+			private PiccoloConfiguration _handlerConfiguration;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_handlerConfiguration = Bootstrapper.ApplyConfiguration(false);
+				_handlerConfiguration = Bootstrapper.ApplyConfiguration(Assembly.GetExecutingAssembly(), false);
 			}
 
 			[Test]
@@ -49,12 +49,12 @@ namespace Piccolo.UnitTests.Configuration
 		[TestFixture]
 		public class when_executed_with_custom_configuration_enabled : given_bootstrapper
 		{
-			private HttpHandlerConfiguration _handlerConfiguration;
+			private PiccoloConfiguration _handlerConfiguration;
 
 			[SetUp]
 			public void SetUp()
 			{
-				_handlerConfiguration = Bootstrapper.ApplyConfiguration(true);
+				_handlerConfiguration = Bootstrapper.ApplyConfiguration(Assembly.GetExecutingAssembly(), true);
 			}
 
 			[Test]
@@ -70,7 +70,7 @@ namespace Piccolo.UnitTests.Configuration
 
 			protected given_bootstrapper()
 			{
-				Bootstrapper = new Bootstrapper(Assembly.GetExecutingAssembly());
+				Bootstrapper = new Bootstrapper();
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace Piccolo.UnitTests.Configuration
 
 		public class StartupTask : IStartupTask
 		{
-			public void Run(HttpHandlerConfiguration configuration)
+			public void Run(PiccoloConfiguration configuration)
 			{
 				configuration.RequestHandlerFactory = new CustomRequestHandlerFactory();
 			}

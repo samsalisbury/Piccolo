@@ -9,28 +9,31 @@ using System.Web.Compilation;
 using Piccolo.Configuration;
 using Piccolo.Internal;
 using Piccolo.Request;
+using Piccolo.Routing;
 
 namespace Piccolo
 {
-	public class HttpHandler : IHttpHandler
+	public class PiccoloHttpHandler : IHttpHandler
 	{
+		private readonly PiccoloConfiguration _configuration;
+		private readonly RequestRouter _requestRouter;
 		private readonly RequestHandlerInvoker _requestHandlerInvoker;
 
 		[ExcludeFromCodeCoverage]
-		public HttpHandler() : this(true, BuildManager.GetGlobalAsaxType().BaseType.Assembly)
+		public PiccoloHttpHandler() : this(BuildManager.GetGlobalAsaxType().BaseType.Assembly, true)
 		{
 		}
 
-		public HttpHandler(bool applyCustomConfiguration, Assembly assembly)
+		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration)
 		{
 			EnsureValidAssembly(assembly);
 
-			var bootstrapper = new Bootstrapper(assembly);
-			Configuration = bootstrapper.ApplyConfiguration(applyCustomConfiguration);
-			_requestHandlerInvoker = new RequestHandlerInvoker(Configuration.JsonDeserialiser, Configuration.ParameterBinders);
+			_configuration = new Bootstrapper().ApplyConfiguration(assembly, applyCustomConfiguration);
+			_requestRouter = new RequestRouter(_configuration.RequestHandlers);
+			_requestHandlerInvoker = new RequestHandlerInvoker(_configuration.JsonDeserialiser, _configuration.ParameterBinders);
 		}
 
-		public HttpHandlerConfiguration Configuration { get; private set; }
+		#region IHttpHandler
 
 		[ExcludeFromCodeCoverage]
 		public void ProcessRequest(HttpContext context)
@@ -43,6 +46,8 @@ namespace Piccolo
 		{
 			get { return true; }
 		}
+
+		#endregion
 
 		public void ProcessRequest(HttpContextBase httpContext)
 		{
@@ -59,20 +64,20 @@ namespace Piccolo
 				httpContext.Response.AddHeader("Content-Type", "application/json");
 
 				var objectContent = (ObjectContent)responseMessage.Content;
-				var serialisedPayload = Configuration.JsonSerialiser(objectContent.Content);
+				var serialisedPayload = _configuration.JsonSerialiser(objectContent.Content);
 				httpContext.Response.Write(serialisedPayload);
 			}
 		}
 
 		private HttpResponseMessage HandleRequest(string verb, Uri requestUri, string payload)
 		{
-			var lookupResult = Configuration.Router.FindRequestHandler(verb, requestUri);
+			var lookupResult = _requestRouter.FindRequestHandler(verb, requestUri);
 			if (lookupResult == null || lookupResult.RequestHandlerType == null)
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 
 			var queryParameters = HttpUtility.ParseQueryString(requestUri.Query).ToDictionary();
 
-			var requestHandler = Configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
+			var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
 			return _requestHandlerInvoker.Execute(requestHandler, verb, lookupResult.RouteParameters, queryParameters, payload);
 		}
 
