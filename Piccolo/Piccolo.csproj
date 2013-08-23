@@ -38,6 +38,8 @@
     <Compile Include="Configuration\PiccoloConfiguration.cs" />
     <Compile Include="Configuration\IRequestHandlerFactory.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
+    <Compile Include="Internal\HttpResponseMessageExtensions.cs" />
+    <Compile Include="PiccoloContext.cs" />
     <Compile Include="PiccoloHttpHandler.cs" />
     <Compile Include="HttpResponseMessage.cs" />
     <Compile Include="IDelete.cs" />

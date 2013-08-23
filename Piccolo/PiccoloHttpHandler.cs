@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -36,7 +34,7 @@ namespace Piccolo
 		[ExcludeFromCodeCoverage]
 		public void ProcessRequest(HttpContext context)
 		{
-			ProcessRequest(new HttpContextWrapper(context));
+			ProcessRequest(new PiccoloContext(new HttpContextWrapper(context)));
 		}
 
 		[ExcludeFromCodeCoverage]
@@ -47,45 +45,34 @@ namespace Piccolo
 
 		#endregion
 
-		public void ProcessRequest(HttpContextBase httpContext)
+		public void ProcessRequest(PiccoloContext context)
 		{
-			var verb = httpContext.Request.HttpMethod;
-			var requestUri = httpContext.Request.Url;
-			var payload = GetPayload(httpContext);
-			var responseMessage = HandleRequest(verb, requestUri, payload);
-
-			httpContext.Response.StatusCode = (int)responseMessage.StatusCode;
-			httpContext.Response.StatusDescription = responseMessage.ReasonPhrase;
-
-			if (responseMessage.Content != null)
+			var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
+			if (lookupResult != null && lookupResult.RequestHandlerType != null)
 			{
-				httpContext.Response.AddHeader("Content-Type", "application/json");
+				var queryParameters = HttpUtility.ParseQueryString(context.RequestUri.Query).ToDictionary();
+
+				var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
+				var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, queryParameters, context.RequestPayload);
+				InjectResponse(context, httpResponseMessage);
+			}
+			else
+				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
+		}
+
+		private void InjectResponse(PiccoloContext context, HttpResponseMessage responseMessage)
+		{
+			context.Http.Response.StatusCode = (int)responseMessage.StatusCode;
+			context.Http.Response.StatusDescription = responseMessage.ReasonPhrase;
+
+			if (responseMessage.HasContent())
+			{
+				context.Http.Response.AddHeader("Content-Type", "application/json");
 
 				var objectContent = (ObjectContent)responseMessage.Content;
 				var serialisedPayload = _configuration.JsonSerialiser(objectContent.Content);
-				httpContext.Response.Write(serialisedPayload);
+				context.Http.Response.Write(serialisedPayload);
 			}
-		}
-
-		private HttpResponseMessage HandleRequest(string verb, Uri requestUri, string payload)
-		{
-			var lookupResult = _requestRouter.FindRequestHandler(verb, requestUri);
-			if (lookupResult == null || lookupResult.RequestHandlerType == null)
-				return new HttpResponseMessage(HttpStatusCode.NotFound);
-
-			var queryParameters = HttpUtility.ParseQueryString(requestUri.Query).ToDictionary();
-
-			var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-			return _requestHandlerInvoker.Execute(requestHandler, verb, lookupResult.RouteParameters, queryParameters, payload);
-		}
-
-		private static string GetPayload(HttpContextBase httpContext)
-		{
-			if (httpContext.Request.InputStream.CanRead == false)
-				return string.Empty;
-
-			using (var reader = new StreamReader(httpContext.Request.InputStream))
-				return reader.ReadToEnd();
 		}
 	}
 }

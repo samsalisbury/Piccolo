@@ -26,7 +26,7 @@ namespace Piccolo.UnitTests
 				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/test-resources/1?test=true"));
 				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(httpContext.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
 			}
 
 			[Test]
@@ -85,7 +85,7 @@ namespace Piccolo.UnitTests
 				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/test-resources"));
 				httpContext.SetupGet(x => x.Request.InputStream).Returns(new MemoryStream(Encoding.UTF8.GetBytes("{\"Test\":\"Test\"}")));
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(httpContext.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
 			}
 
 			[Test]
@@ -142,7 +142,7 @@ namespace Piccolo.UnitTests
 				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/test-resources/1"));
 				httpContext.SetupGet(x => x.Request.InputStream).Returns(new MemoryStream(Encoding.UTF8.GetBytes("{\"Test\":\"Test\"}")));
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(httpContext.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
 			}
 
 			[Test]
@@ -201,7 +201,7 @@ namespace Piccolo.UnitTests
 				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/test-resources/1"));
 				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(httpContext.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
 			}
 
 			[Test]
@@ -249,7 +249,7 @@ namespace Piccolo.UnitTests
 				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/"));
 				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(httpContext.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
 			}
 
 			[Test]
@@ -286,7 +286,7 @@ namespace Piccolo.UnitTests
 				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/unhandled/resource"));
 				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(httpContext.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
 			}
 
 			[Test]
