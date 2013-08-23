@@ -6,6 +6,7 @@
 		<authors>Arnold Zokas</authors>
 		<owners>OpenTable, Inc.</owners>
 		<licenseUrl>https://github.com/opentable/Piccolo/blob/master/LICENSE</licenseUrl>
+		<iconUrl>https://github.com/opentable/Piccolo/blob/master/Piccolo/NuGet/Icon.png</iconUrl>
 		<projectUrl>https://github.com/opentable/Piccolo</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>A modular micro-framework for creating APIs.</description>
