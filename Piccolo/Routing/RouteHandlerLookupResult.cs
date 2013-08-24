@@ -13,5 +13,10 @@ namespace Piccolo.Routing
 
 		public Type RequestHandlerType { get; private set; }
 		public Dictionary<string, string> RouteParameters { get; private set; }
+
+		public bool IsSuccessful
+		{
+			get { return RequestHandlerType == null; }
+		}
 	}
 }

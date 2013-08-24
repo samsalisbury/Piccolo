@@ -48,7 +48,7 @@ namespace Piccolo
 		public void ProcessRequest(PiccoloContext context)
 		{
 			var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
-			if (lookupResult == null || lookupResult.RequestHandlerType == null)
+			if (lookupResult.IsSuccessful)
 			{
 				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
 				return;
