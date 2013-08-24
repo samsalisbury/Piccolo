@@ -47,21 +47,21 @@ namespace Piccolo
 
 		public void ProcessRequest(PiccoloContext context)
 		{
-		    var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
-		    if (lookupResult == null || lookupResult.RequestHandlerType == null)
-		    {
-		        InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
-		        return;
-		    }
-		    
-            var queryParameters = HttpUtility.ParseQueryString(context.RequestUri.Query).ToDictionary();
+			var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
+			if (lookupResult == null || lookupResult.RequestHandlerType == null)
+			{
+				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
+				return;
+			}
 
-		    var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-		    var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, queryParameters, context.RequestPayload);
-		    InjectResponse(context, httpResponseMessage);
+			var queryParameters = HttpUtility.ParseQueryString(context.RequestUri.Query).ToDictionary();
+
+			var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
+			var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, queryParameters, context.RequestPayload);
+			InjectResponse(context, httpResponseMessage);
 		}
 
-	    private void InjectResponse(PiccoloContext context, HttpResponseMessage responseMessage)
+		private void InjectResponse(PiccoloContext context, HttpResponseMessage responseMessage)
 		{
 			context.Http.Response.StatusCode = (int)responseMessage.StatusCode;
 			context.Http.Response.StatusDescription = responseMessage.ReasonPhrase;

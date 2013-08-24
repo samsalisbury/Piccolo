@@ -8,7 +8,7 @@ namespace Piccolo.Internal
 	{
 		public static Dictionary<string, string> ToDictionary(this NameValueCollection value)
 		{
-			return value.AllKeys.ToDictionary(key => key, key => value[(string)key]);
+			return value.AllKeys.ToDictionary(key => key, key => value[key]);
 		}
 	}
 }
