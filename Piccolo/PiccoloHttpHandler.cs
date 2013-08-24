@@ -24,7 +24,7 @@ namespace Piccolo
 
 		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration)
 		{
-			_configuration = new Bootstrapper().ApplyConfiguration(assembly, applyCustomConfiguration);
+			_configuration = Bootstrapper.ApplyConfiguration(assembly, applyCustomConfiguration);
 			_requestRouter = new RequestRouter(_configuration.RequestHandlers);
 			_requestHandlerInvoker = new RequestHandlerInvoker(_configuration.JsonDeserialiser, _configuration.ParameterBinders);
 		}

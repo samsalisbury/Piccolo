@@ -11,9 +11,9 @@ using Piccolo.Request.ParameterBinders;
 
 namespace Piccolo.Configuration
 {
-	public class Bootstrapper
+	public static class Bootstrapper
 	{
-		public PiccoloConfiguration ApplyConfiguration(Assembly assembly, bool applyCustomConfiguration)
+		public static PiccoloConfiguration ApplyConfiguration(Assembly assembly, bool applyCustomConfiguration)
 		{
 			if (AutomaticAssemblyDetectionFailed(assembly))
 				throw new InvalidOperationException(ExceptionMessageBuilder.BuildMissingGlobalAsaxMessage());
@@ -52,7 +52,7 @@ namespace Piccolo.Configuration
 				{typeof(DateTime), new DateTimeParameterBinder()},
 				{typeof(DateTime?), new NullableDateTimeParameterBinder()}
 			};
-			configuration.JsonSerialiser = (model) =>
+				configuration.JsonSerialiser = (model) =>
 			{
 				var jsonSerializerSettings = new JsonSerializerSettings();
 				jsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
