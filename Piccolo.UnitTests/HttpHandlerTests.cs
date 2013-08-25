@@ -44,7 +44,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_set_mime_type_to_application_json()
 			{
-				_httpResponse.Verify(x => x.AddHeader("Content-Type", "application/json"));
+				_httpResponse.VerifySet(x => x.ContentType = "application/json");
 			}
 
 			[Test]
@@ -103,7 +103,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_set_mime_type_to_application_json()
 			{
-				_httpResponse.Verify(x => x.AddHeader("Content-Type", "application/json"));
+				_httpResponse.VerifySet(x => x.ContentType = "application/json");
 			}
 
 			[Test]
@@ -160,7 +160,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_set_mime_type_to_application_json()
 			{
-				_httpResponse.Verify(x => x.AddHeader("Content-Type", "application/json"));
+				_httpResponse.VerifySet(x => x.ContentType = "application/json");
 			}
 
 			[Test]

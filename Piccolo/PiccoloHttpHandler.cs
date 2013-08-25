@@ -50,13 +50,12 @@ namespace Piccolo
 			var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
 			if (lookupResult.IsSuccessful)
 			{
-				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
-				return;
+				var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
+				var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
+				InjectResponse(context, httpResponseMessage);
 			}
-
-			var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-			var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
-			InjectResponse(context, httpResponseMessage);
+			else
+				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
 		}
 
 		private void InjectResponse(PiccoloContext context, HttpResponseMessage responseMessage)
@@ -66,12 +65,15 @@ namespace Piccolo
 
 			if (responseMessage.HasContent())
 			{
-				context.Http.Response.AddHeader("Content-Type", "application/json");
-
-				var objectContent = (ObjectContent)responseMessage.Content;
-				var serialisedPayload = _configuration.JsonSerialiser(objectContent.Content);
-				context.Http.Response.Write(serialisedPayload);
+				context.Http.Response.ContentType = "application/json";
+				context.Http.Response.Write(SerialisePayload(responseMessage));
 			}
+		}
+
+		private string SerialisePayload(HttpResponseMessage responseMessage)
+		{
+			var objectContent = (ObjectContent)responseMessage.Content;
+			return _configuration.JsonSerialiser(objectContent.Content);
 		}
 	}
 }

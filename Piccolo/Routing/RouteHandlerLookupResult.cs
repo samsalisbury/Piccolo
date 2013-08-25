@@ -18,7 +18,7 @@ namespace Piccolo.Routing
 
 		public bool IsSuccessful
 		{
-			get { return RequestHandlerType == null; }
+			get { return RequestHandlerType != null; }
 		}
 	}
 }
