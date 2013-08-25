@@ -20,7 +20,7 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, Dictionary<string, string> routeParameters, Dictionary<string, string> queryParameters, string payload)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, string payload)
 		{
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
@@ -35,7 +35,7 @@ namespace Piccolo.Request
 			return GetResponseMessage(result);
 		}
 
-		private void BindRouteParameters(IRequestHandler requestHandler, Dictionary<string, string> routeParameters, PropertyInfo[] properties)
+		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters, PropertyInfo[] properties)
 		{
 			foreach (var routeParameter in routeParameters)
 			{
@@ -53,7 +53,7 @@ namespace Piccolo.Request
 			}
 		}
 
-		private void BindQueryParameters(IRequestHandler requestHandler, Dictionary<string, string> queryParameters, IEnumerable<PropertyInfo> properties)
+		private void BindQueryParameters(IRequestHandler requestHandler, IDictionary<string, string> queryParameters, IEnumerable<PropertyInfo> properties)
 		{
 			var optionalProperties = properties.Where(x => x.GetCustomAttributes(typeof(OptionalAttribute), true).Any());
 

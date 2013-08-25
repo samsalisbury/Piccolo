@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
+using Piccolo.Internal;
 
 namespace Piccolo
 {
@@ -26,6 +28,11 @@ namespace Piccolo
 		public Uri RequestUri
 		{
 			get { return _httpContext.Request.Url; }
+		}
+
+		public IDictionary<string, string> RequestQueryParameters
+		{
+			get { return HttpUtility.ParseQueryString(RequestUri.Query).ToDictionary(); }
 		}
 
 		public string RequestPayload

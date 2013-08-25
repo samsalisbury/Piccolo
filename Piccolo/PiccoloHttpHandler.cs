@@ -54,10 +54,8 @@ namespace Piccolo
 				return;
 			}
 
-			var queryParameters = HttpUtility.ParseQueryString(context.RequestUri.Query).ToDictionary();
-
 			var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-			var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, queryParameters, context.RequestPayload);
+			var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
 			InjectResponse(context, httpResponseMessage);
 		}
 
