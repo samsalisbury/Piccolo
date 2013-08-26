@@ -148,9 +148,9 @@ namespace Piccolo.UnitTests.Routing
 			}
 
 			[Test]
-			public void it_should_return_null()
+			public void it_should_return_failed_result()
 			{
-				_routeHandlerLookupResult.ShouldBe(null);
+				_routeHandlerLookupResult.ShouldBe(RouteHandlerLookupResult.FailedResult);
 			}
 		}
 
@@ -166,9 +166,9 @@ namespace Piccolo.UnitTests.Routing
 			}
 
 			[Test]
-			public void it_should_return_null()
+			public void it_should_return_failed_result()
 			{
-				_routeHandlerLookupResult.ShouldBe(null);
+				_routeHandlerLookupResult.ShouldBe(RouteHandlerLookupResult.FailedResult);
 			}
 		}
 

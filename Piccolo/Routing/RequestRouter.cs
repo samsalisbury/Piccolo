@@ -35,7 +35,7 @@ namespace Piccolo.Routing
 					return requestHandler;
 			}
 
-			return null;
+			return RouteHandlerLookupResult.FailedResult;
 		}
 
 		private static bool IsMatch(RouteHandlerLookupNode node, string pathFragment, Dictionary<string, string> routeParameters)

@@ -24,7 +24,7 @@ namespace Piccolo
 
 		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration)
 		{
-			_configuration = new Bootstrapper().ApplyConfiguration(assembly, applyCustomConfiguration);
+			_configuration = Bootstrapper.ApplyConfiguration(assembly, applyCustomConfiguration);
 			_requestRouter = new RequestRouter(_configuration.RequestHandlers);
 			_requestHandlerInvoker = new RequestHandlerInvoker(_configuration.JsonDeserialiser, _configuration.ParameterBinders);
 		}
@@ -48,12 +48,10 @@ namespace Piccolo
 		public void ProcessRequest(PiccoloContext context)
 		{
 			var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
-			if (lookupResult != null && lookupResult.RequestHandlerType != null)
+			if (lookupResult.IsSuccessful)
 			{
-				var queryParameters = HttpUtility.ParseQueryString(context.RequestUri.Query).ToDictionary();
-
 				var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-				var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, queryParameters, context.RequestPayload);
+				var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
 				InjectResponse(context, httpResponseMessage);
 			}
 			else
@@ -67,12 +65,15 @@ namespace Piccolo
 
 			if (responseMessage.HasContent())
 			{
-				context.Http.Response.AddHeader("Content-Type", "application/json");
-
-				var objectContent = (ObjectContent)responseMessage.Content;
-				var serialisedPayload = _configuration.JsonSerialiser(objectContent.Content);
-				context.Http.Response.Write(serialisedPayload);
+				context.Http.Response.ContentType = "application/json";
+				context.Http.Response.Write(SerialisePayload(responseMessage));
 			}
+		}
+
+		private string SerialisePayload(HttpResponseMessage responseMessage)
+		{
+			var objectContent = (ObjectContent)responseMessage.Content;
+			return _configuration.JsonSerialiser(objectContent.Content);
 		}
 	}
 }

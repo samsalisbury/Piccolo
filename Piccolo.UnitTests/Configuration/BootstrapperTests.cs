@@ -11,7 +11,7 @@ namespace Piccolo.UnitTests.Configuration
 	public class BootstrapperTests
 	{
 		[TestFixture]
-		public class when_instantiated_with_default_configuration : given_bootstrapper
+		public class when_instantiated_with_default_configuration
 		{
 			private PiccoloConfiguration _handlerConfiguration;
 
@@ -47,7 +47,7 @@ namespace Piccolo.UnitTests.Configuration
 		}
 
 		[TestFixture]
-		public class when_executed_with_custom_configuration_enabled : given_bootstrapper
+		public class when_executed_with_custom_configuration_enabled
 		{
 			private PiccoloConfiguration _handlerConfiguration;
 
@@ -61,16 +61,6 @@ namespace Piccolo.UnitTests.Configuration
 			public void it_should_configure_custom_request_handler_factory()
 			{
 				_handlerConfiguration.RequestHandlerFactory.ShouldBeTypeOf<CustomRequestHandlerFactory>();
-			}
-		}
-
-		public abstract class given_bootstrapper
-		{
-			protected Bootstrapper Bootstrapper;
-
-			protected given_bootstrapper()
-			{
-				Bootstrapper = new Bootstrapper();
 			}
 		}
 
