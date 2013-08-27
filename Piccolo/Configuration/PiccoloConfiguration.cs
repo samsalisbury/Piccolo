@@ -6,7 +6,7 @@ namespace Piccolo.Configuration
 {
 	public class PiccoloConfiguration
 	{
-		public IRequestHandlerFactory RequestHandlerFactory { get; set; }
+		public IObjectFactory ObjectFactory { get; set; }
 		public IList<Type> RequestHandlers { get; internal set; }
 		public IDictionary<Type, IParameterBinder> ParameterBinders { get; internal set; }
 		public Func<object, string> JsonSerialiser { get; set; }

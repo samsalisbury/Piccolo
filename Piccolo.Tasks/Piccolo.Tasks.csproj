@@ -62,7 +62,7 @@
     <Compile Include="RequestsHandlers\AddTask.cs" />
     <Compile Include="Startup\IoC\StartupTask.cs" />
     <Compile Include="Startup\IoC\SamplesRegistry.cs" />
-    <Compile Include="Startup\IoC\StructureMapRequestHandlerFactory.cs" />
+    <Compile Include="Startup\IoC\StructureMapObjectFactory.cs" />
     <Compile Include="RequestsHandlers\GetTaskById.cs" />
     <Compile Include="ViewModels\AddTaskParameters.cs" />
     <Compile Include="ViewModels\TaskCollection.cs" />

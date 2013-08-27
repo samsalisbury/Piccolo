@@ -49,7 +49,7 @@ namespace Piccolo.Configuration
 
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)
 		{
-			configuration.RequestHandlerFactory = new DefaultRequestHandlerFactory();
+			configuration.ObjectFactory = new DefaultObjectFactory();
 			configuration.ParameterBinders = new Dictionary<Type, IParameterBinder>
 			{
 				{typeof(String), new StringParameterBinder()},

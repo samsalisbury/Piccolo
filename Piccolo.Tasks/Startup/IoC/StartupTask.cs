@@ -9,7 +9,7 @@ namespace Piccolo.Tasks.Startup.IoC
 		{
 			ObjectFactory.Initialize(c => c.IncludeRegistry<SamplesRegistry>());
 
-			configuration.RequestHandlerFactory = new StructureMapRequestHandlerFactory();
+			configuration.ObjectFactory = new StructureMapObjectFactory();
 		}
 	}
 }

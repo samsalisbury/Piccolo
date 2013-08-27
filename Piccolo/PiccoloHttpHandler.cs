@@ -57,7 +57,7 @@ namespace Piccolo
 				var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
 				if (lookupResult.IsSuccessful)
 				{
-					var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
+					var requestHandler = _configuration.ObjectFactory.CreateInstance(lookupResult.RequestHandlerType);
 					var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
 					InjectResponse(context, httpResponseMessage);
 				}

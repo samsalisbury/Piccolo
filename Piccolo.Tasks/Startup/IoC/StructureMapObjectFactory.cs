@@ -4,7 +4,7 @@ using StructureMap;
 
 namespace Piccolo.Tasks.Startup.IoC
 {
-	public class StructureMapRequestHandlerFactory : IRequestHandlerFactory
+	public class StructureMapObjectFactory : IObjectFactory
 	{
 		public IRequestHandler CreateInstance(Type requestHandlerType)
 		{

@@ -23,9 +23,9 @@ namespace Piccolo.UnitTests.Configuration
 			}
 
 			[Test]
-			public void it_should_configure_default_request_handler_factory()
+			public void it_should_configure_default_object_factory()
 			{
-				_handlerConfiguration.RequestHandlerFactory.ShouldBeTypeOf<DefaultRequestHandlerFactory>();
+				_handlerConfiguration.ObjectFactory.ShouldBeTypeOf<DefaultObjectFactory>();
 			}
 
 			[Test]
@@ -73,7 +73,7 @@ namespace Piccolo.UnitTests.Configuration
 			[Test]
 			public void it_should_configure_custom_request_handler_factory()
 			{
-				_handlerConfiguration.RequestHandlerFactory.ShouldBeTypeOf<CustomRequestHandlerFactory>();
+				_handlerConfiguration.ObjectFactory.ShouldBeTypeOf<CustomObjectFactory>();
 			}
 		}
 
@@ -83,12 +83,12 @@ namespace Piccolo.UnitTests.Configuration
 		{
 			public void Run(PiccoloConfiguration configuration)
 			{
-				configuration.RequestHandlerFactory = new CustomRequestHandlerFactory();
+				configuration.ObjectFactory = new CustomObjectFactory();
 			}
 		}
 
 		[ExcludeFromCodeCoverage]
-		public class CustomRequestHandlerFactory : IRequestHandlerFactory
+		public class CustomObjectFactory : IObjectFactory
 		{
 			public IRequestHandler CreateInstance(Type requestHandlerType)
 			{

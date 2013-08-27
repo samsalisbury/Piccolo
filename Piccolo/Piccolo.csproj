@@ -34,10 +34,10 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Configuration\Bootstrapper.cs" />
-    <Compile Include="Configuration\DefaultRequestHandlerFactory.cs" />
+    <Compile Include="Configuration\DefaultObjectFactory.cs" />
     <Compile Include="Configuration\EventHandlers.cs" />
     <Compile Include="Configuration\PiccoloConfiguration.cs" />
-    <Compile Include="Configuration\IRequestHandlerFactory.cs" />
+    <Compile Include="Configuration\IObjectFactory.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
     <Compile Include="Events\EventDispatcher.cs" />
     <Compile Include="Events\IEvent.cs" />

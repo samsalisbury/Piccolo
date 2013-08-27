@@ -2,7 +2,7 @@ using System;
 
 namespace Piccolo.Configuration
 {
-	public interface IRequestHandlerFactory
+	public interface IObjectFactory
 	{
 		IRequestHandler CreateInstance(Type requestHandlerType);
 	}
