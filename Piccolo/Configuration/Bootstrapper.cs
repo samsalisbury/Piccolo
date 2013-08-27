@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Piccolo.Events;
 using Piccolo.Internal;
 using Piccolo.Request.ParameterBinders;
 
@@ -21,6 +22,7 @@ namespace Piccolo.Configuration
 			var configuration = new PiccoloConfiguration();
 
 			DiscoverRequestHandlers(configuration, assembly);
+			DiscoverEventHandlers(configuration, assembly);
 			ApplyDefaultConfiguration(configuration);
 
 			if (applyCustomConfiguration)
@@ -33,6 +35,12 @@ namespace Piccolo.Configuration
 		{
 			var requestHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IRequestHandler)));
 			configuration.RequestHandlers = new ReadOnlyCollection<Type>(requestHandlers.ToList());
+		}
+
+		private static void DiscoverEventHandlers(PiccoloConfiguration configuration, Assembly assembly)
+		{
+			configuration.EventHandlers = new EventHandlers();
+			configuration.EventHandlers.RequestProcessing = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestProcessingEvent>)));
 		}
 
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)
