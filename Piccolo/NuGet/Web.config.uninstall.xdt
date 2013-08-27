@@ -3,7 +3,7 @@
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<system.web>
 		<httpHandlers>
-			<add type="Piccolo.HttpHandler" xdt:Transform="Remove" xdt:Locator="Match(type)" />
+			<add type="Piccolo.PiccoloHttpHandler" xdt:Transform="Remove" xdt:Locator="Match(type)" />
 		</httpHandlers>
 	</system.web>
 
