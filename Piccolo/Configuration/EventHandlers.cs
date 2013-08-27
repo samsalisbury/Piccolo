@@ -5,6 +5,13 @@ namespace Piccolo.Configuration
 {
 	public class EventHandlers
 	{
-		public IEnumerable<Type> RequestProcessing { get; set; }
+		public EventHandlers()
+		{
+			RequestProcessing = new List<Type>();
+			RequestProcessed = new List<Type>();
+		}
+
+		public IList<Type> RequestProcessing { get; internal set; }
+		public IList<Type> RequestProcessed { get; internal set; }
 	}
 }

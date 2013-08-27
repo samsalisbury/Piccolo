@@ -18,6 +18,11 @@ namespace Piccolo.Events
 			RaiseEvent<RequestProcessingEvent>(_eventHandlers.RequestProcessing, context);
 		}
 
+		public void RaiseRequestProcessedEvent(PiccoloContext context)
+		{
+			RaiseEvent<RequestProcessedEvent>(_eventHandlers.RequestProcessed, context);
+		}
+
 		private static void RaiseEvent<TEvent>(IEnumerable<Type> eventHandlers, PiccoloContext context) where TEvent : IEvent, new()
 		{
 			var args = new TEvent {Context = context};

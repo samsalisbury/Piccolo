@@ -42,6 +42,7 @@
     <Compile Include="Events\EventDispatcher.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\IHandle.cs" />
+    <Compile Include="Events\RequestProcessedEvent.cs" />
     <Compile Include="Events\RequestProcessingEvent.cs" />
     <Compile Include="Internal\HttpResponseMessageExtensions.cs" />
     <Compile Include="PiccoloContext.cs" />
@@ -82,7 +83,9 @@
     <Compile Include="Routing\RouteIdentifierBuilder.cs" />
     <Compile Include="Routing\RouteHandlerLookupNode.cs" />
     <Compile Include="Routing\RouteHandlerLookupTreeBuilder.cs" />
-    <None Include="Piccolo.nuspec" />
+    <None Include="Piccolo.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

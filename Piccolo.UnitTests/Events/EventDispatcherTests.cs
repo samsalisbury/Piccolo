@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using System.Web;
 using Moq;
 using NUnit.Framework;
@@ -19,20 +18,16 @@ namespace Piccolo.UnitTests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				var eventDispatcher = new EventDispatcher(new EventHandlers
-				{
-					RequestProcessing = new[]
-					{
-						typeof(TestRequestProcessingEventHandlerWithInterrupt),
-						typeof(BootstrapperTests.TestRequestProcessingEventHandler)
-					}
-				});
+				var eventHandlers = new EventHandlers();
+				eventHandlers.RequestProcessing.Add(typeof(TestRequestProcessingEventHandlerWithInterrupt));
+				eventHandlers.RequestProcessing.Add(typeof(BootstrapperTests.TestRequestProcessingEventHandler));
 
 				var httpContext = new Mock<HttpContextBase>();
 				_httpResponse = new Mock<HttpResponseBase>();
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
 				var piccoloContext = new PiccoloContext(httpContext.Object);
 
+				var eventDispatcher = new EventDispatcher(eventHandlers);
 				eventDispatcher.RaiseRequestProcessingEvent(piccoloContext);
 			}
 

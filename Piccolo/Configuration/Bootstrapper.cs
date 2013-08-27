@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -34,13 +33,18 @@ namespace Piccolo.Configuration
 		private static void DiscoverRequestHandlers(PiccoloConfiguration configuration, Assembly assembly)
 		{
 			var requestHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IRequestHandler)));
-			configuration.RequestHandlers = new ReadOnlyCollection<Type>(requestHandlers.ToList());
+			configuration.RequestHandlers = requestHandlers.ToList();
 		}
 
 		private static void DiscoverEventHandlers(PiccoloConfiguration configuration, Assembly assembly)
 		{
 			configuration.EventHandlers = new EventHandlers();
-			configuration.EventHandlers.RequestProcessing = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestProcessingEvent>)));
+
+			var requestProcessingEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestProcessingEvent>)));
+			configuration.EventHandlers.RequestProcessing = requestProcessingEventHandlers.ToList();
+
+			var requestProcessedEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestProcessedEvent>)));
+			configuration.EventHandlers.RequestProcessed = requestProcessedEventHandlers.ToList();
 		}
 
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)
