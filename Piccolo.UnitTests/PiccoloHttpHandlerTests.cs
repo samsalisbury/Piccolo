@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace Piccolo.UnitTests
 {
-	public class HttpHandlerTests
+	public class PiccoloHttpHandlerTests
 	{
 		[TestFixture]
 		public class when_processing_get_request_to_test_resource : given_http_handler
