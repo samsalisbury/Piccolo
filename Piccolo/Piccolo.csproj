@@ -80,6 +80,7 @@
     <Compile Include="Routing\RouteIdentifierBuilder.cs" />
     <Compile Include="Routing\RouteHandlerLookupNode.cs" />
     <Compile Include="Routing\RouteHandlerLookupTreeBuilder.cs" />
+    <None Include="Piccolo.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
