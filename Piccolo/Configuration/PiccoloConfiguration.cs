@@ -11,6 +11,6 @@ namespace Piccolo.Configuration
 		public IDictionary<Type, IParameterBinder> ParameterBinders { get; internal set; }
 		public Func<object, string> JsonSerialiser { get; set; }
 		public Func<Type, string, object> JsonDeserialiser { get; set; }
-		public EventHandlers EventHandlers { get; internal set; }	
+		public EventHandlers EventHandlers { get; internal set; }
 	}
 }
