@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Piccolo.Events;
+﻿using Piccolo.Events;
 
 namespace Piccolo.Tasks.EventHandlers.Logging
 {
@@ -7,7 +6,7 @@ namespace Piccolo.Tasks.EventHandlers.Logging
 	{
 		public void Handle(RequestProcessingEvent args)
 		{
-			Trace.WriteLine("RequestProcessingEvent received.");
+			args.Context.Http.Trace.Write("RequestProcessingEvent received.");
 		}
 	}
 }
