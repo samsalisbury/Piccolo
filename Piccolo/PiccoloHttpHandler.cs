@@ -27,7 +27,7 @@ namespace Piccolo
 		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration)
 		{
 			_configuration = Bootstrapper.ApplyConfiguration(assembly, applyCustomConfiguration);
-			_eventDispatcher = new EventDispatcher(_configuration.EventHandlers);
+			_eventDispatcher = new EventDispatcher(_configuration.EventHandlers, _configuration.ObjectFactory);
 			_requestRouter = new RequestRouter(_configuration.RequestHandlers);
 			_requestHandlerInvoker = new RequestHandlerInvoker(_configuration.JsonDeserialiser, _configuration.ParameterBinders);
 		}
@@ -57,7 +57,7 @@ namespace Piccolo
 				var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
 				if (lookupResult.IsSuccessful)
 				{
-					var requestHandler = _configuration.ObjectFactory.CreateInstance(lookupResult.RequestHandlerType);
+					var requestHandler = _configuration.ObjectFactory.CreateInstance<IRequestHandler>(lookupResult.RequestHandlerType);
 					var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
 					InjectResponse(context, httpResponseMessage);
 				}

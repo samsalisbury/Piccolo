@@ -4,6 +4,6 @@ namespace Piccolo.Configuration
 {
 	public interface IObjectFactory
 	{
-		IRequestHandler CreateInstance(Type requestHandlerType);
+		T CreateInstance<T>(Type requestHandlerType);
 	}
 }

@@ -27,7 +27,7 @@ namespace Piccolo.UnitTests.Events
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
 				var piccoloContext = new PiccoloContext(httpContext.Object);
 
-				var eventDispatcher = new EventDispatcher(eventHandlers);
+				var eventDispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 				eventDispatcher.RaiseRequestProcessingEvent(piccoloContext);
 			}
 
@@ -44,6 +44,8 @@ namespace Piccolo.UnitTests.Events
 			}
 		}
 
+		#region Test Classes
+
 		[ExcludeFromCodeCoverage]
 		public class TestRequestProcessingEventHandlerWithInterrupt : IHandle<RequestProcessingEvent>
 		{
@@ -53,5 +55,7 @@ namespace Piccolo.UnitTests.Events
 				args.StopProcessing = true;
 			}
 		}
+
+		#endregion
 	}
 }

@@ -12,7 +12,7 @@ namespace Piccolo.UnitTests.Configuration
 			[Test]
 			public void it_should_return_instance()
 			{
-				HandlerFactory.CreateInstance(typeof(TestRequestHandler)).ShouldBeTypeOf<TestRequestHandler>();
+				HandlerFactory.CreateInstance<IRequestHandler>(typeof(TestRequestHandler)).ShouldBeTypeOf<TestRequestHandler>();
 			}
 		}
 

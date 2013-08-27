@@ -6,9 +6,9 @@ namespace Piccolo.Tasks.Startup.IoC
 {
 	public class StructureMapObjectFactory : IObjectFactory
 	{
-		public IRequestHandler CreateInstance(Type requestHandlerType)
+		public T CreateInstance<T>(Type requestHandlerType)
 		{
-			return (IRequestHandler)ObjectFactory.GetInstance(requestHandlerType);
+			return (T)ObjectFactory.GetInstance(requestHandlerType);
 		}
 	}
 }

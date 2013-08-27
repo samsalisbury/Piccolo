@@ -4,9 +4,9 @@ namespace Piccolo.Configuration
 {
 	public class DefaultObjectFactory : IObjectFactory
 	{
-		public IRequestHandler CreateInstance(Type requestHandlerType)
+		public T CreateInstance<T>(Type requestHandlerType)
 		{
-			return (IRequestHandler)Activator.CreateInstance(requestHandlerType);
+			return (T)Activator.CreateInstance(requestHandlerType);
 		}
 	}
 }

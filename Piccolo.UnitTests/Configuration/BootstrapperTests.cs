@@ -90,9 +90,9 @@ namespace Piccolo.UnitTests.Configuration
 		[ExcludeFromCodeCoverage]
 		public class CustomObjectFactory : IObjectFactory
 		{
-			public IRequestHandler CreateInstance(Type requestHandlerType)
+			public T CreateInstance<T>(Type requestHandlerType)
 			{
-				return null;
+				return default(T);
 			}
 		}
 
