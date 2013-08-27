@@ -30,6 +30,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_200()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.OK);
@@ -89,6 +95,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_201()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.Created);
@@ -143,6 +155,12 @@ namespace Piccolo.UnitTests
 				httpContext.SetupGet(x => x.Request.InputStream).Returns(new MemoryStream(Encoding.UTF8.GetBytes("{\"Test\":\"Test\"}")));
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
 				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
 			}
 
 			[Test]
@@ -205,6 +223,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_204()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NoContent);
@@ -219,7 +243,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_not_return_content()
 			{
-				_httpResponse.Verify(x => x.Write(It.IsAny<string>()), Times.Never());
+				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
 			}
 
 			[Route("/test-resources/{Id}")]
@@ -253,6 +277,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_404()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
@@ -267,7 +297,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_not_return_content()
 			{
-				_httpResponse.Verify(x => x.Write(It.IsAny<string>()), Times.Never());
+				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
 			}
 		}
 
@@ -290,6 +320,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_404()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
@@ -304,7 +340,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_not_return_content()
 			{
-				_httpResponse.Verify(x => x.Write(It.IsAny<string>()), Times.Never());
+				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
 			}
 		}
 

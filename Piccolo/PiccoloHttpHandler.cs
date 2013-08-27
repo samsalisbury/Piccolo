@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
 using Piccolo.Configuration;
+using Piccolo.Events;
 using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Routing;
@@ -14,6 +15,7 @@ namespace Piccolo
 	public class PiccoloHttpHandler : IHttpHandler
 	{
 		private readonly PiccoloConfiguration _configuration;
+		private readonly EventDispatcher _eventDispatcher;
 		private readonly RequestHandlerInvoker _requestHandlerInvoker;
 		private readonly RequestRouter _requestRouter;
 
@@ -25,6 +27,7 @@ namespace Piccolo
 		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration)
 		{
 			_configuration = Bootstrapper.ApplyConfiguration(assembly, applyCustomConfiguration);
+			_eventDispatcher = new EventDispatcher(_configuration.EventHandlers);
 			_requestRouter = new RequestRouter(_configuration.RequestHandlers);
 			_requestHandlerInvoker = new RequestHandlerInvoker(_configuration.JsonDeserialiser, _configuration.ParameterBinders);
 		}
@@ -47,6 +50,8 @@ namespace Piccolo
 
 		public void ProcessRequest(PiccoloContext context)
 		{
+			_eventDispatcher.RaiseRequestProcessingEvent(context);
+
 			var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
 			if (lookupResult.IsSuccessful)
 			{

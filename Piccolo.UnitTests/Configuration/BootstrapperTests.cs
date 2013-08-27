@@ -93,8 +93,9 @@ namespace Piccolo.UnitTests.Configuration
 		[ExcludeFromCodeCoverage]
 		public class TestRequestProcessingEventHandler : IHandle<RequestProcessingEvent>
 		{
-			public void Handle(RequestProcessingEvent @event)
+			public void Handle(RequestProcessingEvent args)
 			{
+				args.Context.Http.Response.Write("RequestProcessingEvent handled");
 			}
 		}
 

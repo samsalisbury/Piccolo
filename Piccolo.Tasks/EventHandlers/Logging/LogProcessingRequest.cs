@@ -5,7 +5,7 @@ namespace Piccolo.Tasks.EventHandlers.Logging
 {
 	public class LogProcessingRequest : IHandle<RequestProcessingEvent>
 	{
-		public void Handle(RequestProcessingEvent @event)
+		public void Handle(RequestProcessingEvent args)
 		{
 			Trace.WriteLine("RequestProcessingEvent received.");
 		}
