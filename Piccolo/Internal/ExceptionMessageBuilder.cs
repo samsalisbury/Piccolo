@@ -40,7 +40,7 @@ namespace Piccolo.Internal
 			return string.Format("Request handler [{0}] does not implement any of the following supported interfaces: IGet<TOutput>, IPut<TInput, TOutput>, IPost<TInput, TOutput>, IDelete.", requestHandler.FullName);
 		}
 
-		public static string BuildUnsupportedQueryParameterTypeMessage(PropertyInfo property)
+		internal static string BuildUnsupportedQueryParameterTypeMessage(PropertyInfo property)
 		{
 			return string.Format("Query parameter [{0}.{1}] is of type {2} which is not supported.. Supported types are:" +
 			                     "{3} - System.String" +
@@ -56,12 +56,12 @@ namespace Piccolo.Internal
 			                     "{3} - System.DateTime?", property.DeclaringType.FullName, property.Name, property.PropertyType, Environment.NewLine);
 		}
 
-		public static string BuildInvalidParameterAssignmentMessage(PropertyInfo property, string value)
+		internal static string BuildInvalidParameterAssignmentMessage(PropertyInfo property, string value)
 		{
 			return string.Format("Value \"{0}\" could not be assigned to parameter [{1}.{2}] of type {3}.", value, property.DeclaringType.FullName, property.Name, property.PropertyType);
 		}
 
-		public static string BuildMissingGlobalAsaxMessage()
+		internal static string BuildMissingGlobalAsaxMessage()
 		{
 			return "Global.asax could not be found.";
 		}

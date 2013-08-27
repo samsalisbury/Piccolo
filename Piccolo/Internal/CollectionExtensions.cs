@@ -6,7 +6,7 @@ namespace Piccolo.Internal
 {
 	internal static class CollectionExtensions
 	{
-		public static Dictionary<string, string> ToDictionary(this NameValueCollection value)
+		internal static Dictionary<string, string> ToDictionary(this NameValueCollection value)
 		{
 			return value.AllKeys.ToDictionary(key => key, key => value[key]);
 		}

@@ -2,7 +2,7 @@
 
 namespace Piccolo.Internal
 {
-	public static class HttpResponseMessageExtensions
+	internal static class HttpResponseMessageExtensions
 	{
 		public static bool HasContent(this HttpResponseMessage httpResponseMessage)
 		{
