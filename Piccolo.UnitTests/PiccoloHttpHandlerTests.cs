@@ -36,6 +36,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_200()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.OK);
@@ -101,6 +107,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_201()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.Created);
@@ -161,6 +173,12 @@ namespace Piccolo.UnitTests
 			public void it_should_raise_request_processing_event()
 			{
 				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
 			}
 
 			[Test]
@@ -229,6 +247,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_204()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NoContent);
@@ -283,6 +307,12 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
 			public void it_should_return_status_404()
 			{
 				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
@@ -323,6 +353,12 @@ namespace Piccolo.UnitTests
 			public void it_should_raise_request_processing_event()
 			{
 				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
 			}
 
 			[Test]

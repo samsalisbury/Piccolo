@@ -50,17 +50,24 @@ namespace Piccolo
 
 		public void ProcessRequest(PiccoloContext context)
 		{
-			_eventDispatcher.RaiseRequestProcessingEvent(context);
-
-			var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
-			if (lookupResult.IsSuccessful)
+			try
 			{
-				var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
-				var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
-				InjectResponse(context, httpResponseMessage);
+				_eventDispatcher.RaiseRequestProcessingEvent(context);
+
+				var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
+				if (lookupResult.IsSuccessful)
+				{
+					var requestHandler = _configuration.RequestHandlerFactory.CreateInstance(lookupResult.RequestHandlerType);
+					var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.RequestPayload);
+					InjectResponse(context, httpResponseMessage);
+				}
+				else
+					InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
 			}
-			else
-				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
+			finally
+			{
+				_eventDispatcher.RaiseRequestProcessedEvent(context);
+			}
 		}
 
 		private void InjectResponse(PiccoloContext context, HttpResponseMessage responseMessage)
