@@ -5,7 +5,7 @@ using Shouldly;
 
 namespace Piccolo.UnitTests.InvalidConfigurationDetection
 {
-	public class HttpHandlerTests
+	public class PiccoloHttpHandlerTests
 	{
 		[TestFixture]
 		public class when_initialising_http_handler_with_invalid_assembly
