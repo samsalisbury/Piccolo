@@ -47,6 +47,12 @@ namespace Piccolo.UnitTests.Configuration
 			}
 
 			[Test]
+			public void it_should_autodetect_request_faulted_event_handlers()
+			{
+				_handlerConfiguration.EventHandlers.RequestFaulted.Any(x => x == typeof(TestRequestFaultedEventHandler)).ShouldBe(true);
+			}
+
+			[Test]
 			public void it_should_configure_json_serialiser()
 			{
 				_handlerConfiguration.JsonSerialiser("Test").ShouldBe("\"Test\"");
@@ -111,6 +117,15 @@ namespace Piccolo.UnitTests.Configuration
 			public void Handle(RequestProcessedEvent args)
 			{
 				args.Context.Http.Response.Write("RequestProcessedEvent handled");
+			}
+		}
+
+		[ExcludeFromCodeCoverage]
+		public class TestRequestFaultedEventHandler : IHandle<RequestFaultedEvent>
+		{
+			public void Handle(RequestFaultedEvent args)
+			{
+				args.Context.Http.Response.Write("RequestFaultedEvent handled");
 			}
 		}
 

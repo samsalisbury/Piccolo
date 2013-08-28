@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -63,6 +64,11 @@ namespace Piccolo
 				}
 				else
 					InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
+			}
+			catch (Exception ex)
+			{
+				_eventDispatcher.RaiseRequestFaultedEvent(context, ex);
+				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.InternalServerError));
 			}
 			finally
 			{

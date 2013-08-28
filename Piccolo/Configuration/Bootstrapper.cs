@@ -45,6 +45,9 @@ namespace Piccolo.Configuration
 
 			var requestProcessedEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestProcessedEvent>)));
 			configuration.EventHandlers.RequestProcessed = requestProcessedEventHandlers.ToList();
+
+			var requestFaultedEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestFaultedEvent>)));
+			configuration.EventHandlers.RequestFaulted = requestFaultedEventHandlers.ToList();
 		}
 
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)

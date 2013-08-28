@@ -17,18 +17,24 @@ namespace Piccolo.Events
 
 		public void RaiseRequestProcessingEvent(PiccoloContext context)
 		{
-			RaiseEvent<RequestProcessingEvent>(_eventHandlers.RequestProcessing, context);
+			var args = new RequestProcessingEvent {Context = context};
+			RaiseEvent(_eventHandlers.RequestProcessing, args);
 		}
 
 		public void RaiseRequestProcessedEvent(PiccoloContext context)
 		{
-			RaiseEvent<RequestProcessedEvent>(_eventHandlers.RequestProcessed, context);
+			var args = new RequestProcessedEvent {Context = context};
+			RaiseEvent(_eventHandlers.RequestProcessed, args);
 		}
 
-		private void RaiseEvent<TEvent>(IEnumerable<Type> eventHandlers, PiccoloContext context) where TEvent : IEvent, new()
+		public void RaiseRequestFaultedEvent(PiccoloContext context, Exception exception)
 		{
-			var args = new TEvent {Context = context};
+			var args = new RequestFaultedEvent {Context = context, Exception = exception};
+			RaiseEvent(_eventHandlers.RequestFaulted, args);
+		}
 
+		private void RaiseEvent<TEvent>(IEnumerable<Type> eventHandlers, TEvent args) where TEvent : IEvent, new()
+		{
 			foreach (var eventHandlerType in eventHandlers)
 			{
 				var eventHandler = _objectFactory.CreateInstance<IHandle<TEvent>>(eventHandlerType);

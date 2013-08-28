@@ -42,6 +42,7 @@
     <Compile Include="Events\EventDispatcher.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\IHandle.cs" />
+    <Compile Include="Events\RequestFaultedEvent.cs" />
     <Compile Include="Events\RequestProcessedEvent.cs" />
     <Compile Include="Events\RequestProcessingEvent.cs" />
     <Compile Include="Internal\HttpResponseMessageExtensions.cs" />
