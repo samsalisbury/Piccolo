@@ -2,7 +2,7 @@
 
 namespace Piccolo.Tasks.EventHandlers.Logging
 {
-	public class LogProcessingRequest : IHandle<RequestProcessingEvent>
+	public class LogRequestProcessingEvent : IHandle<RequestProcessingEvent>
 	{
 		public void Handle(RequestProcessingEvent args)
 		{
