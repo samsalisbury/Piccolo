@@ -65,5 +65,10 @@ namespace Piccolo.Internal
 		{
 			return "Global.asax could not be found.";
 		}
+
+		internal static string BuildMissingRouteMessage(Type requestHandler)
+		{
+			return String.Format("Request handler [{0}] does not have any routes defined.", requestHandler);
+		}
 	}
 }

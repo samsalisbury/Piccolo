@@ -81,5 +81,25 @@ namespace Piccolo.UnitTests.InvalidConfigurationDetection.Routing
 				public string OptionalParam { get; set; }
 			}
 		}
+
+		[TestFixture]
+		public class when_initialising_request_router_with_route_handler_that_does_have_a_route
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				var requestHandlers = new List<Type> {typeof(Handler)};
+				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
+			}
+
+			public class Handler : IGet<string>
+			{
+				[ExcludeFromCodeCoverage]
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
 	}
 }

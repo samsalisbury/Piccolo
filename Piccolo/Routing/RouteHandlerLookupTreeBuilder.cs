@@ -15,6 +15,9 @@ namespace Piccolo.Routing
 			foreach (var requestHandler in requestHandlers)
 			{
 				var routeAttributes = RequestHandlerDescriptor.GetRouteAttributes(requestHandler);
+				if (routeAttributes.Count == 0)
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildMissingRouteMessage(requestHandler));
+
 				var routeHandlerVerb = RequestHandlerDescriptor.GetVerb(requestHandler);
 				var routeFragmentSets = routeAttributes.Select(x => RouteIdentifierBuilder.BuildIdentifier(routeHandlerVerb, x.Template)).ToList();
 
