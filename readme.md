@@ -28,6 +28,7 @@ public class Hello : IGet<string>
 1. [Routing](https://github.com/opentable/Piccolo/wiki/Routing)
 1. [Response Helpers](https://github.com/opentable/Piccolo/wiki/Response-Helpers)
 1. [Events](https://github.com/opentable/Piccolo/wiki/Events)
+1. [Diagnostics](https://github.com/opentable/Piccolo/wiki/Diagnostics)
 1. [JSON Serialisation](https://github.com/opentable/Piccolo/wiki/JSON-Serialisation)
 1. [JSON Deserialisation](https://github.com/opentable/Piccolo/wiki/JSON-Deserialisation)
 1. [Configuration](https://github.com/opentable/Piccolo/wiki/Configuration)
