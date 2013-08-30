@@ -119,6 +119,24 @@ namespace Piccolo.UnitTests.Routing
 		}
 
 		[TestFixture]
+		public class when_searching_for_request_handler_that_matches_mixed_multi_level_path : given_request_router_initialised_with_test_routes
+		{
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/level-1/2/level-3", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_request_handler()
+			{
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(MixedMultiLevelRequestHandler));
+			}
+		}
+
+		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_multi_level_path : given_request_router_initialised_with_test_routes
 		{
 			private RouteHandlerLookupResult _routeHandlerLookupResult;
@@ -181,6 +199,7 @@ namespace Piccolo.UnitTests.Routing
 				typeof(StaticLevel2RequestHandler),
 				typeof(DynamicLevel1RequestHandler),
 				typeof(DynamicLevel2RequestHandler),
+				typeof(MixedMultiLevelRequestHandler),
 				typeof(DynamicMultiLevelRequestHandler)
 			};
 
@@ -253,6 +272,18 @@ namespace Piccolo.UnitTests.Routing
 
 		[Route("/level-1/{DynamicLevel2}")]
 		public class DynamicLevel2RequestHandler : IGet<string>
+		{
+			[ExcludeFromCodeCoverage]
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
+			public int DynamicLevel2 { get; set; }
+		}
+
+		[Route("/level-1/{DynamicLevel2}/level-3")]
+		public class MixedMultiLevelRequestHandler : IGet<string>
 		{
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
