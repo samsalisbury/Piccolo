@@ -98,6 +98,12 @@ namespace Piccolo.UnitTests.Routing
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel1RequestHandler));
 			}
+
+			[Test]
+			public void it_should_bind_route_parameters()
+			{
+				_routeHandlerLookupResult.RouteParameters.Count.ShouldBe(1);
+			}
 		}
 
 		[TestFixture]
@@ -115,6 +121,12 @@ namespace Piccolo.UnitTests.Routing
 			public void it_should_return_request_handler()
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel2RequestHandler));
+			}
+
+			[Test]
+			public void it_should_bind_route_parameters()
+			{
+				_routeHandlerLookupResult.RouteParameters.Count.ShouldBe(1);
 			}
 		}
 
@@ -134,6 +146,12 @@ namespace Piccolo.UnitTests.Routing
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(MixedMultiLevelRequestHandler));
 			}
+
+			[Test]
+			public void it_should_bind_route_parameters()
+			{
+				_routeHandlerLookupResult.RouteParameters.Count.ShouldBe(1);
+			}
 		}
 
 		[TestFixture]
@@ -151,6 +169,12 @@ namespace Piccolo.UnitTests.Routing
 			public void it_should_return_request_handler()
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicMultiLevelRequestHandler));
+			}
+
+			[Test]
+			public void it_should_bind_route_parameters()
+			{
+				_routeHandlerLookupResult.RouteParameters.Count.ShouldBe(3);
 			}
 		}
 
