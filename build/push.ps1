@@ -10,5 +10,5 @@ formatTaskName {
 }
 
 task package {
-	& nuget push $package_file $api_key
+	& nuget push $package_file -ApiKey $api_key
 }
