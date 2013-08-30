@@ -20,5 +20,5 @@ formatTaskName {
 }
 
 task package {
-	& $nuget pack $nuspec -Version $version -OutputDirectory $project_dir -Symbols
+	& $nuget pack $nuspec -Version $version -OutputDirectory $project_dir
 }
