@@ -480,6 +480,62 @@ namespace Piccolo.UnitTests
 			}
 		}
 
+		[TestFixture]
+		public class when_processing_request_with_runtime_exception_in_aspnet_debug_mode : given_http_handler
+		{
+			private Mock<HttpResponseBase> _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = new Mock<HttpResponseBase>();
+
+				var httpContext = new Mock<HttpContextBase>();
+				httpContext.SetupGet(x => x.IsDebuggingEnabled).Returns(true);
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/exception"));
+				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
+				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_return_status_500()
+			{
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.InternalServerError);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_ok()
+			{
+				_httpResponse.VerifySet(x => x.StatusDescription = "Internal Server Error");
+			}
+
+			[Test]
+			public void it_should_return_content()
+			{
+				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
+			}
+		}
+
 		public abstract class given_http_handler
 		{
 			protected PiccoloHttpHandler PiccoloHttpHandler;

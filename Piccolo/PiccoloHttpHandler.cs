@@ -68,7 +68,12 @@ namespace Piccolo
 			catch (Exception ex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, ex);
-				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.InternalServerError));
+
+				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+				if (context.Http.IsDebuggingEnabled)
+					httpResponseMessage.Content = new ObjectContent(ex);
+
+				InjectResponse(context, httpResponseMessage);
 			}
 			finally
 			{
