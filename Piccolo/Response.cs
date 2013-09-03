@@ -15,9 +15,9 @@ namespace Piccolo
 			}
 
 			[ExcludeFromCodeCoverage]
-			public static HttpResponseMessage<TOutput> Gone<TOutput>()
+			public static HttpResponseMessage<TOutput> Gone<TOutput>(string reason)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone);
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone) {Content = new ObjectContent(reason)};
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 		}
