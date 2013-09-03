@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
@@ -10,6 +11,13 @@ namespace Piccolo
 			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
+				return new HttpResponseMessage<TOutput>(responseMessage);
+			}
+
+			[ExcludeFromCodeCoverage]
+			public static HttpResponseMessage<TOutput> Gone<TOutput>()
+			{
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone);
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 		}
