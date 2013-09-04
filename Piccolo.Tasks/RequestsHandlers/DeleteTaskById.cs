@@ -3,7 +3,7 @@
 namespace Piccolo.Tasks.RequestsHandlers
 {
 	[Route("/tasks/{id}")]
-	public class DeleteTaskById : IDelete
+	public class DeleteTaskById : IDelete<object, object>
 	{
 		private readonly ITaskRepository _taskRepository;
 
@@ -14,7 +14,7 @@ namespace Piccolo.Tasks.RequestsHandlers
 
 		public int Id { get; set; }
 
-		public HttpResponseMessage<dynamic> Delete()
+		public HttpResponseMessage<object> Delete(object parameters)
 		{
 			_taskRepository.Delete(Id);
 

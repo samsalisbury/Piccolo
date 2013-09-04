@@ -37,7 +37,7 @@ namespace Piccolo.Internal
 
 		internal static string BuildInvalidRequestHandlerImplementationMessage(Type requestHandler)
 		{
-			return string.Format("Request handler [{0}] does not implement any of the following supported interfaces: IGet<TOutput>, IPut<TInput, TOutput>, IPost<TInput, TOutput>, IDelete.", requestHandler.FullName);
+			return string.Format("Request handler [{0}] does not implement any of the following supported interfaces: IGet<TOutput>, IPut<TInput, TOutput>, IPost<TInput, TOutput>, IDelete<TInput, TOutput>.", requestHandler.FullName);
 		}
 
 		internal static string BuildUnsupportedQueryParameterTypeMessage(PropertyInfo property)

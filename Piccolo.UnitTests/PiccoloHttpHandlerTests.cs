@@ -226,9 +226,9 @@ namespace Piccolo.UnitTests
 			[Route("/test-resources/{Id}")]
 			public class UpdateTestResource : IPut<UpdateTestResource.Parameters, UpdateTestResource.Parameters>
 			{
-				public HttpResponseMessage<Parameters> Put(Parameters task)
+				public HttpResponseMessage<Parameters> Put(Parameters parameters)
 				{
-					return Response.Success.Ok(task);
+					return Response.Success.Ok(parameters);
 				}
 
 				public class Parameters
@@ -295,11 +295,11 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/test-resources/{Id}")]
-			public class DeleteTestResource : IDelete
+			public class DeleteTestResource : IDelete<string, string>
 			{
-				public HttpResponseMessage<dynamic> Delete()
+				public HttpResponseMessage<string> Delete(string parameters)
 				{
-					return Response.Success.NoContent<dynamic>();
+					return Response.Success.NoContent<string>();
 				}
 
 				public int Id { get; set; }

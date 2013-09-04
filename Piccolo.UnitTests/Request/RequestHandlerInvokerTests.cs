@@ -111,7 +111,7 @@ namespace Piccolo.UnitTests.Request
 		[Route("/PutRequestHandlerInvokerTests/{Param}")]
 		public class PutResource : IPut<string, string>
 		{
-			public HttpResponseMessage<string> Put(string task)
+			public HttpResponseMessage<string> Put(string parameters)
 			{
 				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(Param)});
 			}
@@ -120,11 +120,11 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[Route("/DeleteRequestHandlerInvokerTests/{Param}")]
-		public class DeleteResource : IDelete
+		public class DeleteResource : IDelete<string, string>
 		{
-			public HttpResponseMessage<dynamic> Delete()
+			public HttpResponseMessage<string> Delete(string parameters)
 			{
-				return new HttpResponseMessage<dynamic>(new HttpResponseMessage {Content = new StringContent(Param)});
+				return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent(Param)});
 			}
 
 			public string Param { get; set; }
@@ -767,9 +767,9 @@ namespace Piccolo.UnitTests.Request
 		[Route("/PutRequestHandlerInvokerTests/Payload")]
 		public class PutResourceWithPayload : IPut<PutResourceWithPayload.Parameters, PutResourceWithPayload.Parameters>
 		{
-			public HttpResponseMessage<Parameters> Put(Parameters task)
+			public HttpResponseMessage<Parameters> Put(Parameters parameters)
 			{
-				var content = string.Format("A: {0}; B: {1}", task.A, task.B);
+				var content = string.Format("A: {0}; B: {1}", parameters.A, parameters.B);
 				return new HttpResponseMessage<Parameters>(new HttpResponseMessage {Content = new StringContent(content)});
 			}
 

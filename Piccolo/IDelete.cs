@@ -1,7 +1,7 @@
 namespace Piccolo
 {
-	public interface IDelete : IRequestHandler
+	public interface IDelete<in TInput, TOutput> : IRequestHandler
 	{
-		HttpResponseMessage<dynamic> Delete();
+		HttpResponseMessage<TOutput> Delete(TInput parameters);
 	}
 }
