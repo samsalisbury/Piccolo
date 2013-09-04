@@ -36,10 +36,10 @@ namespace Piccolo
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 
-			public static HttpResponseMessage<dynamic> NoContent()
+			public static HttpResponseMessage<TOutput> NoContent<TOutput>()
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.NoContent);
-				return new HttpResponseMessage<dynamic>(responseMessage);
+				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 		}
 	}

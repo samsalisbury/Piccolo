@@ -18,7 +18,7 @@ namespace Piccolo.Tasks.RequestsHandlers
 		{
 			_taskRepository.Delete(Id);
 
-			return Response.Success.NoContent();
+			return Response.Success.NoContent<dynamic>();
 		}
 	}
 }

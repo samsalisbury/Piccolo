@@ -299,7 +299,7 @@ namespace Piccolo.UnitTests
 			{
 				public HttpResponseMessage<dynamic> Delete()
 				{
-					return Response.Success.NoContent();
+					return Response.Success.NoContent<dynamic>();
 				}
 
 				public int Id { get; set; }

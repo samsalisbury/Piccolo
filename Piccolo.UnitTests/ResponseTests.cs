@@ -91,7 +91,7 @@ namespace Piccolo.UnitTests
 				[SetUp]
 				public void SetUp()
 				{
-					_response = Response.Success.NoContent();
+					_response = Response.Success.NoContent<object>();
 				}
 
 				[Test]
