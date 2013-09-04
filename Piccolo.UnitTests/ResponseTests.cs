@@ -31,6 +31,30 @@ namespace Piccolo.UnitTests
 					_response.Message.ReasonPhrase.ShouldBe("Not Found");
 				}
 			}
+
+			[TestFixture]
+			public class when_gone_response_message_is_returned
+			{
+				private HttpResponseMessage<object> _response;
+
+				[SetUp]
+				public void SetUp()
+				{
+					_response = Response.Error.Gone<object>("gone");
+				}
+
+				[Test]
+				public void status_code_should_be_410()
+				{
+					_response.Message.StatusCode.ShouldBe((HttpStatusCode)410);
+				}
+
+				[Test]
+				public void reason_phrase_should_be_gone()
+				{
+					_response.Message.ReasonPhrase.ShouldBe("Gone");
+				}
+			}
 		}
 
 		public class Success

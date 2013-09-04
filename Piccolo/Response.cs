@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
@@ -14,7 +13,6 @@ namespace Piccolo
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 
-			[ExcludeFromCodeCoverage]
 			public static HttpResponseMessage<TOutput> Gone<TOutput>(string reason)
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone) {Content = new ObjectContent(reason)};
