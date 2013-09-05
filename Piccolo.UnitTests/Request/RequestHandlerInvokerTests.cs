@@ -743,7 +743,7 @@ namespace Piccolo.UnitTests.Request
 		}
 
 		[TestFixture]
-		public class when_executing_putt_request_with_payload : given_request_handler_invoker
+		public class when_executing_put_request_with_payload : given_request_handler_invoker
 		{
 			private string _result;
 
