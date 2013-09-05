@@ -9,6 +9,30 @@ namespace Piccolo.UnitTests
 		public class Error
 		{
 			[TestFixture]
+			public class when_bad_request_response_message_is_returned
+			{
+				private HttpResponseMessage<object> _response;
+
+				[SetUp]
+				public void SetUp()
+				{
+					_response = Response.Error.BadRequest<object>("bad request");
+				}
+
+				[Test]
+				public void status_code_should_be_400()
+				{
+					_response.Message.StatusCode.ShouldBe((HttpStatusCode)400);
+				}
+
+				[Test]
+				public void reason_phrase_should_be_not_found()
+				{
+					_response.Message.ReasonPhrase.ShouldBe("Bad Request");
+				}
+			}
+
+			[TestFixture]
 			public class when_not_found_response_message_is_returned
 			{
 				private HttpResponseMessage<object> _response;

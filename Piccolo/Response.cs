@@ -7,6 +7,12 @@ namespace Piccolo
 	{
 		public class Error
 		{
+			public static HttpResponseMessage<TOutput> BadRequest<TOutput>(string reason)
+			{
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(reason)};
+				return new HttpResponseMessage<TOutput>(responseMessage);
+			}
+
 			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
 			{
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
