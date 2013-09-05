@@ -78,6 +78,7 @@
     <Compile Include="Request\ParameterBinders\Int32ParameterBinder.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="RouteAttribute.cs" />
+    <Compile Include="RouteParameterDatatypeMismatchException.cs" />
     <Compile Include="Routing\RouteHandlerLookupResult.cs" />
     <Compile Include="Routing\RequestRouter.cs" />
     <Compile Include="Routing\RequestHandlerDescriptor.cs" />

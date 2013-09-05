@@ -30,9 +30,18 @@ namespace Piccolo.Request
 			BindQueryParameters(requestHandler, queryParameters, properties);
 			var postParameter = DeserialisePostParameter(payload, handlerMethod);
 
-			var result = handlerMethod.Invoke(requestHandler, postParameter);
+			try
+			{
+				var result = handlerMethod.Invoke(requestHandler, postParameter);
+				return GetResponseMessage(result);
+			}
+			catch (Exception ex)
+			{
+				if (ex.InnerException != null && ex.InnerException.GetType() == typeof(RouteParameterDatatypeMismatchException))
+					throw ex.InnerException;
 
-			return GetResponseMessage(result);
+				throw;
+			}
 		}
 
 		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters, PropertyInfo[] properties)
@@ -48,7 +57,7 @@ namespace Piccolo.Request
 				}
 				catch (FormatException)
 				{
-					throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, routeParameter.Value));
+					throw new RouteParameterDatatypeMismatchException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, routeParameter.Value));
 				}
 			}
 		}

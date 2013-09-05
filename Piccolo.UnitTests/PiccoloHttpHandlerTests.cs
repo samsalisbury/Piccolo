@@ -481,6 +481,70 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
+		public class when_processing_request_with_route_parameter_datatype_mismatch_exception : given_http_handler
+		{
+			private Mock<HttpResponseBase> _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = new Mock<HttpResponseBase>();
+
+				var httpContext = new Mock<HttpContextBase>();
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/route_parameter_datatype_mismatch_exception"));
+				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
+				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_return_status_404()
+			{
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_ok()
+			{
+				_httpResponse.VerifySet(x => x.StatusDescription = "Not Found");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
+			}
+
+			[Route("/route_parameter_datatype_mismatch_exception")]
+			public class HandlerWithRuntimeRouteParameterDatatypeMismatchException : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					throw new RouteParameterDatatypeMismatchException(string.Empty);
+				}
+			}
+		}
+
+		[TestFixture]
 		public class when_processing_request_with_runtime_exception_in_aspnet_debug_mode : given_http_handler
 		{
 			private Mock<HttpResponseBase> _httpResponse;

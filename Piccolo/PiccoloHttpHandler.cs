@@ -65,6 +65,11 @@ namespace Piccolo
 				else
 					InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
 			}
+			catch (RouteParameterDatatypeMismatchException rpdmex)
+			{
+				_eventDispatcher.RaiseRequestFaultedEvent(context, rpdmex);
+				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
+			}
 			catch (Exception ex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, ex);

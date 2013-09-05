@@ -255,7 +255,7 @@ namespace Piccolo.UnitTests.Request
 			public void it_should_thrown_exception()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "undefined"}};
-				Assert.Throws<InvalidOperationException>(() => Invoker.Execute(new GetResourceInt32(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty));
+				Assert.Throws<RouteParameterDatatypeMismatchException>(() => Invoker.Execute(new GetResourceInt32(), "GET", routeParameters, new Dictionary<string, string>(), string.Empty));
 			}
 		}
 
