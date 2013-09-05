@@ -780,6 +780,44 @@ namespace Piccolo.UnitTests.Request
 			}
 		}
 
+		[TestFixture]
+		public class when_executing_delete_request_with_payload : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var payload = "{" +
+				              "\"A\":1," +
+				              "\"B\":\"2\"" +
+				              "}";
+				_result = Invoker.Execute(new DeleteResourceWithPayload(), "DELETE", new Dictionary<string, string>(), new Dictionary<string, string>(), payload).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("A: 1; B: 2");
+			}
+		}
+
+		[Route("/PutRequestHandlerInvokerTests/Payload")]
+		public class DeleteResourceWithPayload : IDelete<DeleteResourceWithPayload.Parameters, DeleteResourceWithPayload.Parameters>
+		{
+			public HttpResponseMessage<Parameters> Delete(Parameters parameters)
+			{
+				var content = string.Format("A: {0}; B: {1}", parameters.A, parameters.B);
+				return new HttpResponseMessage<Parameters>(new HttpResponseMessage {Content = new StringContent(content)});
+			}
+
+			public class Parameters
+			{
+				public int A { get; set; }
+				public string B { get; set; }
+			}
+		}
+
 		#endregion
 
 		public abstract class given_request_handler_invoker
