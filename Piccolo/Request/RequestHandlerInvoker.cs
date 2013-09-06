@@ -98,18 +98,7 @@ namespace Piccolo.Request
 				if (contextualParameter.Equals(default(KeyValuePair<string, object>)))
 					continue;
 
-				var binder = _routeParameterBinders.SingleOrDefault(x => x.Key == property.PropertyType).Value;
-				if (binder == null)
-					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
-
-				try
-				{
-					binder.BindParameter(requestHandler, property, contextualParameter.Value.ToString());
-				}
-				catch (FormatException)
-				{
-					throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, contextualParameter.Value.ToString()));
-				}
+				property.SetValue(requestHandler, contextualParameter.Value, null);
 			}
 		}
 
