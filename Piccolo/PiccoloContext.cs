@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Web;
 using Piccolo.Internal;
@@ -13,6 +14,7 @@ namespace Piccolo
 		public PiccoloContext(HttpContextBase httpContext)
 		{
 			_httpContext = httpContext;
+			Data = new ExpandoObject();
 		}
 
 		public HttpContextBase Http
@@ -46,5 +48,7 @@ namespace Piccolo
 					return reader.ReadToEnd();
 			}
 		}
+
+		public dynamic Data { get; private set; }
 	}
 }

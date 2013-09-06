@@ -23,10 +23,14 @@ namespace Piccolo.UnitTests
 
 				var httpContext = new Mock<HttpContextBase>();
 				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
-				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/test-resources/1?test=true"));
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/test-resources/1?optionalParam=2"));
 				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+
+				var piccoloContext = new PiccoloContext(httpContext.Object);
+				piccoloContext.Data.ContextualParam = 3;
+
+				PiccoloHttpHandler.ProcessRequest(piccoloContext);
 			}
 
 			[Test]
@@ -68,7 +72,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_content()
 			{
-				_httpResponse.Verify(x => x.Write("{\"test\":\"Test\"}"));
+				_httpResponse.Verify(x => x.Write("{\"test\":6}"));
 			}
 
 			[Route("/test-resources/{id}")]
@@ -76,14 +80,20 @@ namespace Piccolo.UnitTests
 			{
 				public HttpResponseMessage<Model> Get()
 				{
-					return Response.Success.Ok(new Model {Test = "Test"});
+					return Response.Success.Ok(new Model {Test = Id + OptionalParam + ContextualParam});
 				}
 
 				public int Id { get; set; }
 
+				[Optional]
+				public int OptionalParam { get; set; }
+
+				[Contextual]
+				public int ContextualParam { get; set; }
+
 				public class Model
 				{
-					public string Test { get; set; }
+					public int Test { get; set; }
 				}
 			}
 		}

@@ -18,9 +18,8 @@ namespace Piccolo.UnitTests.InvalidConfigurationDetection.Request
 
 			Should.Throw<InvalidOperationException>(() =>
 			{
-				var routeParameters = new Dictionary<string, string>();
 				var queryParameters = new Dictionary<string, string> {{"Param", "value"}};
-				handlerInvoker.Execute(new Handler(), "GET", routeParameters, queryParameters, null);
+				handlerInvoker.Execute(new Handler(), "GET", new Dictionary<string, string>(), queryParameters, new Dictionary<string, object>(), null);
 			});
 		}
 
@@ -28,6 +27,35 @@ namespace Piccolo.UnitTests.InvalidConfigurationDetection.Request
 		public class Handler : IGet<string>
 		{
 			[Optional]
+			public uint Param { get; set; }
+
+			[ExcludeFromCodeCoverage]
+			public HttpResponseMessage<string> Get()
+			{
+				return null;
+			}
+		}
+	}
+
+	[TestFixture]
+	public class when_binding_contextual_parameter_of_unsupported_type
+	{
+		[Test]
+		public void it_should_throw_exception()
+		{
+			var handlerInvoker = new RequestHandlerInvoker(null, new Dictionary<Type, IParameterBinder>());
+
+			Should.Throw<InvalidOperationException>(() =>
+			{
+				var contextualParameters = new Dictionary<string, object> {{"Param", "value"}};
+				handlerInvoker.Execute(new Handler(), "GET", new Dictionary<string, string>(), new Dictionary<string, string>(), contextualParameters, null);
+			});
+		}
+
+		[Route("/route")]
+		public class Handler : IGet<string>
+		{
+			[Contextual]
 			public uint Param { get; set; }
 
 			[ExcludeFromCodeCoverage]

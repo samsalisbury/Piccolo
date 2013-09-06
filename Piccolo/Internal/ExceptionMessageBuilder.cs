@@ -40,9 +40,9 @@ namespace Piccolo.Internal
 			return string.Format("Request handler [{0}] does not implement any of the following supported interfaces: IGet<TOutput>, IPut<TInput, TOutput>, IPost<TInput, TOutput>, IDelete<TInput, TOutput>.", requestHandler.FullName);
 		}
 
-		internal static string BuildUnsupportedQueryParameterTypeMessage(PropertyInfo property)
+		internal static string BuildUnsupportedParameterTypeMessage(PropertyInfo property)
 		{
-			return string.Format("Query parameter [{0}.{1}] is of type {2} which is not supported.. Supported types are:" +
+			return string.Format("Parameter [{0}.{1}] is of type {2} which is not supported.. Supported types are:" +
 			                     "{3} - System.String" +
 			                     "{3} - System.Boolean" +
 			                     "{3} - System.Boolean?" +

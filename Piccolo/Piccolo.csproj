@@ -39,6 +39,7 @@
     <Compile Include="Configuration\PiccoloConfiguration.cs" />
     <Compile Include="Configuration\IObjectFactory.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
+    <Compile Include="ContextualAttribute.cs" />
     <Compile Include="Events\EventDispatcher.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\IHandle.cs" />

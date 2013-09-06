@@ -20,7 +20,7 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, string payload)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string payload)
 		{
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
@@ -28,6 +28,7 @@ namespace Piccolo.Request
 
 			BindRouteParameters(requestHandler, routeParameters, properties);
 			BindQueryParameters(requestHandler, queryParameters, properties);
+			BindContextualParameters(requestHandler, contextualParameters, properties);
 			var postParameter = DeserialisePostParameter(payload, handlerMethod);
 
 			try
@@ -74,7 +75,7 @@ namespace Piccolo.Request
 
 				var binder = _routeParameterBinders.SingleOrDefault(x => x.Key == property.PropertyType).Value;
 				if (binder == null)
-					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedQueryParameterTypeMessage(property));
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
 				try
 				{
@@ -83,6 +84,31 @@ namespace Piccolo.Request
 				catch (FormatException)
 				{
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, queryParameter.Value));
+				}
+			}
+		}
+
+		private void BindContextualParameters(IRequestHandler requestHandler, IDictionary<string, object> contextualParameters, IEnumerable<PropertyInfo> properties)
+		{
+			var contextualProperties = properties.Where(x => x.GetCustomAttributes(typeof(ContextualAttribute), true).Any());
+
+			foreach (var property in contextualProperties)
+			{
+				var contextualParameter = contextualParameters.SingleOrDefault(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
+				if (contextualParameter.Equals(default(KeyValuePair<string, object>)))
+					continue;
+
+				var binder = _routeParameterBinders.SingleOrDefault(x => x.Key == property.PropertyType).Value;
+				if (binder == null)
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
+
+				try
+				{
+					binder.BindParameter(requestHandler, property, contextualParameter.Value.ToString());
+				}
+				catch (FormatException)
+				{
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, contextualParameter.Value.ToString()));
 				}
 			}
 		}
