@@ -79,7 +79,7 @@ namespace Piccolo.Request
 			}
 		}
 
-		private void BindContextualParameters(IRequestHandler requestHandler, IDictionary<string, object> contextualParameters, IEnumerable<PropertyInfo> properties)
+		private static void BindContextualParameters(IRequestHandler requestHandler, IDictionary<string, object> contextualParameters, IEnumerable<PropertyInfo> properties)
 		{
 			var contextualProperties = properties.Where(x => x.GetCustomAttributes(typeof(ContextualAttribute), true).Any());
 
