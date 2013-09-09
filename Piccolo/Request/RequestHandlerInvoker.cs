@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using Newtonsoft.Json;
 using Piccolo.Internal;
 using Piccolo.Request.ParameterBinders;
 
@@ -31,18 +32,8 @@ namespace Piccolo.Request
 			BindContextualParameters(requestHandler, contextualParameters, properties);
 			var postParameter = DeserialisePostParameter(payload, handlerMethod);
 
-			try
-			{
-				var result = handlerMethod.Invoke(requestHandler, postParameter);
-				return GetResponseMessage(result);
-			}
-			catch (Exception ex)
-			{
-				if (ex.InnerException != null && ex.InnerException.GetType() == typeof(RouteParameterDatatypeMismatchException))
-					throw ex.InnerException;
-
-				throw;
-			}
+			var result = handlerMethod.Invoke(requestHandler, postParameter);
+			return GetResponseMessage(result);
 		}
 
 		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters, PropertyInfo[] properties)
@@ -108,8 +99,15 @@ namespace Piccolo.Request
 			var arguments = new object[parameters.Length];
 			if (parameters.Length == 1)
 			{
-				var parameterType = parameters.First().ParameterType;
-				arguments[0] = _jsonDecoder(parameterType, payload);
+				try
+				{
+					var parameterType = parameters.First().ParameterType;
+					arguments[0] = _jsonDecoder(parameterType, payload);
+				}
+				catch (JsonReaderException jrex)
+				{
+					throw new MalformedPayloadException("Failed to deserialise request payload.", jrex);
+				}
 			}
 			return arguments;
 		}

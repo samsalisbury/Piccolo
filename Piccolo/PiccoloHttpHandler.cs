@@ -70,6 +70,15 @@ namespace Piccolo
 				_eventDispatcher.RaiseRequestFaultedEvent(context, rpdmex);
 				InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
 			}
+			catch (MalformedPayloadException mpex)
+			{
+				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
+				InjectResponse(context, new HttpResponseMessage
+				{
+					StatusCode = (HttpStatusCode)422,
+					ReasonPhrase = "Unprocessable Entity"
+				});
+			}
 			catch (Exception ex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, ex);

@@ -712,7 +712,7 @@ namespace Piccolo.UnitTests.Request
 			[SetUp]
 			public void SetUp()
 			{
-				var contextualParameters = new Dictionary<string, object> { { "Param", new MyClass { Value = "TEST" } } };
+				var contextualParameters = new Dictionary<string, object> {{"Param", new MyClass {Value = "TEST"}}};
 				_result = Invoker.Execute(new GetResourceContextual(), "GET", new Dictionary<string, string>(), new Dictionary<string, string>(), contextualParameters, string.Empty).Content.ReadAsStringAsync().Result;
 			}
 

@@ -47,6 +47,7 @@
     <Compile Include="Events\RequestProcessedEvent.cs" />
     <Compile Include="Events\RequestProcessingEvent.cs" />
     <Compile Include="Internal\HttpResponseMessageExtensions.cs" />
+    <Compile Include="MalformedPayloadException.cs" />
     <Compile Include="PiccoloContext.cs" />
     <Compile Include="PiccoloHttpHandler.cs" />
     <Compile Include="HttpResponseMessage.cs" />
