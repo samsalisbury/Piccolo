@@ -324,115 +324,7 @@ namespace Piccolo.UnitTests
 
 		#endregion
 
-		[TestFixture]
-		public class when_processing_request_with_unsupported_verb : given_http_handler
-		{
-			private Mock<HttpResponseBase> _httpResponse;
-
-			[SetUp]
-			public void SetUp()
-			{
-				_httpResponse = new Mock<HttpResponseBase>();
-
-				var httpContext = new Mock<HttpContextBase>();
-				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("FAKE!");
-				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/"));
-				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
-				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
-			}
-
-			[Test]
-			public void it_should_raise_request_processing_event()
-			{
-				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
-			}
-
-			[Test]
-			public void it_should_raise_request_processed_event()
-			{
-				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
-			}
-
-			[Test]
-			public void it_should_not_raise_request_faulted_event()
-			{
-				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"), Times.Never());
-			}
-
-			[Test]
-			public void it_should_return_status_404()
-			{
-				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
-			}
-
-			[Test]
-			public void it_should_return_status_reason_method_not_allowed()
-			{
-				_httpResponse.VerifySet(x => x.StatusDescription = "Not Found");
-			}
-
-			[Test]
-			public void it_should_not_return_content()
-			{
-				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
-			}
-		}
-
-		[TestFixture]
-		public class when_processing_request_to_unhandled_resource : given_http_handler
-		{
-			private Mock<HttpResponseBase> _httpResponse;
-
-			[SetUp]
-			public void SetUp()
-			{
-				_httpResponse = new Mock<HttpResponseBase>();
-
-				var httpContext = new Mock<HttpContextBase>();
-				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
-				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/unhandled/resource"));
-				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
-				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
-			}
-
-			[Test]
-			public void it_should_raise_request_processing_event()
-			{
-				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
-			}
-
-			[Test]
-			public void it_should_raise_request_processed_event()
-			{
-				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
-			}
-
-			[Test]
-			public void it_should_not_raise_request_faulted_event()
-			{
-				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"), Times.Never());
-			}
-
-			[Test]
-			public void it_should_return_status_404()
-			{
-				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
-			}
-
-			[Test]
-			public void it_should_return_status_reason_not_found()
-			{
-				_httpResponse.VerifySet(x => x.StatusDescription = "Not Found");
-			}
-
-			[Test]
-			public void it_should_not_return_content()
-			{
-				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
-			}
-		}
+		#region Exception Handling
 
 		[TestFixture]
 		public class when_processing_request_with_runtime_exception : given_http_handler
@@ -495,6 +387,62 @@ namespace Piccolo.UnitTests
 				{
 					throw new Exception();
 				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_with_runtime_exception_in_aspnet_debug_mode : given_http_handler
+		{
+			private Mock<HttpResponseBase> _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = new Mock<HttpResponseBase>();
+
+				var httpContext = new Mock<HttpContextBase>();
+				httpContext.SetupGet(x => x.IsDebuggingEnabled).Returns(true);
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/exception"));
+				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
+				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_return_status_500()
+			{
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.InternalServerError);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_ok()
+			{
+				_httpResponse.VerifySet(x => x.StatusDescription = "Internal Server Error");
+			}
+
+			[Test]
+			public void it_should_return_content()
+			{
+				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
 			}
 		}
 
@@ -742,8 +690,10 @@ namespace Piccolo.UnitTests
 			}
 		}
 
+		#endregion
+
 		[TestFixture]
-		public class when_processing_request_with_runtime_exception_in_aspnet_debug_mode : given_http_handler
+		public class when_processing_request_with_unsupported_verb : given_http_handler
 		{
 			private Mock<HttpResponseBase> _httpResponse;
 
@@ -753,9 +703,8 @@ namespace Piccolo.UnitTests
 				_httpResponse = new Mock<HttpResponseBase>();
 
 				var httpContext = new Mock<HttpContextBase>();
-				httpContext.SetupGet(x => x.IsDebuggingEnabled).Returns(true);
-				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
-				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/exception"));
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("FAKE!");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/"));
 				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
 				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
 				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
@@ -774,27 +723,82 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_raise_request_faulted_event()
+			public void it_should_not_raise_request_faulted_event()
 			{
-				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"));
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"), Times.Never());
 			}
 
 			[Test]
-			public void it_should_return_status_500()
+			public void it_should_return_status_404()
 			{
-				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.InternalServerError);
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
 			}
 
 			[Test]
-			public void it_should_return_status_reason_ok()
+			public void it_should_return_status_reason_method_not_allowed()
 			{
-				_httpResponse.VerifySet(x => x.StatusDescription = "Internal Server Error");
+				_httpResponse.VerifySet(x => x.StatusDescription = "Not Found");
 			}
 
 			[Test]
-			public void it_should_return_content()
+			public void it_should_not_return_content()
 			{
-				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
+				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_to_unhandled_resource : given_http_handler
+		{
+			private Mock<HttpResponseBase> _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = new Mock<HttpResponseBase>();
+
+				var httpContext = new Mock<HttpContextBase>();
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/unhandled/resource"));
+				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
+				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_not_raise_request_faulted_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"), Times.Never());
+			}
+
+			[Test]
+			public void it_should_return_status_404()
+			{
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.NotFound);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_not_found()
+			{
+				_httpResponse.VerifySet(x => x.StatusDescription = "Not Found");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
 			}
 		}
 
