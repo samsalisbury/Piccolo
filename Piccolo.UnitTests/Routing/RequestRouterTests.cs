@@ -90,7 +90,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/DynamicLevel1/1", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/1", UriKind.Absolute));
 			}
 
 			[Test]
@@ -179,6 +179,24 @@ namespace Piccolo.UnitTests.Routing
 		}
 
 		[TestFixture]
+		public class when_searching_for_request_handler_that_matches_static_path_adjacent_to_dynamic_path : given_request_router_initialised_with_test_routes
+		{
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/specificity/static", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_request_handler()
+			{
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(SpecificityTestStaticHandler));
+			}
+		}
+
+		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_dynamic_multi_level_path_that_is_not_routed : given_request_router_initialised_with_test_routes
 		{
 			private RouteHandlerLookupResult _routeHandlerLookupResult;
@@ -224,7 +242,9 @@ namespace Piccolo.UnitTests.Routing
 				typeof(DynamicLevel1RequestHandler),
 				typeof(DynamicLevel2RequestHandler),
 				typeof(MixedMultiLevelRequestHandler),
-				typeof(DynamicMultiLevelRequestHandler)
+				typeof(DynamicMultiLevelRequestHandler),
+				typeof(SpecificityTestDynamicHandler),
+				typeof(SpecificityTestStaticHandler)
 			};
 
 			protected given_request_router_initialised_with_test_routes() : base(_testRoutes)
@@ -282,7 +302,7 @@ namespace Piccolo.UnitTests.Routing
 			}
 		}
 
-		[Route("/DynamicLevel1/{Value}")]
+		[Route("/{DynamicLevel1}")]
 		public class DynamicLevel1RequestHandler : IGet<string>
 		{
 			[ExcludeFromCodeCoverage]
@@ -291,7 +311,7 @@ namespace Piccolo.UnitTests.Routing
 				return new HttpResponseMessage<string>(new HttpResponseMessage());
 			}
 
-			public Int32 Value { get; set; }
+			public Int32 DynamicLevel1 { get; set; }
 		}
 
 		[Route("/level-1/{DynamicLevel2}")]
@@ -330,6 +350,28 @@ namespace Piccolo.UnitTests.Routing
 			public int DynamicLevel1 { get; set; }
 			public int DynamicLevel2 { get; set; }
 			public int DynamicLevel3 { get; set; }
+		}
+
+		[Route("/specificity/static")]
+		public class SpecificityTestStaticHandler : IGet<string>
+		{
+			[ExcludeFromCodeCoverage]
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+		}
+
+		[Route("/specificity/{dynamic}")]
+		public class SpecificityTestDynamicHandler : IGet<string>
+		{
+			[ExcludeFromCodeCoverage]
+			public HttpResponseMessage<string> Get()
+			{
+				return new HttpResponseMessage<string>(new HttpResponseMessage());
+			}
+
+			public string Dynamic { get; set; }
 		}
 
 		#endregion

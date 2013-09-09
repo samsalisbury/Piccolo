@@ -14,7 +14,7 @@ namespace Piccolo.Routing
 
 		internal RouteHandlerLookupNode(string headFragment, IEnumerable<string> routeTemplateFragments, Type requestHandler)
 		{
-			ChildNodes = new List<RouteHandlerLookupNode>();
+			ChildNodes = new SortedSet<RouteHandlerLookupNode>(new RouteHandlerLookupNodeComparer());
 			IsStaticRouteTemplateFragment = IsStaticFragment(headFragment);
 			IsVirtualRouteTemplateFragment = IsVirtualFragment(routeTemplateFragments);
 			RouteTemplateFragment = RemoveDynamicFragmentTokens(headFragment);
@@ -23,7 +23,7 @@ namespace Piccolo.Routing
 				RequestHandler = requestHandler;
 		}
 
-		internal IList<RouteHandlerLookupNode> ChildNodes { get; set; }
+		internal SortedSet<RouteHandlerLookupNode> ChildNodes { get; set; }
 
 		internal bool IsStaticRouteTemplateFragment { get; set; }
 
@@ -74,6 +74,17 @@ namespace Piccolo.Routing
 		private static bool IsVirtualFragment(IEnumerable<string> routeTemplateFragments)
 		{
 			return routeTemplateFragments.Any();
+		}
+
+		internal class RouteHandlerLookupNodeComparer : IComparer<RouteHandlerLookupNode>
+		{
+			public int Compare(RouteHandlerLookupNode x, RouteHandlerLookupNode y)
+			{
+				if (x.IsStaticRouteTemplateFragment == false)
+					return 1;
+
+				return -1;
+			}
 		}
 	}
 }
