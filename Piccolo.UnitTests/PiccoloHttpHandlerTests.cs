@@ -684,6 +684,62 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
+		public class when_processing_request_with_malformed_payload_exception_in_aspnet_debug_mode : given_http_handler
+		{
+			private Mock<HttpResponseBase> _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = new Mock<HttpResponseBase>();
+
+				var httpContext = new Mock<HttpContextBase>();
+				httpContext.SetupGet(x => x.IsDebuggingEnabled).Returns(true);
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("POST");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/malformed_payload_exception"));
+				httpContext.SetupGet(x => x.Request.InputStream).Returns(new MemoryStream(Encoding.UTF8.GetBytes("invalid")));
+				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_return_status_422()
+			{
+				_httpResponse.VerifySet(x => x.StatusCode = 422);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_unprocessable_entity()
+			{
+				_httpResponse.VerifySet(x => x.StatusDescription = "Unprocessable Entity");
+			}
+
+			[Test]
+			public void it_should_return_content()
+			{
+				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
+			}
+		}
+
+		[TestFixture]
 		public class when_processing_request_with_runtime_exception_in_aspnet_debug_mode : given_http_handler
 		{
 			private Mock<HttpResponseBase> _httpResponse;

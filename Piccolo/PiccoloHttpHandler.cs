@@ -78,11 +78,15 @@ namespace Piccolo
 			catch (MalformedPayloadException mpex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
-				InjectResponse(context, new HttpResponseMessage
+
+				var httpResponseMessage = new HttpResponseMessage
 				{
 					StatusCode = (HttpStatusCode)422,
-					ReasonPhrase = "Unprocessable Entity"
-				});
+					ReasonPhrase = "Unprocessable Entity",
+					Content = context.Http.IsDebuggingEnabled ? new ObjectContent(mpex) : null
+				};
+
+				InjectResponse(context, httpResponseMessage);
 			}
 			catch (Exception ex)
 			{
