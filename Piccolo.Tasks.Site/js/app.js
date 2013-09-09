@@ -53,7 +53,7 @@ function TaskListController($scope) {
 			url: "http://piccolo.com/tasks/" + id,
 			async: false
 		}).done(function(data) {
-			task = JSON.parse(data);
+			task = data;
 		});
 		return task;
 	};
@@ -133,7 +133,7 @@ function TaskDetailController($scope, $routeParams) {
 			url: "http://piccolo.com/tasks/" + id,
 			async: false
 		}).done(function(data) {
-			task = JSON.parse(data);
+			task = data;
 		});
 		return task;
 	};

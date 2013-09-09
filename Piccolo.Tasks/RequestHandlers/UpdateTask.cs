@@ -18,7 +18,7 @@ namespace Piccolo.Tasks.RequestHandlers
 
 		public HttpResponseMessage<Task> Put(UpdateTaskParameters parameters)
 		{
-			var task = new Task {Title = parameters.Title, IsCompleted = parameters.IsCompleted};
+			var task = new Task {Id = Id, Title = parameters.Title, IsCompleted = parameters.IsCompleted};
 			_taskRepository.Update(task);
 
 			return Response.Success.Ok(task);
