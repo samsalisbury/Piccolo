@@ -94,6 +94,9 @@ namespace Piccolo.UnitTests
 				[Contextual]
 				public int ContextualParam { get; set; }
 
+				[Contextual]
+				public int ContextualParam2 { get; set; }
+
 				public class Model
 				{
 					public int Test { get; set; }

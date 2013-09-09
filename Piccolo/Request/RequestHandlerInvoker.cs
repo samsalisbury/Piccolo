@@ -86,9 +86,6 @@ namespace Piccolo.Request
 			foreach (var property in contextualProperties)
 			{
 				var contextualParameter = contextualParameters.SingleOrDefault(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
-				if (contextualParameter.Equals(default(KeyValuePair<string, object>)))
-					continue;
-
 				property.SetValue(requestHandler, contextualParameter.Value, null);
 			}
 		}
