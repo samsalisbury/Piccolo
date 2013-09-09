@@ -2,7 +2,7 @@
 using Piccolo.Tasks.Repositories;
 using Piccolo.Tasks.ViewModels;
 
-namespace Piccolo.Tasks.RequestsHandlers
+namespace Piccolo.Tasks.RequestHandlers
 {
 	[Route("/tasks/{id}")]
 	public class UpdateTask : IPut<UpdateTaskParameters, Task>

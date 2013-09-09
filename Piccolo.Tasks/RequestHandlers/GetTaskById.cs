@@ -1,7 +1,7 @@
 ﻿using Piccolo.Tasks.Models;
 using Piccolo.Tasks.Repositories;
 
-namespace Piccolo.Tasks.RequestsHandlers
+namespace Piccolo.Tasks.RequestHandlers
 {
 	[Route("/tasks/{id}")]
 	public class GetTaskById : IGet<Task>
