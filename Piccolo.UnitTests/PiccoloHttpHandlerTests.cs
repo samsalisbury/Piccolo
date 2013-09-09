@@ -447,7 +447,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_processing_request_with_route_parameter_datatype_mismatch_exception : given_http_handler
+		public class when_processing_request_with_route_parameter_datatype_mismatch : given_http_handler
 		{
 			private Mock<HttpResponseBase> _httpResponse;
 
@@ -501,7 +501,7 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/route_parameter_datatype_mismatch_exception/{id}")]
-			public class HandlerWithRuntimeRouteParameterDatatypeMismatchException : IGet<string>
+			public class HandlerWithRuntimeRouteParameterDatatypeMismatch : IGet<string>
 			{
 				public int Id { get; set; }
 
@@ -514,7 +514,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_processing_request_with_route_parameter_datatype_mismatch_exception_in_aspnet_debug_mode : given_http_handler
+		public class when_processing_request_with_route_parameter_datatype_mismatch_in_aspnet_debug_mode : given_http_handler
 		{
 			private Mock<HttpResponseBase> _httpResponse;
 
@@ -570,7 +570,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_processing_request_with_malformed_payload_exception : given_http_handler
+		public class when_processing_request_with_malformed_payload : given_http_handler
 		{
 			private Mock<HttpResponseBase> _httpResponse;
 
@@ -624,7 +624,7 @@ namespace Piccolo.UnitTests
 			}
 
 			[Route("/malformed_payload_exception")]
-			public class HandlerWithRuntimeRouteParameterDatatypeMismatchException : IPost<DateTime, string>
+			public class HandlerWithRuntimeRouteParameterDatatypeMismatch : IPost<DateTime, string>
 			{
 				[ExcludeFromCodeCoverage]
 				public HttpResponseMessage<string> Post(DateTime parameters)
@@ -635,7 +635,7 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
-		public class when_processing_request_with_malformed_payload_exception_in_aspnet_debug_mode : given_http_handler
+		public class when_processing_request_with_malformed_payload_in_aspnet_debug_mode : given_http_handler
 		{
 			private Mock<HttpResponseBase> _httpResponse;
 
