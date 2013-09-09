@@ -440,7 +440,7 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_return_content()
+			public void it_should_return_exception_information()
 			{
 				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
 			}
@@ -563,7 +563,131 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_return_content()
+			public void it_should_return_exception_information()
+			{
+				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_with_malformed_optional_parameter : given_http_handler
+		{
+			private Mock<HttpResponseBase> _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = new Mock<HttpResponseBase>();
+
+				var httpContext = new Mock<HttpContextBase>();
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/malformed_optional_parameter?id=test"));
+				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
+				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_return_status_400()
+			{
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.BadRequest);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_not_found()
+			{
+				_httpResponse.VerifySet(x => x.StatusDescription = "Bad Request");
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_httpResponse.Verify(x => x.Write(It.Is((string value) => !value.Contains("Event"))), Times.Never());
+			}
+
+			[Route("/malformed_optional_parameter")]
+			public class HandlerWithMalformedOptionalParameter : IGet<string>
+			{
+				[Optional]
+				public int Id { get; set; }
+
+				[ExcludeFromCodeCoverage]
+				public HttpResponseMessage<string> Get()
+				{
+					return Response.Success.NoContent<string>();
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_with_malformed_optional_parameter_in_aspnet_debug_mode : given_http_handler
+		{
+			private Mock<HttpResponseBase> _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = new Mock<HttpResponseBase>();
+
+				var httpContext = new Mock<HttpContextBase>();
+				httpContext.SetupGet(x => x.IsDebuggingEnabled).Returns(true);
+				httpContext.SetupGet(x => x.Request.HttpMethod).Returns("GET");
+				httpContext.SetupGet(x => x.Request.Url).Returns(new Uri("https://api.com/malformed_optional_parameter?id=test"));
+				httpContext.SetupGet(x => x.Request.InputStream.CanRead).Returns(false);
+				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext.Object));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestProcessedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Verify(x => x.Write("RequestFaultedEvent handled"));
+			}
+
+			[Test]
+			public void it_should_return_status_400()
+			{
+				_httpResponse.VerifySet(x => x.StatusCode = (int)HttpStatusCode.BadRequest);
+			}
+
+			[Test]
+			public void it_should_return_status_reason_not_found()
+			{
+				_httpResponse.VerifySet(x => x.StatusDescription = "Bad Request");
+			}
+
+			[Test]
+			public void it_should_return_exception_information()
 			{
 				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
 			}
@@ -684,7 +808,7 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_return_content()
+			public void it_should_return_exception_information()
 			{
 				_httpResponse.Verify(x => x.Write(It.Is<string>(s => s.Contains("Exception"))));
 			}

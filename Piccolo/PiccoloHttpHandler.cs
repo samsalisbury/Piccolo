@@ -75,6 +75,16 @@ namespace Piccolo
 
 				InjectResponse(context, httpResponseMessage);
 			}
+			catch (MalformedParameterException mpex)
+			{
+				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
+
+				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+				if (context.Http.IsDebuggingEnabled)
+					httpResponseMessage.Content = new ObjectContent(mpex);
+
+				InjectResponse(context, httpResponseMessage);
+			}
 			catch (MalformedPayloadException mpex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);

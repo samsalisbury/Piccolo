@@ -74,7 +74,7 @@ namespace Piccolo.Request
 				}
 				catch (FormatException)
 				{
-					throw new InvalidOperationException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, queryParameter.Value));
+					throw new MalformedParameterException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, queryParameter.Value));
 				}
 			}
 		}

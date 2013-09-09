@@ -564,7 +564,7 @@ namespace Piccolo.UnitTests.Request
 			public void it_should_thrown_exception()
 			{
 				var queryParameters = new Dictionary<string, string> {{"param", "undefined"}};
-				Assert.Throws<InvalidOperationException>(() => Invoker.Execute(new GetResourceOptionalInt32(), "GET", new Dictionary<string, string>(), queryParameters, new Dictionary<string, object>(), string.Empty));
+				Assert.Throws<MalformedParameterException>(() => Invoker.Execute(new GetResourceOptionalInt32(), "GET", new Dictionary<string, string>(), queryParameters, new Dictionary<string, object>(), string.Empty));
 			}
 		}
 
