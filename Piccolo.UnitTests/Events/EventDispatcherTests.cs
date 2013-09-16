@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Web;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Events;
@@ -13,7 +13,7 @@ namespace Piccolo.UnitTests.Events
 		[TestFixture]
 		public class when_request_processing_event_is_raised_with_two_handlers_and_first_stop_execution
 		{
-			private Mock<HttpResponseBase> _httpResponse;
+			private HttpResponseBase _httpResponse;
 
 			[TestFixtureSetUp]
 			public void SetUp()
@@ -22,10 +22,10 @@ namespace Piccolo.UnitTests.Events
 				eventHandlers.RequestProcessing.Add(typeof(TestRequestProcessingEventHandlerWithInterrupt));
 				eventHandlers.RequestProcessing.Add(typeof(BootstrapperTests.TestRequestProcessingEventHandler));
 
-				var httpContext = new Mock<HttpContextBase>();
-				_httpResponse = new Mock<HttpResponseBase>();
-				httpContext.SetupGet(x => x.Response).Returns(_httpResponse.Object);
-				var piccoloContext = new PiccoloContext(httpContext.Object);
+				var httpContext = Substitute.For<HttpContextBase>();
+				_httpResponse = Substitute.For<HttpResponseBase>();
+				httpContext.Response.Returns(_httpResponse);
+				var piccoloContext = new PiccoloContext(httpContext);
 
 				var eventDispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 				eventDispatcher.RaiseRequestProcessingEvent(piccoloContext);
@@ -34,13 +34,13 @@ namespace Piccolo.UnitTests.Events
 			[Test]
 			public void it_should_execute_first_handler()
 			{
-				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled with interrupt"), Times.Once());
+				_httpResponse.Received().Write("RequestProcessingEvent handled with interrupt");
 			}
 
 			[Test]
 			public void it_should_not_execute_second_handler()
 			{
-				_httpResponse.Verify(x => x.Write("RequestProcessingEvent handled"), Times.Never());
+				_httpResponse.DidNotReceive().Write("RequestProcessingEvent handled");
 			}
 		}
 
