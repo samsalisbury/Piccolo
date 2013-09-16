@@ -10,7 +10,7 @@
 	<system.webServer xdt:Transform="InsertIfMissing">
 		<handlers xdt:Transform="InsertIfMissing">
 			<remove name="OPTIONSVerbHandler" xdt:Transform="InsertIfMissing" />
-			<add path="*." verb="*" name="Piccolo.PiccoloHttpHandler" type="Piccolo.PiccoloHttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="InsertIfMissing" />
+			<add path="*" verb="*" name="Piccolo.PiccoloHttpHandler" type="Piccolo.PiccoloHttpHandler" preCondition="integratedMode,runtimeVersionv4.0" xdt:Transform="InsertIfMissing" />
 		</handlers>
 
 		<httpErrors existingResponse="PassThrough" xdt:Transform="SetAttributes(existingResponse)" />
