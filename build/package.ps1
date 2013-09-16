@@ -5,7 +5,7 @@ properties {
 	$project_dir = "$build_dir\.."
 	$build_output_dir = "$project_dir\build-output"
 	
-	$nuget = "$project_dir\packages\NuGet.CommandLine.2.6.1\tools\NuGet.exe"
+	$nuget = "$project_dir\packages\NuGet.CommandLine.2.7.1\tools\NuGet.exe"
 	$nuspec = "$project_dir\Piccolo\Piccolo.nuspec"
 	$version = "0.0.0"
 }
