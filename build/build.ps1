@@ -10,7 +10,7 @@ properties {
 	
 	$build_configuration = "Release"
 	$version_major = 0
-	$version_minor = 1
+	$version_minor = 9
 	$version_build = 0
 }
 
