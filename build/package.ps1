@@ -20,5 +20,12 @@ formatTaskName {
 }
 
 task package {
-	& $nuget pack $nuspec -Version $version -OutputDirectory $project_dir -Symbols
+	try {
+		& $nuget pack $nuspec -Version $version -OutputDirectory $project_dir -Symbols
+	}
+	catch {
+		write-host $_.Exception.Message
+		write-host "##teamcity[buildStatus text='package task failed - see build log for details' status='FAILURE']"
+		throw ("************ package task failed **************")
+	}
 }

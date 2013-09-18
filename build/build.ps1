@@ -24,29 +24,50 @@ formatTaskName {
 }
 
 taskSetup {
-	write-output "##teamcity[progessMessage '$($psake.context.Peek().currentTaskName.ToUpper())']"
+	write-host "##teamcity[progessMessage '$($psake.context.Peek().currentTaskName.ToUpper())']"
 }
 
 task compile -depends set-version-number {
-	exec { msbuild $solution_file /m /property:"Configuration=$build_configuration;OutputPath=$build_output_dir" /nologo }
+	try {
+		exec { msbuild $solution_file /m /property:"Configuration=$build_configuration;OutputPath=$build_output_dir" /nologo }
+	}
+	catch {
+		write-host $_.Exception.Message
+		write-host "##teamcity[buildStatus text='compile task failed - see build log for details' status='FAILURE']"
+		throw ("************ compile task failed **************")
+	}
 }
 
 task set-version-number -depends clean {
-	$version = "$version_major.$version_minor.$version_build.0"
-	write-host Setting assembly version to $version
-	
-	$package_version = "$version_major.$version_minor.$version_build"
-	write-host "##teamcity[setParameter name='package.version' value='$package_version']"
-	
-	$versionPattern = 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
-	$versionAssembly = 'AssemblyVersion("' + $version + '")';
-	$versionFilePattern = 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
-	$versionAssemblyFile = 'AssemblyFileVersion("' + $version + '")';
- 	
-	$updatedContent = get-content $assembly_info_file | % {$_ -replace $versionFilePattern, $versionAssemblyFile } | % {$_ -replace $versionPattern, $versionAssembly }
-	$updatedContent > $assembly_info_file
+	try {
+		$version = "$version_major.$version_minor.$version_build.0"
+		write-host Setting assembly version to $version
+		
+		$package_version = "$version_major.$version_minor.$version_build"
+		write-host "##teamcity[setParameter name='package.version' value='$package_version']"
+		
+		$versionPattern = 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
+		$versionAssembly = 'AssemblyVersion("' + $version + '")';
+		$versionFilePattern = 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
+		$versionAssemblyFile = 'AssemblyFileVersion("' + $version + '")';
+		
+		$updatedContent = get-content $assembly_info_file | % {$_ -replace $versionFilePattern, $versionAssemblyFile } | % {$_ -replace $versionPattern, $versionAssembly }
+		$updatedContent > $assembly_info_file
+	}
+	catch {
+		write-host $_.Exception.Message
+		write-host "##teamcity[buildStatus text='set-version-number task failed - see build log for details' status='FAILURE']"
+		throw ("************ set-version-number task failed **************")
+	}
 }
 
 task clean {
-	remove-item $build_output_dir -recurse -force -errorAction SilentlyContinue
+	try {
+		remove-item $build_output_dir -recurse -force -errorAction SilentlyContinue
+	}
+	catch {
+		write-host $_.Exception.Message
+		write-host "##teamcity[buildStatus text='clean task failed - see build log for details' status='FAILURE']"
+		throw ("************ clean task failed **************")
+	}
 }

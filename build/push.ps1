@@ -17,5 +17,12 @@ formatTaskName {
 }
 
 task package {
-	& $nuget push $package_file -ApiKey $api_key
+	try {
+		& $nuget push $package_file -ApiKey $api_key
+	}
+	catch {
+		write-host $_.Exception.Message
+		write-host "##teamcity[buildStatus text='package task failed - see build log for details' status='FAILURE']"
+		throw ("************ package task failed **************")
+	}
 }
