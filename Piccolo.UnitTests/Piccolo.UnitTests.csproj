@@ -36,6 +36,7 @@
     <Compile Include="Configuration\BootstrapperTests.cs" />
     <Compile Include="Configuration\DefaultObjectFactoryTests.cs" />
     <Compile Include="Events\EventDispatcherTests.cs" />
+    <Compile Include="PiccoloContextTests.cs" />
     <Compile Include="PiccoloHttpHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request\RequestHandlerInvokerTests.cs" />

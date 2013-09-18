@@ -10,6 +10,7 @@ namespace Piccolo
 	public class PiccoloContext
 	{
 		private readonly HttpContextBase _httpContext;
+		private string _requestPayload;
 
 		public PiccoloContext(HttpContextBase httpContext)
 		{
@@ -41,11 +42,16 @@ namespace Piccolo
 		{
 			get
 			{
-				if (_httpContext.Request.InputStream.CanRead == false)
-					return string.Empty;
+				if (_requestPayload == null)
+				{
+					if (_httpContext.Request.InputStream.CanRead == false)
+						return string.Empty;
 
-				using (var reader = new StreamReader(_httpContext.Request.InputStream))
-					return reader.ReadToEnd();
+					using (var reader = new StreamReader(_httpContext.Request.InputStream))
+						_requestPayload = reader.ReadToEnd();
+				}
+
+				return _requestPayload;
 			}
 		}
 
