@@ -271,13 +271,10 @@ namespace Piccolo.UnitTests
 			{
 				_httpResponse = Substitute.For<HttpResponseBase>();
 
-				var inputStream = Substitute.For<Stream>();
-				inputStream.CanRead.Returns(false);
-
 				var httpContext = Substitute.For<HttpContextBase>();
 				httpContext.Request.HttpMethod.Returns("DELETE");
 				httpContext.Request.Url.Returns(new Uri("https://api.com/test-resources/1"));
-				httpContext.Request.InputStream.Returns(inputStream);
+				httpContext.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("\"\"")));
 				httpContext.Response.Returns(_httpResponse);
 
 				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext));
@@ -372,7 +369,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+TargetInvocationException");
 			}
 
 			[Test]
@@ -441,7 +438,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+TargetInvocationException");
 			}
 
 			[Test]
@@ -500,7 +497,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+RouteParameterDatatypeMismatchException");
 			}
 
 			[Test]
@@ -572,7 +569,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+RouteParameterDatatypeMismatchException");
 			}
 
 			[Test]
@@ -631,7 +628,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+MalformedParameterException");
 			}
 
 			[Test]
@@ -704,7 +701,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+MalformedParameterException");
 			}
 
 			[Test]
@@ -760,7 +757,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+MalformedPayloadException");
 			}
 
 			[Test]
@@ -827,7 +824,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_faulted_event()
 			{
-				_httpResponse.Received().Write("RequestFaultedEvent handled");
+				_httpResponse.Received().Write("RequestFaultedEvent handled+MalformedPayloadException");
 			}
 
 			[Test]

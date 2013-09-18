@@ -40,7 +40,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "post"}};
-				_result = Invoker.Execute(new PostResource(), "POST", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), string.Empty).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new PostResource(), "POST", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), "\"\"").Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -59,7 +59,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "put"}};
-				_result = Invoker.Execute(new PutResource(), "PUT", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), string.Empty).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new PutResource(), "PUT", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), "\"\"").Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]
@@ -78,7 +78,7 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "delete"}};
-				_result = Invoker.Execute(new DeleteResource(), "DELETE", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), string.Empty).Content.ReadAsStringAsync().Result;
+				_result = Invoker.Execute(new DeleteResource(), "DELETE", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), "\"\"").Content.ReadAsStringAsync().Result;
 			}
 
 			[Test]

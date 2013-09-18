@@ -93,20 +93,18 @@ namespace Piccolo.Request
 		private object[] DeserialisePostParameter(string payload, MethodInfo handlerMethod)
 		{
 			var parameters = handlerMethod.GetParameters();
-			var arguments = new object[parameters.Length];
-			if (parameters.Length == 1)
+			if (parameters.Length == 0)
+				return new object[0];
+
+			try
 			{
-				try
-				{
-					var parameterType = parameters.First().ParameterType;
-					arguments[0] = _jsonDecoder(parameterType, payload);
-				}
-				catch (JsonReaderException jrex)
-				{
-					throw new MalformedPayloadException("Failed to deserialise request payload.", jrex);
-				}
+				var parameterType = parameters.First().ParameterType;
+				return new[] {_jsonDecoder(parameterType, payload)};
 			}
-			return arguments;
+			catch (JsonReaderException jrex)
+			{
+				throw new MalformedPayloadException("Failed to deserialise request payload.", jrex);
+			}
 		}
 
 		private static HttpResponseMessage GetResponseMessage(object result)

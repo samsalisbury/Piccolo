@@ -125,7 +125,7 @@ namespace Piccolo.UnitTests.Configuration
 		{
 			public void Handle(RequestFaultedEvent args)
 			{
-				args.Context.Http.Response.Write("RequestFaultedEvent handled");
+				args.Context.Http.Response.Write("RequestFaultedEvent handled+" + args.Exception.GetType().Name);
 			}
 		}
 
