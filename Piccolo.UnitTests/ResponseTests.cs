@@ -155,5 +155,35 @@ namespace Piccolo.UnitTests
 				}
 			}
 		}
+
+		[TestFixture]
+		public class when_error_response_is_created
+		{
+			private HttpResponseMessage<object> _response;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_response = Response.CreateErrorResponse<object>(HttpStatusCode.Forbidden, "test");
+			}
+
+			[Test]
+			public void status_code_should_be_403()
+			{
+				_response.Message.StatusCode.ShouldBe((HttpStatusCode)403);
+			}
+
+			[Test]
+			public void reason_phrase_should_be_forbidden()
+			{
+				_response.Message.ReasonPhrase.ShouldBe("Forbidden");
+			}
+
+			[Test]
+			public void content_should_be_test()
+			{
+				_response.Message.Content.ReadAsStringAsync().Result.ShouldBe("test");
+			}
+		}
 	}
 }
