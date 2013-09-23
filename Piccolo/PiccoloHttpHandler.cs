@@ -25,9 +25,13 @@ namespace Piccolo
 		{
 		}
 
-		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration)
+		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration) : this(Bootstrapper.ApplyConfiguration(assembly, applyCustomConfiguration))
 		{
-			_configuration = Bootstrapper.ApplyConfiguration(assembly, applyCustomConfiguration);
+		}
+
+		public PiccoloHttpHandler(PiccoloConfiguration configuration)
+		{
+			_configuration = configuration;
 			_eventDispatcher = new EventDispatcher(_configuration.EventHandlers, _configuration.ObjectFactory);
 			_requestRouter = new RequestRouter(_configuration.RequestHandlers);
 			_requestHandlerInvoker = new RequestHandlerInvoker(_configuration.JsonDeserialiser, _configuration.ParameterBinders);

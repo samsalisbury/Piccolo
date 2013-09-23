@@ -7,6 +7,8 @@ using System.Text;
 using System.Web;
 using NSubstitute;
 using NUnit.Framework;
+using Piccolo.Configuration;
+using Piccolo.UnitTests.Events;
 
 namespace Piccolo.UnitTests
 {
@@ -972,7 +974,10 @@ namespace Piccolo.UnitTests
 
 			protected given_http_handler()
 			{
-				PiccoloHttpHandler = new PiccoloHttpHandler(Assembly.GetExecutingAssembly(), false);
+				var piccoloConfiguration = Bootstrapper.ApplyConfiguration(Assembly.GetExecutingAssembly(), false);
+				piccoloConfiguration.EventHandlers.RequestProcessing.Remove<EventDispatcherTests.TestRequestProcessingEventHandlerWithStopEventProcessing>();
+
+				PiccoloHttpHandler = new PiccoloHttpHandler(piccoloConfiguration);
 			}
 		}
 	}

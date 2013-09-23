@@ -43,6 +43,7 @@
     <Compile Include="ResponseTests.cs" />
     <Compile Include="Routing\RequestRouterTests.cs" />
     <Compile Include="TestRequestHandler.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Piccolo\Piccolo.csproj">
