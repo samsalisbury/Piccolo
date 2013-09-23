@@ -6,6 +6,6 @@ namespace Piccolo.Events
 	{
 		public Exception Exception { get; set; }
 		public PiccoloContext Context { get; set; }
-		public bool StopProcessing { get; set; }
+		public bool StopEventProcessing { get; set; }
 	}
 }

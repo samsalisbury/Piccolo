@@ -40,7 +40,7 @@ namespace Piccolo.Events
 				var eventHandler = _objectFactory.CreateInstance<IHandle<TEvent>>(eventHandlerType);
 				eventHandler.Handle(args);
 
-				if (args.StopProcessing)
+				if (args.StopEventProcessing)
 					break;
 			}
 		}

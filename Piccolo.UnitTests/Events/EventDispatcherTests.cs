@@ -19,7 +19,7 @@ namespace Piccolo.UnitTests.Events
 			public void SetUp()
 			{
 				var eventHandlers = new EventHandlers();
-				eventHandlers.RequestProcessing.Add(typeof(TestRequestProcessingEventHandlerWithInterrupt));
+				eventHandlers.RequestProcessing.Add(typeof(TestRequestProcessingEventHandlerWithStopEventProcessing));
 				eventHandlers.RequestProcessing.Add(typeof(BootstrapperTests.TestRequestProcessingEventHandler));
 
 				var httpContext = Substitute.For<HttpContextBase>();
@@ -34,7 +34,7 @@ namespace Piccolo.UnitTests.Events
 			[Test]
 			public void it_should_execute_first_handler()
 			{
-				_httpResponse.Received().Write("RequestProcessingEvent handled with interrupt");
+				_httpResponse.Received().Write("RequestProcessingEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -47,12 +47,12 @@ namespace Piccolo.UnitTests.Events
 		#region Test Classes
 
 		[ExcludeFromCodeCoverage]
-		public class TestRequestProcessingEventHandlerWithInterrupt : IHandle<RequestProcessingEvent>
+		public class TestRequestProcessingEventHandlerWithStopEventProcessing : IHandle<RequestProcessingEvent>
 		{
 			public void Handle(RequestProcessingEvent args)
 			{
-				args.Context.Http.Response.Write("RequestProcessingEvent handled with interrupt");
-				args.StopProcessing = true;
+				args.Context.Http.Response.Write("RequestProcessingEvent handled with StopEventProcessing");
+				args.StopEventProcessing = true;
 			}
 		}
 
