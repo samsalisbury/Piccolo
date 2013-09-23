@@ -4,5 +4,6 @@
 	{
 		public PiccoloContext Context { get; set; }
 		public bool StopEventProcessing { get; set; }
+		public bool StopRequestProcessing { get; set; }
 	}
 }

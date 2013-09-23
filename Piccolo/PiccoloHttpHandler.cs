@@ -25,6 +25,7 @@ namespace Piccolo
 		{
 		}
 
+		[ExcludeFromCodeCoverage]
 		public PiccoloHttpHandler(Assembly assembly, bool applyCustomConfiguration) : this(Bootstrapper.ApplyConfiguration(assembly, applyCustomConfiguration))
 		{
 		}
@@ -57,7 +58,9 @@ namespace Piccolo
 		{
 			try
 			{
-				_eventDispatcher.RaiseRequestProcessingEvent(context);
+				var stopRequestProcessing = _eventDispatcher.RaiseRequestProcessingEvent(context);
+				if (stopRequestProcessing)
+					return;
 
 				var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
 				if (lookupResult.IsSuccessful)

@@ -851,6 +851,66 @@ namespace Piccolo.UnitTests
 		#endregion
 
 		[TestFixture]
+		public class when_processing_get_request_cancelled_by_event_handler
+		{
+			private HttpResponseBase _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = Substitute.For<HttpResponseBase>();
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+
+				var httpContext = Substitute.For<HttpContextBase>();
+				httpContext.Request.HttpMethod.Returns("GET");
+				httpContext.Request.Url.Returns(new Uri("https://api.com/test-resources/1"));
+				httpContext.Request.InputStream.Returns(inputStream);
+				httpContext.Response.Returns(_httpResponse);
+
+				var piccoloContext = new PiccoloContext(httpContext);
+
+				var piccoloConfiguration = Bootstrapper.ApplyConfiguration(Assembly.GetExecutingAssembly(), false);
+				piccoloConfiguration.EventHandlers.RequestProcessing.Remove<EventDispatcherTests.TestRequestProcessingEventHandlerWithStopEventProcessing>();
+
+				var httpHandler = new PiccoloHttpHandler(piccoloConfiguration);
+
+				httpHandler.ProcessRequest(piccoloContext);
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Received().Write("RequestProcessingEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Received().Write("RequestProcessedEvent handled");
+			}
+
+			[Test]
+			public void it_should_not_raise_request_faulted_event()
+			{
+				_httpResponse.DidNotReceive().Write("RequestFaultedEvent handled");
+			}
+
+			[Test]
+			public void it_should_return_status_426()
+			{
+				_httpResponse.Received().StatusCode = 426;
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_httpResponse.DidNotReceive().Write(Arg.Is<string>(x => !x.Contains("Event")));
+			}
+		}
+
+		[TestFixture]
 		public class when_processing_request_with_unsupported_verb : given_http_handler
 		{
 			private HttpResponseBase _httpResponse;
@@ -976,6 +1036,7 @@ namespace Piccolo.UnitTests
 			{
 				var piccoloConfiguration = Bootstrapper.ApplyConfiguration(Assembly.GetExecutingAssembly(), false);
 				piccoloConfiguration.EventHandlers.RequestProcessing.Remove<EventDispatcherTests.TestRequestProcessingEventHandlerWithStopEventProcessing>();
+				piccoloConfiguration.EventHandlers.RequestProcessing.Remove<EventDispatcherTests.TestRequestProcessingEventHandlerWithStopRequestProcessing>();
 
 				PiccoloHttpHandler = new PiccoloHttpHandler(piccoloConfiguration);
 			}

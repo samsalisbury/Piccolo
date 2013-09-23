@@ -15,10 +15,23 @@ namespace Piccolo.Events
 			_objectFactory = objectFactory;
 		}
 
-		public void RaiseRequestProcessingEvent(PiccoloContext context)
+		public bool RaiseRequestProcessingEvent(PiccoloContext context)
 		{
 			var args = new RequestProcessingEvent {Context = context};
-			RaiseEvent(_eventHandlers.RequestProcessing, args);
+			var stopRequestProcessing = false;
+
+			foreach (var eventHandlerType in _eventHandlers.RequestProcessing)
+			{
+				var eventHandler = _objectFactory.CreateInstance<IHandle<RequestProcessingEvent>>(eventHandlerType);
+				eventHandler.Handle(args);
+
+				stopRequestProcessing = args.StopRequestProcessing;
+
+				if (args.StopEventProcessing)
+					break;
+			}
+
+			return stopRequestProcessing;
 		}
 
 		public void RaiseRequestProcessedEvent(PiccoloContext context)

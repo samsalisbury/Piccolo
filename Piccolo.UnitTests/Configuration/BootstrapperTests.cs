@@ -5,6 +5,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Events;
+using Piccolo.UnitTests.Events;
 using Shouldly;
 
 namespace Piccolo.UnitTests.Configuration
@@ -37,7 +38,7 @@ namespace Piccolo.UnitTests.Configuration
 			[Test]
 			public void it_should_autodetect_request_processing_event_handlers()
 			{
-				_handlerConfiguration.EventHandlers.RequestProcessing.Any(x => x == typeof(TestRequestProcessingEventHandler)).ShouldBe(true);
+				_handlerConfiguration.EventHandlers.RequestProcessing.Any(x => x == typeof(EventDispatcherTests.TestRequestProcessingEventHandler)).ShouldBe(true);
 			}
 
 			[Test]
@@ -99,15 +100,6 @@ namespace Piccolo.UnitTests.Configuration
 			public T CreateInstance<T>(Type requestHandlerType)
 			{
 				return default(T);
-			}
-		}
-
-		[ExcludeFromCodeCoverage]
-		public class TestRequestProcessingEventHandler : IHandle<RequestProcessingEvent>
-		{
-			public void Handle(RequestProcessingEvent args)
-			{
-				args.Context.Http.Response.Write("RequestProcessingEvent handled");
 			}
 		}
 
