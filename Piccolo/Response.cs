@@ -5,6 +5,12 @@ namespace Piccolo
 {
 	public class Response
 	{
+		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string errorMessage)
+		{
+			var responseMessage = new HttpResponseMessage(statusCode) {Content = new StringContent(errorMessage)};
+			return new HttpResponseMessage<TOutput>(responseMessage);
+		}
+
 		public class Error
 		{
 			public static HttpResponseMessage<TOutput> BadRequest<TOutput>(string reason)
@@ -45,12 +51,6 @@ namespace Piccolo
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.NoContent);
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
-		}
-
-		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string errorMessage)
-		{
-			var responseMessage = new HttpResponseMessage(statusCode) {Content = new StringContent(errorMessage)};
-			return new HttpResponseMessage<TOutput>(responseMessage);
 		}
 	}
 }
