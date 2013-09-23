@@ -19,6 +19,9 @@ public class Hello : IGet<string>
 
 **4)** Build and run
 
+## Nightly Builds
+[CodeBetter TeamCity server](http://teamcity.codebetter.com/project.html?projectId=project389&tab=projectOverview)
+
 ## Documentation
 1. [Installation](https://github.com/opentable/Piccolo/wiki/Installation)
 1. [GET Request Handlers](https://github.com/opentable/Piccolo/wiki/GET-Request-Handlers)
