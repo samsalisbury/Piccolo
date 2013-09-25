@@ -5,9 +5,9 @@ namespace Piccolo
 {
 	public class Response
 	{
-		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string errorMessage)
+		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string reason)
 		{
-			var responseMessage = new HttpResponseMessage(statusCode) {Content = new StringContent(errorMessage)};
+			var responseMessage = new HttpResponseMessage(statusCode) {Content = new ObjectContent(reason)};
 			return new HttpResponseMessage<TOutput>(responseMessage);
 		}
 

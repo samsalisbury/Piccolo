@@ -182,7 +182,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void content_should_be_test()
 			{
-				_response.Message.Content.ReadAsStringAsync().Result.ShouldBe("test");
+				((ObjectContent)_response.Message.Content).Content.ShouldBe("test");
 			}
 		}
 	}
