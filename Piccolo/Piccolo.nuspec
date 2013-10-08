@@ -14,7 +14,7 @@
 		<tags>api rest</tags>
 		<dependencies>
 			<group>
-				<dependency id="Microsoft.Net.Http" version="2.2.13" />
+				<dependency id="Microsoft.Net.Http" version="2.2.15" />
 				<dependency id="Newtonsoft.Json" version="[5.0,6.0)" />
 			</group>
 		</dependencies>
