@@ -59,6 +59,8 @@
     <Compile Include="IPost.cs" />
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
+    <Compile Include="Validation\IRequestValidator.cs" />
+    <Compile Include="Validation\ValidationResult.cs" />
     <None Include="NuGet\Global.asax.cs.pp">
       <DependentUpon>Global.asax.pp</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

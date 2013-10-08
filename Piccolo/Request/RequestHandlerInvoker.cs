@@ -6,6 +6,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Piccolo.Internal;
 using Piccolo.Request.ParameterBinders;
+using Piccolo.Validation;
 
 namespace Piccolo.Request
 {
@@ -21,18 +22,26 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string payload)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string payload, IRequestValidator requestValidator)
 		{
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
 			var properties = handlerType.GetProperties();
+			var postParameter = DeserialisePostParameter(payload, handlerMethod);
+
+			if (requestValidator != null)
+			{
+				var validationResult = requestValidator.Validate(routeParameters, payload);
+				if (validationResult.IsValid == false)
+					return validationResult.ErrorResponse;
+			}
 
 			BindRouteParameters(requestHandler, routeParameters, properties);
 			BindQueryParameters(requestHandler, queryParameters, properties);
 			BindContextualParameters(requestHandler, contextualParameters, properties);
-			var postParameter = DeserialisePostParameter(payload, handlerMethod);
 
-			var result = handlerMethod.Invoke(requestHandler, postParameter);
+			var parameters = postParameter != null ? new[] {postParameter} : new object[0];
+			var result = handlerMethod.Invoke(requestHandler, parameters);
 			return GetResponseMessage(result);
 		}
 
@@ -90,16 +99,16 @@ namespace Piccolo.Request
 			}
 		}
 
-		private object[] DeserialisePostParameter(string payload, MethodInfo handlerMethod)
+		private object DeserialisePostParameter(string payload, MethodInfo handlerMethod)
 		{
 			var parameters = handlerMethod.GetParameters();
 			if (parameters.Length == 0)
-				return new object[0];
+				return null;
 
 			try
 			{
 				var parameterType = parameters.First().ParameterType;
-				return new[] {_jsonDecoder(parameterType, payload)};
+				return _jsonDecoder(parameterType, payload);
 			}
 			catch (JsonReaderException jrex)
 			{
