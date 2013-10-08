@@ -884,7 +884,7 @@ namespace Piccolo.UnitTests.Request
 			[Test]
 			public void it_should_return_error_message()
 			{
-				_result.Content.ReadAsStringAsync().Result.ShouldBe("invalid");
+				((ObjectContent)_result.Content).Content.ShouldBe("invalid");
 			}
 		}
 

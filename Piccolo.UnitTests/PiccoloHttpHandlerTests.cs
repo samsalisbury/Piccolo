@@ -9,6 +9,8 @@ using NSubstitute;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.UnitTests.Events;
+using Piccolo.UnitTests.Request;
+using Piccolo.Validation;
 
 namespace Piccolo.UnitTests
 {
@@ -862,13 +864,10 @@ namespace Piccolo.UnitTests
 			{
 				_httpResponse = Substitute.For<HttpResponseBase>();
 
-				var inputStream = Substitute.For<Stream>();
-				inputStream.CanRead.Returns(false);
-
 				var httpContext = Substitute.For<HttpContextBase>();
-				httpContext.Request.HttpMethod.Returns("GET");
-				httpContext.Request.Url.Returns(new Uri("https://api.com/validation/0"));
-				httpContext.Request.InputStream.Returns(inputStream);
+				httpContext.Request.HttpMethod.Returns("POST");
+				httpContext.Request.Url.Returns(new Uri("https://api.com/validation"));
+				httpContext.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("{\"A\":\"\"}")));
 				httpContext.Response.Returns(_httpResponse);
 
 				var piccoloContext = new PiccoloContext(httpContext);
@@ -903,20 +902,19 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_error_message()
 			{
-				_httpResponse.Received().Write("{\"id missing\"}");
+				_httpResponse.Received().Write("\"invalid\"");
 			}
 		}
 
-		[Route("/validation/{id}")]
-		public class RequestHandlerWithValidator : IGet<string>
+		[Route("/validation")]
+		[ValidateWith(typeof(TestPayloadValidator))]
+		public class RequestHandlerWithValidator : IPost<RequestHandlerInvokerTests.TestResourceWithPayload.Parameters, string>
 		{
 			[ExcludeFromCodeCoverage]
-			public HttpResponseMessage<string> Get()
+			public HttpResponseMessage<string> Post(RequestHandlerInvokerTests.TestResourceWithPayload.Parameters parameters)
 			{
 				return Response.Success.Ok(string.Empty);
 			}
-
-			public int Id { get; set; }
 		}
 
 		#endregion

@@ -60,6 +60,7 @@
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="Validation\IPayloadValidator.cs" />
+    <Compile Include="Validation\ValidateWithAttribute.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
     <None Include="NuGet\Global.asax.cs.pp">
       <DependentUpon>Global.asax.pp</DependentUpon>

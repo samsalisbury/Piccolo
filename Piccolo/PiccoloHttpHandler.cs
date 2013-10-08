@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -10,6 +11,7 @@ using Piccolo.Events;
 using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Routing;
+using Piccolo.Validation;
 
 namespace Piccolo
 {
@@ -66,7 +68,8 @@ namespace Piccolo
 				if (lookupResult.IsSuccessful)
 				{
 					var requestHandler = _configuration.ObjectFactory.CreateInstance<IRequestHandler>(lookupResult.RequestHandlerType);
-					var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.Data, context.RequestPayload, null);
+					var payloadValidator = GetPayloadValidator(lookupResult.RequestHandlerType);
+					var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.Data, context.RequestPayload, payloadValidator);
 					InjectResponse(context, httpResponseMessage);
 				}
 				else
@@ -119,6 +122,15 @@ namespace Piccolo
 			{
 				_eventDispatcher.RaiseRequestProcessedEvent(context);
 			}
+		}
+
+		private object GetPayloadValidator(Type requestHandlerType)
+		{
+			var attribute = requestHandlerType.GetCustomAttributes(typeof(ValidateWithAttribute), true).Cast<ValidateWithAttribute>().SingleOrDefault();
+			if (attribute == null)
+				return null;
+
+			return _configuration.ObjectFactory.CreateInstance<object>(attribute.ValidatorType);
 		}
 
 		private void InjectResponse(PiccoloContext context, HttpResponseMessage responseMessage)
