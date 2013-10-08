@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Request;
-using Piccolo.Validation;
 using Shouldly;
 
 namespace Piccolo.UnitTests.Request
@@ -873,7 +871,7 @@ namespace Piccolo.UnitTests.Request
 			[SetUp]
 			public void SetUp()
 			{
-				_result = Invoker.Execute(new GetResourceString(), "GET", new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, object>(), null, new RequestValidator());
+				_result = Invoker.Execute(new GetResourceString(), "GET", new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, object>(), null, new TestRequestValidator());
 			}
 
 			[Test]
@@ -898,24 +896,13 @@ namespace Piccolo.UnitTests.Request
 			public void SetUp()
 			{
 				var routeParameters = new Dictionary<string, string> {{"param", "TEST"}};
-				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), null, new RequestValidator());
+				_result = Invoker.Execute(new GetResourceString(), "GET", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), null, new TestRequestValidator());
 			}
 
 			[Test]
 			public void it_should_pass_validation()
 			{
 				_result.StatusCode.ShouldBe(HttpStatusCode.OK);
-			}
-		}
-
-		public class RequestValidator : IRequestValidator
-		{
-			public ValidationResult Validate(IDictionary<string, string> routeParameters, string payload)
-			{
-				if (routeParameters.Any() == false)
-					return new ValidationResult(HttpStatusCode.BadRequest, "id missing");
-
-				return ValidationResult.Valid;
 			}
 		}
 
