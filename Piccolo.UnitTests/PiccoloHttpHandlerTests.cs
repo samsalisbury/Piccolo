@@ -851,7 +851,7 @@ namespace Piccolo.UnitTests
 		#endregion
 
 		#region Validation
-		
+
 		[TestFixture]
 		public class when_processing_request_with_invalid_parameters : given_http_handler
 		{

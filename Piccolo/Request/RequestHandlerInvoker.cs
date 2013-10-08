@@ -22,16 +22,19 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string payload, IRequestValidator requestValidator)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string payload, object payloadValidator)
 		{
 			var handlerType = requestHandler.GetType();
 			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
 			var properties = handlerType.GetProperties();
 			var postParameter = DeserialisePostParameter(payload, handlerMethod);
 
-			if (requestValidator != null)
+			if (payloadValidator != null)
 			{
-				var validationResult = requestValidator.Validate(routeParameters, payload);
+				var validatorType = payloadValidator.GetType();
+				var validationMethod = validatorType.GetMethod("validate", MethodLookupFlags);
+
+				var validationResult = (ValidationResult)validationMethod.Invoke(payloadValidator, postParameter);
 				if (validationResult.IsValid == false)
 					return validationResult.ErrorResponse;
 			}
@@ -40,8 +43,7 @@ namespace Piccolo.Request
 			BindQueryParameters(requestHandler, queryParameters, properties);
 			BindContextualParameters(requestHandler, contextualParameters, properties);
 
-			var parameters = postParameter != null ? new[] {postParameter} : new object[0];
-			var result = handlerMethod.Invoke(requestHandler, parameters);
+			var result = handlerMethod.Invoke(requestHandler, postParameter);
 			return GetResponseMessage(result);
 		}
 
@@ -99,16 +101,16 @@ namespace Piccolo.Request
 			}
 		}
 
-		private object DeserialisePostParameter(string payload, MethodInfo handlerMethod)
+		private object[] DeserialisePostParameter(string payload, MethodInfo handlerMethod)
 		{
 			var parameters = handlerMethod.GetParameters();
 			if (parameters.Length == 0)
-				return null;
+				return new object[0];
 
 			try
 			{
 				var parameterType = parameters.First().ParameterType;
-				return _jsonDecoder(parameterType, payload);
+				return new[] {_jsonDecoder(parameterType, payload)};
 			}
 			catch (JsonReaderException jrex)
 			{
