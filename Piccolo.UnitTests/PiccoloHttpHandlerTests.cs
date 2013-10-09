@@ -52,7 +52,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -139,7 +139,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -215,7 +215,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -293,7 +293,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -367,7 +367,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -436,7 +436,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -495,7 +495,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -567,7 +567,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -626,7 +626,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -699,7 +699,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -755,7 +755,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -821,7 +821,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -893,7 +893,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -952,7 +952,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -1011,7 +1011,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -1073,7 +1073,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -1146,7 +1146,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -1199,7 +1199,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
@@ -1258,7 +1258,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
 			}
 
 			[Test]
