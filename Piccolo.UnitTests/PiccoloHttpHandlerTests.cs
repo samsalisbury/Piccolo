@@ -794,6 +794,77 @@ namespace Piccolo.UnitTests
 		}
 
 		[TestFixture]
+		public class when_processing_request_with_alternate_malformed_payload : given_http_handler
+		{
+			private HttpResponseBase _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = Substitute.For<HttpResponseBase>();
+
+				var httpContext = Substitute.For<HttpContextBase>();
+				httpContext.Request.HttpMethod.Returns("POST");
+				httpContext.Request.Url.Returns(new Uri("https://api.com/alternate_malformed_payload_exception"));
+				httpContext.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("{ message: \"\" ")));
+				httpContext.Response.Returns(_httpResponse);
+
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Received().Write("RequestProcessingEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Received().Write("RequestProcessedEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Received().Write("RequestFaultedEvent handled+MalformedPayloadException");
+			}
+
+			[Test]
+			public void it_should_return_status_422()
+			{
+				_httpResponse.Received().StatusCode = 422;
+			}
+
+			[Test]
+			public void it_should_return_status_reason_unprocessable_entity()
+			{
+				_httpResponse.Received().StatusDescription = "Unprocessable Entity";
+			}
+
+			[Test]
+			public void it_should_not_return_content()
+			{
+				_httpResponse.DidNotReceive().Write(Arg.Is<string>(x => !x.Contains("Event")));
+			}
+
+			[Route("/alternate_malformed_payload_exception")]
+			public class HandlerWithRuntimeRouteParameterDatatypeMismatch : IPost<Params, string>
+			{
+				[ExcludeFromCodeCoverage]
+				public HttpResponseMessage<string> Post(Params parameters)
+				{
+					return Response.Success.NoContent<string>();
+				}
+			}
+
+			public class Params
+			{
+				public string Message { get; set; }
+			}
+		}
+
+		[TestFixture]
 		public class when_processing_request_with_malformed_payload_in_aspnet_debug_mode : given_http_handler
 		{
 			private HttpResponseBase _httpResponse;

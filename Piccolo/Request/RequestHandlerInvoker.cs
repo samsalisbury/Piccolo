@@ -115,6 +115,10 @@ namespace Piccolo.Request
 				var parameterType = parameters.First().ParameterType;
 				return new[] {_jsonDecoder(parameterType, payload)};
 			}
+			catch (JsonSerializationException jsex)
+			{
+				throw new MalformedPayloadException("Failed to deserialise request payload.", jsex);
+			}
 			catch (JsonReaderException jrex)
 			{
 				throw new MalformedPayloadException("Failed to deserialise request payload.", jrex);
