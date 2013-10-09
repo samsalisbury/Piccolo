@@ -850,6 +850,124 @@ namespace Piccolo.UnitTests
 			}
 		}
 
+		[TestFixture]
+		public class when_processing_POST_request_with_missing_payload : given_http_handler
+		{
+			private HttpResponseBase _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = Substitute.For<HttpResponseBase>();
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+
+				var httpContext = Substitute.For<HttpContextBase>();
+				httpContext.Request.HttpMethod.Returns("POST");
+				httpContext.Request.Url.Returns(new Uri("https://api.com/test-resources"));
+				httpContext.Request.InputStream.Returns(inputStream);
+				httpContext.Response.Returns(_httpResponse);
+
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Received().Write("RequestProcessingEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Received().Write("RequestProcessedEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Received().Write("RequestFaultedEvent handled+MissingPayloadException");
+			}
+
+			[Test]
+			public void it_should_return_status_400()
+			{
+				_httpResponse.Received().StatusCode = 400;
+			}
+
+			[Test]
+			public void it_should_return_status_reason_unprocessable_entity()
+			{
+				_httpResponse.Received().StatusDescription = "Bad Request";
+			}
+
+			[Test]
+			public void it_should_return_error_information()
+			{
+				_httpResponse.Received().Write(Arg.Is<string>(x => x.Contains("Payload missing")));
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_PUT_request_with_missing_payload : given_http_handler
+		{
+			private HttpResponseBase _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = Substitute.For<HttpResponseBase>();
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+
+				var httpContext = Substitute.For<HttpContextBase>();
+				httpContext.Request.HttpMethod.Returns("PUT");
+				httpContext.Request.Url.Returns(new Uri("https://api.com/test-resources/1"));
+				httpContext.Request.InputStream.Returns(inputStream);
+				httpContext.Response.Returns(_httpResponse);
+
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Received().Write("RequestProcessingEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Received().Write("RequestProcessedEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				_httpResponse.Received().Write("RequestFaultedEvent handled+MissingPayloadException");
+			}
+
+			[Test]
+			public void it_should_return_status_400()
+			{
+				_httpResponse.Received().StatusCode = 400;
+			}
+
+			[Test]
+			public void it_should_return_status_reason_unprocessable_entity()
+			{
+				_httpResponse.Received().StatusDescription = "Bad Request";
+			}
+
+			[Test]
+			public void it_should_return_error_information()
+			{
+				_httpResponse.Received().Write(Arg.Is<string>(x => x.Contains("Payload missing")));
+			}
+		}
+
 		#endregion
 
 		#region Validation

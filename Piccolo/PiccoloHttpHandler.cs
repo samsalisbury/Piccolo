@@ -95,6 +95,15 @@ namespace Piccolo
 
 				InjectResponse(context, httpResponseMessage);
 			}
+			catch (MissingPayloadException mpex)
+			{
+				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
+
+				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+				httpResponseMessage.Content = new ObjectContent("Payload missing");
+
+				InjectResponse(context, httpResponseMessage);
+			}
 			catch (MalformedPayloadException mpex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);

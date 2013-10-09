@@ -107,6 +107,9 @@ namespace Piccolo.Request
 			if (parameters.Length == 0)
 				return new object[0];
 
+			if (string.IsNullOrWhiteSpace(payload))
+				throw new MissingPayloadException();
+
 			try
 			{
 				var parameterType = parameters.First().ParameterType;
