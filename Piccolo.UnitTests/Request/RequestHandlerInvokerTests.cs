@@ -884,7 +884,8 @@ namespace Piccolo.UnitTests.Request
 			[Test]
 			public void it_should_return_error_message()
 			{
-				((ObjectContent)_result.Content).Content.ShouldBe("invalid");
+				var content = ((ObjectContent)_result.Content).Content;
+				content.GetType().GetProperty("message").GetValue(content, null).ShouldBe("invalid");
 			}
 		}
 

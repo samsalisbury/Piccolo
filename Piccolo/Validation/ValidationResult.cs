@@ -18,7 +18,7 @@ namespace Piccolo.Validation
 		public ValidationResult(HttpStatusCode statusCode, string errorMessage)
 		{
 			IsValid = false;
-			ErrorResponse = new HttpResponseMessage(statusCode) {Content = new ObjectContent(errorMessage)};
+			ErrorResponse = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {message = errorMessage})};
 		}
 
 		public static ValidationResult Valid { get; private set; }

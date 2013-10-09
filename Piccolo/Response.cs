@@ -7,7 +7,7 @@ namespace Piccolo
 	{
 		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string reason)
 		{
-			var responseMessage = new HttpResponseMessage(statusCode) {Content = new ObjectContent(reason)};
+			var responseMessage = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {message = reason})};
 			return new HttpResponseMessage<TOutput>(responseMessage);
 		}
 
@@ -15,7 +15,7 @@ namespace Piccolo
 		{
 			public static HttpResponseMessage<TOutput> BadRequest<TOutput>(string reason)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(reason)};
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(new {message = reason})};
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 
@@ -27,7 +27,7 @@ namespace Piccolo
 
 			public static HttpResponseMessage<TOutput> Gone<TOutput>(string reason)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone) {Content = new ObjectContent(reason)};
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone) {Content = new ObjectContent(new {message = reason})};
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
 		}

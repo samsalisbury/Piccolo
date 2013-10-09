@@ -182,7 +182,8 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void content_should_be_test()
 			{
-				((ObjectContent)_response.Message.Content).Content.ShouldBe("test");
+				var content = ((ObjectContent)_response.Message.Content).Content;
+				content.GetType().GetProperty("message").GetValue(content, null).ShouldBe("test");
 			}
 		}
 	}

@@ -1020,7 +1020,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_error_message()
 			{
-				_httpResponse.Received().Write("\"invalid\"");
+				_httpResponse.Received().Write("{\"message\":\"invalid\"}");
 			}
 		}
 
