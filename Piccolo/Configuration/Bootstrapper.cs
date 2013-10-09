@@ -38,16 +38,12 @@ namespace Piccolo.Configuration
 
 		private static void DiscoverEventHandlers(PiccoloConfiguration configuration, Assembly assembly)
 		{
-			configuration.EventHandlers = new EventHandlers();
-
-			var requestProcessingEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestProcessingEvent>)));
-			configuration.EventHandlers.RequestProcessing = requestProcessingEventHandlers.ToList();
-
-			var requestProcessedEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestProcessedEvent>)));
-			configuration.EventHandlers.RequestProcessed = requestProcessedEventHandlers.ToList();
-
-			var requestFaultedEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<RequestFaultedEvent>)));
-			configuration.EventHandlers.RequestFaulted = requestFaultedEventHandlers.ToList();
+			configuration.EventHandlers = new EventHandlers
+			{
+				RequestProcessing = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessingEvent>(assembly),
+				RequestProcessed = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessedEvent>(assembly),
+				RequestFaulted = EventHandlerScanner.FindEventHandlersForEvent<RequestFaultedEvent>(assembly)
+			};
 		}
 
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)

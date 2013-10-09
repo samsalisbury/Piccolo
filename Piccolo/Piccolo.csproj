@@ -36,6 +36,7 @@
     <Compile Include="Configuration\Bootstrapper.cs" />
     <Compile Include="Configuration\DefaultObjectFactory.cs" />
     <Compile Include="Configuration\EventHandlers.cs" />
+    <Compile Include="Configuration\EventHandlerScanner.cs" />
     <Compile Include="Configuration\PiccoloConfiguration.cs" />
     <Compile Include="Configuration\IObjectFactory.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
