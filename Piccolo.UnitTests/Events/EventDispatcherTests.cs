@@ -132,6 +132,7 @@ namespace Piccolo.UnitTests.Events
 		}
 
 		[ExcludeFromCodeCoverage]
+		[Priority(1)]
 		public class TestRequestProcessedEventHandlerWithStopEventProcessing : IHandle<RequestProcessedEvent>
 		{
 			public void Handle(RequestProcessedEvent args)
@@ -142,6 +143,7 @@ namespace Piccolo.UnitTests.Events
 		}
 
 		[ExcludeFromCodeCoverage]
+		[Priority(1)]
 		public class TestRequestProcessingEventHandler : IHandle<RequestProcessingEvent>
 		{
 			public void Handle(RequestProcessingEvent args)

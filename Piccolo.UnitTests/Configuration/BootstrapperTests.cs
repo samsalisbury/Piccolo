@@ -38,19 +38,19 @@ namespace Piccolo.UnitTests.Configuration
 			[Test]
 			public void it_should_autodetect_request_processing_event_handlers()
 			{
-				_handlerConfiguration.EventHandlers.RequestProcessing.Any(x => x == typeof(EventDispatcherTests.TestRequestProcessingEventHandler)).ShouldBe(true);
+				_handlerConfiguration.EventHandlers.RequestProcessing[0].ShouldBe(typeof(EventDispatcherTests.TestRequestProcessingEventHandler));
 			}
 
 			[Test]
 			public void it_should_autodetect_request_processed_event_handlers()
 			{
-				_handlerConfiguration.EventHandlers.RequestProcessed.Any(x => x == typeof(TestRequestProcessedEventHandler)).ShouldBe(true);
+				_handlerConfiguration.EventHandlers.RequestProcessed[0].ShouldBe(typeof(EventDispatcherTests.TestRequestProcessedEventHandlerWithStopEventProcessing));
 			}
 
 			[Test]
 			public void it_should_autodetect_request_faulted_event_handlers()
 			{
-				_handlerConfiguration.EventHandlers.RequestFaulted.Any(x => x == typeof(TestRequestFaultedEventHandler)).ShouldBe(true);
+				_handlerConfiguration.EventHandlers.RequestFaulted[0].ShouldBe(typeof(TestRequestFaultedEventHandler));
 			}
 
 			[Test]
@@ -113,6 +113,7 @@ namespace Piccolo.UnitTests.Configuration
 		}
 
 		[ExcludeFromCodeCoverage]
+		[Priority(1)]
 		public class TestRequestFaultedEventHandler : IHandle<RequestFaultedEvent>
 		{
 			public void Handle(RequestFaultedEvent args)

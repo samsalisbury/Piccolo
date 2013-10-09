@@ -10,8 +10,15 @@ namespace Piccolo.Configuration
 	{
 		internal static List<Type> FindEventHandlersForEvent<TEvent>(Assembly assembly) where TEvent : IEvent
 		{
-			var requestProcessingEventHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IHandle<TEvent>)));
-			return requestProcessingEventHandlers.ToList();
+			return assembly
+				.GetExportedTypes()
+				.Where(x => x.GetInterfaces().Contains(typeof(IHandle<TEvent>)))
+				.OrderBy(x =>
+				{
+					var priorityAttribute = x.GetCustomAttributes(typeof(PriorityAttribute), false).FirstOrDefault();
+					return priorityAttribute != null ? ((PriorityAttribute)priorityAttribute).Level : byte.MaxValue;
+				})
+				.ToList();
 		}
 	}
 }
