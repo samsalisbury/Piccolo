@@ -11,7 +11,7 @@ namespace Piccolo.UnitTests.Events
 	public class EventDispatcherTests
 	{
 		[TestFixture]
-		public class when_request_processing_event_is_raised_with_two_handlers_and_first_stops_event_processing
+		public class when_processing_event_is_raised_with_two_handlers_and_first_stops_event_processing
 		{
 			private HttpResponseBase _httpResponse;
 
@@ -60,15 +60,16 @@ namespace Piccolo.UnitTests.Events
 				_httpResponse = Substitute.For<HttpResponseBase>();
 				httpContext.Response.Returns(_httpResponse);
 				var piccoloContext = new PiccoloContext(httpContext);
+				const string payload = "{test:1}";
 
 				var eventDispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
-				eventDispatcher.RaiseRequestProcessedEvent(piccoloContext);
+				eventDispatcher.RaiseRequestProcessedEvent(piccoloContext, payload);
 			}
 
 			[Test]
 			public void it_should_execute_first_handler()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {test:1}");
 			}
 
 			[Test]
@@ -137,7 +138,7 @@ namespace Piccolo.UnitTests.Events
 		{
 			public void Handle(RequestProcessedEvent args)
 			{
-				args.Context.Http.Response.Write("RequestProcessedEvent handled with StopEventProcessing");
+				args.Context.Http.Response.Write("RequestProcessedEvent handled with StopEventProcessing: " + args.Payload);
 				args.StopEventProcessing = true;
 			}
 		}

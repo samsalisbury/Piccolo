@@ -34,9 +34,9 @@ namespace Piccolo.Events
 			return stopRequestProcessing;
 		}
 
-		public void RaiseRequestProcessedEvent(PiccoloContext context)
+		public void RaiseRequestProcessedEvent(PiccoloContext context, string payload)
 		{
-			var args = new RequestProcessedEvent {Context = context};
+			var args = new RequestProcessedEvent {Context = context, Payload = payload};
 			RaiseEvent(_eventHandlers.RequestProcessed, args);
 		}
 

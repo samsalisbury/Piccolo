@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Compilation;
 using Piccolo.Configuration;
 using Piccolo.Events;
-using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Routing;
 using Piccolo.Validation;
@@ -58,6 +57,7 @@ namespace Piccolo
 
 		public void ProcessRequest(PiccoloContext context)
 		{
+			string payload = null;
 			try
 			{
 				var stopRequestProcessing = _eventDispatcher.RaiseRequestProcessingEvent(context);
@@ -69,95 +69,96 @@ namespace Piccolo
 				{
 					var requestHandler = _configuration.ObjectFactory.CreateInstance<IRequestHandler>(lookupResult.RequestHandlerType);
 					var payloadValidator = GetPayloadValidator(lookupResult.RequestHandlerType);
-					var httpResponseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.Data, context.RequestPayload, payloadValidator);
-					InjectResponse(context, httpResponseMessage);
+					var responseMessage = (HttpResponseMessage)_requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.Data, context.RequestPayload, payloadValidator);
+
+					payload = SerialisePayload(responseMessage.Content);
+					InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
 				}
 				else
-					InjectResponse(context, new HttpResponseMessage(HttpStatusCode.NotFound));
+				{
+					var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
+					InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, null);
+				}
 			}
 			catch (RouteParameterDatatypeMismatchException rpdmex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, rpdmex);
 
-				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
 				if (context.Http.IsDebuggingEnabled)
-					httpResponseMessage.Content = new ObjectContent(rpdmex);
+					payload = SerialisePayload(new ObjectContent(rpdmex));
 
-				InjectResponse(context, httpResponseMessage);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
 			}
 			catch (MalformedParameterException mpex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
 
-				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
 				if (context.Http.IsDebuggingEnabled)
-					httpResponseMessage.Content = new ObjectContent(mpex);
+					payload = SerialisePayload(new ObjectContent(mpex));
 
-				InjectResponse(context, httpResponseMessage);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
 			}
 			catch (MissingPayloadException mpex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
 
-				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-				httpResponseMessage.Content = new ObjectContent(new {message = "Payload missing"});
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
+				payload = SerialisePayload(new ObjectContent(new {message = "Payload missing"}));
 
-				InjectResponse(context, httpResponseMessage);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
 			}
 			catch (MalformedPayloadException mpex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
 
-				var httpResponseMessage = new HttpResponseMessage
-				{
-					StatusCode = (HttpStatusCode)422,
-					ReasonPhrase = "Unprocessable Entity",
-					Content = context.Http.IsDebuggingEnabled ? new ObjectContent(mpex) : null
-				};
+				if (context.Http.IsDebuggingEnabled)
+					payload = SerialisePayload(new ObjectContent(mpex));
 
-				InjectResponse(context, httpResponseMessage);
+				InjectResponse(context, (HttpStatusCode)422, "Unprocessable Entity", payload);
 			}
 			catch (Exception ex)
 			{
 				_eventDispatcher.RaiseRequestFaultedEvent(context, ex);
 
-				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError);
 				if (context.Http.IsDebuggingEnabled)
-					httpResponseMessage.Content = new ObjectContent(ex);
+					payload = SerialisePayload(new ObjectContent(ex));
 
-				InjectResponse(context, httpResponseMessage);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
 			}
 			finally
 			{
-				_eventDispatcher.RaiseRequestProcessedEvent(context);
+				_eventDispatcher.RaiseRequestProcessedEvent(context, payload);
 			}
 		}
 
 		private object GetPayloadValidator(Type requestHandlerType)
 		{
 			var attribute = requestHandlerType.GetCustomAttributes(typeof(ValidateWithAttribute), true).Cast<ValidateWithAttribute>().SingleOrDefault();
-			if (attribute == null)
+			return attribute == null ? null : _configuration.ObjectFactory.CreateInstance<object>(attribute.ValidatorType);
+		}
+
+		private string SerialisePayload(HttpContent httpContent)
+		{
+			if (httpContent == null)
 				return null;
 
-			return _configuration.ObjectFactory.CreateInstance<object>(attribute.ValidatorType);
+			var objectContent = (ObjectContent)httpContent;
+			return _configuration.JsonSerialiser(objectContent.Content);
 		}
 
-		private void InjectResponse(PiccoloContext context, HttpResponseMessage responseMessage)
+		private static void InjectResponse(PiccoloContext context, HttpStatusCode statusCode, string reasonPhrase, string payload)
 		{
-			context.Http.Response.StatusCode = (int)responseMessage.StatusCode;
-			context.Http.Response.StatusDescription = responseMessage.ReasonPhrase;
+			context.Http.Response.StatusCode = (int)statusCode;
+			context.Http.Response.StatusDescription = reasonPhrase;
 
-			if (responseMessage.HasContent())
+			if (payload != null)
 			{
 				context.Http.Response.ContentType = "application/json";
-				context.Http.Response.Write(SerialisePayload(responseMessage));
+				context.Http.Response.Write(payload);
 			}
-		}
-
-		private string SerialisePayload(HttpResponseMessage responseMessage)
-		{
-			var objectContent = (ObjectContent)responseMessage.Content;
-			return _configuration.JsonSerialiser(objectContent.Content);
 		}
 	}
 }

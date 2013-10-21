@@ -104,15 +104,6 @@ namespace Piccolo.UnitTests.Configuration
 		}
 
 		[ExcludeFromCodeCoverage]
-		public class TestRequestProcessedEventHandler : IHandle<RequestProcessedEvent>
-		{
-			public void Handle(RequestProcessedEvent args)
-			{
-				args.Context.Http.Response.Write("RequestProcessedEvent handled");
-			}
-		}
-
-		[ExcludeFromCodeCoverage]
 		[Priority(1)]
 		public class TestRequestFaultedEventHandler : IHandle<RequestFaultedEvent>
 		{
