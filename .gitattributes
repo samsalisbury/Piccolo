@@ -1,0 +1,6 @@
+* text=auto
+*.cs text
+*.csproj text
+*.nuspec text
+*.xml text
+*.sln text eol=crlf
