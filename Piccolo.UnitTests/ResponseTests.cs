@@ -33,6 +33,30 @@ namespace Piccolo.UnitTests
 			}
 
 			[TestFixture]
+			public class when_unauthorized_response_message_is_returned
+			{
+				private HttpResponseMessage<object> _response;
+
+				[SetUp]
+				public void SetUp()
+				{
+					_response = Response.Error.Unauthorized<object>("unauthorized");
+				}
+
+				[Test]
+				public void status_code_should_be_401()
+				{
+					_response.Message.StatusCode.ShouldBe((HttpStatusCode)401);
+				}
+
+				[Test]
+				public void reason_phrase_should_be_unauthorized()
+				{
+					_response.Message.ReasonPhrase.ShouldBe("Unauthorized");
+				}
+			}
+
+			[TestFixture]
 			public class when_not_found_response_message_is_returned
 			{
 				private HttpResponseMessage<object> _response;
@@ -77,30 +101,6 @@ namespace Piccolo.UnitTests
 				public void reason_phrase_should_be_gone()
 				{
 					_response.Message.ReasonPhrase.ShouldBe("Gone");
-				}
-			}
-
-			[TestFixture]
-			public class when_unauthorized_response_message_is_returned
-			{
-				private HttpResponseMessage<object> _response;
-
-				[SetUp]
-				public void SetUp()
-				{
-					_response = Response.Error.Unauthorized<object>("unauthorized");
-				}
-
-				[Test]
-				public void status_code_should_be_401()
-				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)401);
-				}
-
-				[Test]
-				public void reason_phrase_should_be_unauthorized()
-				{
-					_response.Message.ReasonPhrase.ShouldBe("Unauthorized");
 				}
 			}
 		}
