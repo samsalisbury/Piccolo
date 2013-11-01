@@ -30,6 +30,12 @@ namespace Piccolo
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone) {Content = new ObjectContent(new {message = reason})};
 				return new HttpResponseMessage<TOutput>(responseMessage);
 			}
+
+			public static HttpResponseMessage<TOutput> Unauthorized<TOutput>(string reason)
+			{
+				var responseMessage = new HttpResponseMessage(HttpStatusCode.Unauthorized) {Content = new ObjectContent(new {message = reason})};
+				return new HttpResponseMessage<TOutput>(responseMessage);
+			}
 		}
 
 		public class Success
