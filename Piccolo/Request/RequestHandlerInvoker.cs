@@ -39,7 +39,11 @@ namespace Piccolo.Request
 			}
 
 			BindRouteParameters(requestHandler, routeParameters, properties);
-			BindQueryParameters(requestHandler, queryParameters, properties);
+
+			var responseMessage = BindQueryParameters(requestHandler, queryParameters, properties);
+			if (responseMessage != null)
+				return responseMessage;
+
 			BindContextualParameters(requestHandler, contextualParameters, properties);
 
 			var result = handlerMethod.Invoke(requestHandler, postParameter);
@@ -65,7 +69,7 @@ namespace Piccolo.Request
 			}
 		}
 
-		private void BindQueryParameters(IRequestHandler requestHandler, IDictionary<string, string> queryParameters, IEnumerable<PropertyInfo> properties)
+		private HttpResponseMessage BindQueryParameters(IRequestHandler requestHandler, IDictionary<string, string> queryParameters, IEnumerable<PropertyInfo> properties)
 		{
 			var optionalProperties = properties.Where(x => x.GetCustomAttributes(typeof(OptionalAttribute), true).Any());
 
@@ -79,9 +83,23 @@ namespace Piccolo.Request
 				if (binder == null)
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
+				var validatorAttribute = property.GetCustomAttributes(typeof(ValidateWithAttribute), true).SingleOrDefault();
+				var validatorType = validatorAttribute != null ? ((ValidateWithAttribute)validatorAttribute).ValidatorType : null;
+
 				try
 				{
 					var value = binder(queryParameter.Value);
+
+					if (validatorType != null)
+					{
+						var validationMethod = validatorType.GetMethod("validate", MethodLookupFlags);
+
+						var validator = Activator.CreateInstance(validatorType);
+						var validationResult = (ValidationResult)validationMethod.Invoke(validator, new[] {value});
+						if (validationResult.IsValid == false)
+							return validationResult.ErrorResponse;
+					}
+
 					property.SetValue(requestHandler, value, null);
 				}
 				catch (FormatException)
@@ -89,6 +107,8 @@ namespace Piccolo.Request
 					throw new MalformedParameterException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, queryParameter.Value));
 				}
 			}
+
+			return null;
 		}
 
 		private static void BindContextualParameters(IRequestHandler requestHandler, IDictionary<string, object> contextualParameters, IEnumerable<PropertyInfo> properties)

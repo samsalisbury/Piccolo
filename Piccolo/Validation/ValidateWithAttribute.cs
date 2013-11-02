@@ -2,7 +2,7 @@
 
 namespace Piccolo.Validation
 {
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 	public sealed class ValidateWithAttribute : Attribute
 	{
 		public ValidateWithAttribute(Type validatorType)

@@ -61,6 +61,7 @@
     <Compile Include="IPost.cs" />
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
+    <Compile Include="Validation\IParameterValidator.cs" />
     <Compile Include="Validation\IPayloadValidator.cs" />
     <Compile Include="Validation\ValidateWithAttribute.cs" />
     <Compile Include="Validation\ValidationResult.cs" />

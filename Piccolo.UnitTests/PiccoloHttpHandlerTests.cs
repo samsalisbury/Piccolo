@@ -1044,7 +1044,7 @@ namespace Piccolo.UnitTests
 		#region Validation
 
 		[TestFixture]
-		public class when_processing_request_with_invalid_parameters : given_http_handler
+		public class when_processing_request_with_invalid_payload : given_http_handler
 		{
 			private HttpResponseBase _httpResponse;
 
@@ -1055,7 +1055,7 @@ namespace Piccolo.UnitTests
 
 				var httpContext = Substitute.For<HttpContextBase>();
 				httpContext.Request.HttpMethod.Returns("POST");
-				httpContext.Request.Url.Returns(new Uri("https://api.com/validation"));
+				httpContext.Request.Url.Returns(new Uri("https://api.com/validation/payload"));
 				httpContext.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("{\"A\":\"\"}")));
 				httpContext.Response.Returns(_httpResponse);
 
@@ -1095,12 +1095,81 @@ namespace Piccolo.UnitTests
 			}
 		}
 
-		[Route("/validation")]
+		[TestFixture]
+		public class when_processing_request_with_invalid_optional_parameter : given_http_handler
+		{
+			private HttpResponseBase _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = Substitute.For<HttpResponseBase>();
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+
+				var httpContext = Substitute.For<HttpContextBase>();
+				httpContext.Request.HttpMethod.Returns("GET");
+				httpContext.Request.Url.Returns(new Uri("https://api.com/validation/optional-parameter?age=-1"));
+				httpContext.Request.InputStream.Returns(inputStream);
+				httpContext.Response.Returns(_httpResponse);
+
+				var piccoloContext = new PiccoloContext(httpContext);
+
+				PiccoloHttpHandler.ProcessRequest(piccoloContext);
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Received().Write("RequestProcessingEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"message\":\"invalid age\"}");
+			}
+
+			[Test]
+			public void it_should_not_raise_request_faulted_event()
+			{
+				_httpResponse.DidNotReceive().Write("RequestFaultedEvent handled");
+			}
+
+			[Test]
+			public void it_should_return_status_400()
+			{
+				_httpResponse.Received().StatusCode = 400;
+			}
+
+			[Test]
+			public void it_should_return_error_message()
+			{
+				_httpResponse.Received().Write("{\"message\":\"invalid age\"}");
+			}
+		}
+
+		[Route("/validation/payload")]
 		[ValidateWith(typeof(TestPayloadValidator))]
-		public class RequestHandlerWithValidator : IPost<RequestHandlerInvokerTests.TestResourceWithPayload.Parameters, string>
+		public class RequestHandlerWithPayloadValidator : IPost<RequestHandlerInvokerTests.TestResourceWithPayload.Parameters, string>
 		{
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Post(RequestHandlerInvokerTests.TestResourceWithPayload.Parameters parameters)
+			{
+				return Response.Success.Ok(string.Empty);
+			}
+		}
+
+		[Route("/validation/optional-parameter")]
+		[ExcludeFromCodeCoverage]
+		public class RequestHandlerWithParameterValidator : IGet<string>
+		{
+			[Optional]
+			[ValidateWith(typeof(TestParameterValidator))]
+			public int Age { get; set; }
+
+			public HttpResponseMessage<string> Get()
 			{
 				return Response.Success.Ok(string.Empty);
 			}

@@ -35,6 +35,7 @@
     </Compile>
     <Compile Include="Configuration\BootstrapperTests.cs" />
     <Compile Include="Configuration\DefaultObjectFactoryTests.cs" />
+    <Compile Include="TestParameterValidator.cs" />
     <Compile Include="Events\EventDispatcherTests.cs" />
     <Compile Include="PiccoloContextTests.cs" />
     <Compile Include="PiccoloHttpHandlerTests.cs" />
