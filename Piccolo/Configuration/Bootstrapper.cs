@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Piccolo.Events;
 using Piccolo.Internal;
-using Piccolo.Request.ParameterBinders;
 
 namespace Piccolo.Configuration
 {
@@ -49,24 +48,26 @@ namespace Piccolo.Configuration
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)
 		{
 			configuration.ObjectFactory = new DefaultObjectFactory();
-			configuration.ParameterBinders = new Dictionary<Type, IParameterBinder>
+			configuration.ParameterBinders = new Dictionary<Type, Func<string, object>>
 			{
-				{typeof(String), new StringParameterBinder()},
-				{typeof(Boolean), new BooleanParameterBinder()},
-				{typeof(Boolean?), new NullableBooleanParameterBinder()},
-				{typeof(Byte), new ByteParameterBinder()},
-				{typeof(Byte?), new NullableByteParameterBinder()},
-				{typeof(Int16), new Int16ParameterBinder()},
-				{typeof(Int16?), new NullableInt16ParameterBinder()},
-				{typeof(Int32), new Int32ParameterBinder()},
-				{typeof(Int32?), new NullableInt32ParameterBinder()},
-				{typeof(DateTime), new DateTimeParameterBinder()},
-				{typeof(DateTime?), new NullableDateTimeParameterBinder()}
+				{typeof(String), x => x},
+				{typeof(Boolean), x => Boolean.Parse(x)},
+				{typeof(Boolean?), x => Boolean.Parse(x)},
+				{typeof(Byte), x => Byte.Parse(x)},
+				{typeof(Byte?), x => Byte.Parse(x)},
+				{typeof(Int16), x => Int16.Parse(x)},
+				{typeof(Int16?), x => Int16.Parse(x)},
+				{typeof(Int32), x => Int32.Parse(x)},
+				{typeof(Int32?), x => Int32.Parse(x)},
+				{typeof(DateTime), x => DateTime.Parse(x)},
+				{typeof(DateTime?), x => DateTime.Parse(x)}
 			};
 			configuration.JsonSerialiser = model =>
 			{
-				var jsonSerializerSettings = new JsonSerializerSettings();
-				jsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+				var jsonSerializerSettings = new JsonSerializerSettings
+				{
+					ContractResolver = new CamelCasePropertyNamesContractResolver()
+				};
 
 				return JsonConvert.SerializeObject(model, jsonSerializerSettings);
 			};

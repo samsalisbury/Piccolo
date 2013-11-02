@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Reflection;
 using Newtonsoft.Json;
 using Piccolo.Internal;
-using Piccolo.Request.ParameterBinders;
 using Piccolo.Validation;
 
 namespace Piccolo.Request
@@ -14,9 +13,9 @@ namespace Piccolo.Request
 	{
 		private const BindingFlags MethodLookupFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
 		private readonly Func<Type, string, object> _jsonDecoder;
-		private readonly IDictionary<Type, IParameterBinder> _routeParameterBinders;
+		private readonly IDictionary<Type, Func<string, object>> _routeParameterBinders;
 
-		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, IDictionary<Type, IParameterBinder> routeParameterBinders)
+		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, IDictionary<Type, Func<string, object>> routeParameterBinders)
 		{
 			_jsonDecoder = jsonDecoder;
 			_routeParameterBinders = routeParameterBinders;
@@ -56,7 +55,8 @@ namespace Piccolo.Request
 
 				try
 				{
-					binder.BindParameter(requestHandler, property, routeParameter.Value);
+					var value = binder(routeParameter.Value);
+					property.SetValue(requestHandler, value, null);
 				}
 				catch (FormatException)
 				{
@@ -81,7 +81,8 @@ namespace Piccolo.Request
 
 				try
 				{
-					binder.BindParameter(requestHandler, property, queryParameter.Value);
+					var value = binder(queryParameter.Value);
+					property.SetValue(requestHandler, value, null);
 				}
 				catch (FormatException)
 				{

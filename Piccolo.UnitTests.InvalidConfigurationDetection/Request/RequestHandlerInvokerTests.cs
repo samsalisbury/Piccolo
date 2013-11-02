@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Piccolo.Request;
-using Piccolo.Request.ParameterBinders;
 using Shouldly;
 
 namespace Piccolo.UnitTests.InvalidConfigurationDetection.Request
@@ -14,7 +13,7 @@ namespace Piccolo.UnitTests.InvalidConfigurationDetection.Request
 		[Test]
 		public void it_should_throw_exception()
 		{
-			var handlerInvoker = new RequestHandlerInvoker(null, new Dictionary<Type, IParameterBinder>());
+			var handlerInvoker = new RequestHandlerInvoker(null, new Dictionary<Type, Func<string, object>>());
 
 			Should.Throw<InvalidOperationException>(() =>
 			{
