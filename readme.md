@@ -1,5 +1,5 @@
 # Piccolo
-A modular micro-framework for creating APIs.
+A micro-framework for creating APIs.
 
 ## Quickstart
 **1)** New web application project (.net 4.0+)<br />
