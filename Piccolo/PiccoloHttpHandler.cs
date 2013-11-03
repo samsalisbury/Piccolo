@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Compilation;
 using Piccolo.Configuration;
 using Piccolo.Events;
+using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Routing;
 using Piccolo.Validation;

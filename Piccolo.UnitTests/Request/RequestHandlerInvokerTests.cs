@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Reflection;
 using NUnit.Framework;
 using Piccolo.Configuration;
+using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Validation;
 using Shouldly;
@@ -247,17 +248,6 @@ namespace Piccolo.UnitTests.Request
 			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET 2013-07-22T00:00:00");
-			}
-		}
-
-		[TestFixture]
-		public class when_executing_get_request_with_invalid_parameter_value : given_request_handler_invoker
-		{
-			[Test]
-			public void it_should_thrown_exception()
-			{
-				var routeParameters = new Dictionary<string, string> {{"param", "undefined"}};
-				Assert.Throws<RouteParameterDatatypeMismatchException>(() => Invoker.Execute(new GetResourceInt32(), "GET", routeParameters, new Dictionary<string, string>(), new Dictionary<string, object>(), string.Empty, null));
 			}
 		}
 
@@ -556,17 +546,6 @@ namespace Piccolo.UnitTests.Request
 			public void it_should_bind_parameters()
 			{
 				_result.ShouldBe("GET ");
-			}
-		}
-
-		[TestFixture]
-		public class when_executing_get_request_with_invalid_optional_parameter_value : given_request_handler_invoker
-		{
-			[Test]
-			public void it_should_thrown_exception()
-			{
-				var queryParameters = new Dictionary<string, string> {{"param", "undefined"}};
-				Assert.Throws<MalformedParameterException>(() => Invoker.Execute(new GetResourceOptionalInt32(), "GET", new Dictionary<string, string>(), queryParameters, new Dictionary<string, object>(), string.Empty, null));
 			}
 		}
 

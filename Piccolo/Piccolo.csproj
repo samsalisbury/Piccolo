@@ -42,15 +42,16 @@
     <Compile Include="Configuration\IStartupTask.cs" />
     <Compile Include="ContextualAttribute.cs" />
     <Compile Include="Events\PriorityAttribute.cs" />
-    <Compile Include="MalformedParameterException.cs" />
+    <Compile Include="Internal\MalformedParameterException.cs" />
+    <Compile Include="Internal\MalformedPayloadException.cs" />
+    <Compile Include="Internal\MissingPayloadException.cs" />
     <Compile Include="Events\EventDispatcher.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\IHandle.cs" />
     <Compile Include="Events\RequestFaultedEvent.cs" />
     <Compile Include="Events\RequestProcessedEvent.cs" />
     <Compile Include="Events\RequestProcessingEvent.cs" />
-    <Compile Include="MalformedPayloadException.cs" />
-    <Compile Include="MissingPayloadException.cs" />
+    <Compile Include="Internal\RouteParameterDatatypeMismatchException.cs" />
     <Compile Include="PiccoloContext.cs" />
     <Compile Include="PiccoloHttpHandler.cs" />
     <Compile Include="HttpResponseMessage.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="Request\RequestHandlerInvoker.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="RouteAttribute.cs" />
-    <Compile Include="RouteParameterDatatypeMismatchException.cs" />
     <Compile Include="Routing\RouteHandlerLookupResult.cs" />
     <Compile Include="Routing\RequestRouter.cs" />
     <Compile Include="Routing\RequestHandlerDescriptor.cs" />

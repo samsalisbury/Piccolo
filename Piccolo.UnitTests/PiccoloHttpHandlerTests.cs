@@ -567,7 +567,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write(Arg.Is<string>(x => x.StartsWith("RequestProcessedEvent handled with StopEventProcessing: {\"ClassName\":\"Piccolo.RouteParameterDatatypeMismatchException\"")));
+				_httpResponse.Received().Write(Arg.Is<string>(x => x.StartsWith("RequestProcessedEvent handled with StopEventProcessing: {\"ClassName\":\"Piccolo.Internal.RouteParameterDatatypeMismatchException\"")));
 			}
 
 			[Test]
@@ -699,7 +699,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write(Arg.Is<string>(x => x.StartsWith("RequestProcessedEvent handled with StopEventProcessing: {\"ClassName\":\"Piccolo.MalformedParameterException\"")));
+				_httpResponse.Received().Write(Arg.Is<string>(x => x.StartsWith("RequestProcessedEvent handled with StopEventProcessing: {\"ClassName\":\"Piccolo.Internal.MalformedParameterException\"")));
 			}
 
 			[Test]
@@ -893,7 +893,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write(Arg.Is<string>(x => x.StartsWith("RequestProcessedEvent handled with StopEventProcessing: {\"ClassName\":\"Piccolo.MalformedPayloadException\"")));
+				_httpResponse.Received().Write(Arg.Is<string>(x => x.StartsWith("RequestProcessedEvent handled with StopEventProcessing: {\"ClassName\":\"Piccolo.Internal.MalformedPayloadException\"")));
 			}
 
 			[Test]
