@@ -42,6 +42,7 @@
     <Compile Include="Configuration\IStartupTask.cs" />
     <Compile Include="ContextualAttribute.cs" />
     <Compile Include="Events\PriorityAttribute.cs" />
+    <Compile Include="Internal\ReflectionExtensions.cs" />
     <Compile Include="Internal\MalformedParameterException.cs" />
     <Compile Include="Internal\MalformedPayloadException.cs" />
     <Compile Include="Internal\MissingPayloadException.cs" />

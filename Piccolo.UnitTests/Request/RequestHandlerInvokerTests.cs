@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Reflection;
 using NUnit.Framework;
 using Piccolo.Configuration;
-using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Validation;
 using Shouldly;

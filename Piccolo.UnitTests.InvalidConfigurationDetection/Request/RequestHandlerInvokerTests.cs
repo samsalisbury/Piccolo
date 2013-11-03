@@ -17,7 +17,7 @@ namespace Piccolo.UnitTests.InvalidConfigurationDetection.Request
 
 			Should.Throw<InvalidOperationException>(() =>
 			{
-				var queryParameters = new Dictionary<string, string> {{"Param", "value"}};
+				var queryParameters = new Dictionary<string, string> {{"param", "value"}};
 				handlerInvoker.Execute(new Handler(), "GET", new Dictionary<string, string>(), queryParameters, new Dictionary<string, object>(), null, null);
 			});
 		}

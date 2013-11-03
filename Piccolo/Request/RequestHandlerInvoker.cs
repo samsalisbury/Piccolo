@@ -11,7 +11,6 @@ namespace Piccolo.Request
 {
 	public class RequestHandlerInvoker
 	{
-		private const BindingFlags MethodLookupFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
 		private readonly Func<Type, string, object> _jsonDecoder;
 		private readonly IDictionary<Type, Func<string, object>> _routeParameterBinders;
 
@@ -21,62 +20,63 @@ namespace Piccolo.Request
 			_routeParameterBinders = routeParameterBinders;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string payload, object payloadValidator)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator)
 		{
-			var handlerType = requestHandler.GetType();
-			var handlerMethod = handlerType.GetMethod(verb, MethodLookupFlags);
-			var properties = handlerType.GetProperties();
-			var postParameter = DeserialisePostParameter(payload, handlerMethod);
+			BindRouteParameters(requestHandler, routeParameters);
+			BindContextualParameters(requestHandler, contextualParameters);
 
-			if (payloadValidator != null)
-			{
-				var validatorType = payloadValidator.GetType();
-				var validationMethod = validatorType.GetMethod("validate", MethodLookupFlags);
+			var queryParameterValidationResult = BindQueryParameters(requestHandler, queryParameters);
+			if (queryParameterValidationResult.IsValid == false)
+				return queryParameterValidationResult.ErrorResponse;
 
-				var validationResult = (ValidationResult)validationMethod.Invoke(payloadValidator, postParameter);
-				if (validationResult.IsValid == false)
-					return validationResult.ErrorResponse;
-			}
+			var payload = DeserialisePayload(requestHandler, verb, rawPayload);
+			var payloadValidationResult = ValidatePayload(payloadValidator, payload);
+			if (payloadValidationResult.IsValid == false)
+				return payloadValidationResult.ErrorResponse;
 
-			BindRouteParameters(requestHandler, routeParameters, properties);
-
-			var responseMessage = BindQueryParameters(requestHandler, queryParameters, properties);
-			if (responseMessage != null)
-				return responseMessage;
-
-			BindContextualParameters(requestHandler, contextualParameters, properties);
-
-			var result = handlerMethod.Invoke(requestHandler, postParameter);
-			return GetResponseMessage(result);
+			return GetResponseMessage(requestHandler.InvokeMethod<object>(verb, payload));
 		}
 
-		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters, PropertyInfo[] properties)
+		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters)
 		{
-			foreach (var routeParameter in routeParameters)
+			var requestHandlerType = requestHandler.GetType();
+
+			foreach (var parameter in routeParameters)
 			{
-				var property = properties.Single(x => x.Name.Equals(routeParameter.Key, StringComparison.InvariantCultureIgnoreCase));
+				var property = requestHandlerType.GetProperty(parameter.Key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
 				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
 
 				try
 				{
-					var value = binder(routeParameter.Value);
+					var value = binder(parameter.Value);
 					property.SetValue(requestHandler, value, null);
 				}
 				catch (FormatException)
 				{
-					throw new RouteParameterDatatypeMismatchException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, routeParameter.Value));
+					throw new RouteParameterDatatypeMismatchException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, parameter.Value));
 				}
 			}
 		}
 
-		private HttpResponseMessage BindQueryParameters(IRequestHandler requestHandler, IDictionary<string, string> queryParameters, IEnumerable<PropertyInfo> properties)
+		private static void BindContextualParameters(IRequestHandler requestHandler, IDictionary<string, object> contextualParameters)
 		{
-			var optionalProperties = properties.Where(x => x.GetCustomAttributes(typeof(OptionalAttribute), true).Any());
+			var properties = requestHandler.GetType().GetPropertiesDecoratedWith<ContextualAttribute>();
 
-			foreach (var property in optionalProperties)
+			foreach (var property in properties)
 			{
-				var queryParameter = queryParameters.SingleOrDefault(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
-				if (queryParameter.Equals(default(KeyValuePair<string, string>)))
+				var parameter = contextualParameters.SingleOrDefault(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
+				property.SetValue(requestHandler, parameter.Value, null);
+			}
+		}
+
+		private ValidationResult BindQueryParameters(IRequestHandler requestHandler, IDictionary<string, string> queryParameters)
+		{
+			var properties = requestHandler.GetType().GetPropertiesDecoratedWith<OptionalAttribute>();
+
+			foreach (var property in properties)
+			{
+				var parameter = queryParameters.GetValue(property.Name.ToLower());
+				if (parameter == null)
 					continue;
 
 				var binder = _routeParameterBinders.SingleOrDefault(x => x.Key == property.PropertyType).Value;
@@ -84,48 +84,34 @@ namespace Piccolo.Request
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
 				var validatorAttribute = property.GetCustomAttributes(typeof(ValidateWithAttribute), true).SingleOrDefault();
-				var validatorType = validatorAttribute != null ? ((ValidateWithAttribute)validatorAttribute).ValidatorType : null;
+				var parameterValidatorType = validatorAttribute != null ? ((ValidateWithAttribute)validatorAttribute).ValidatorType : null;
 
 				try
 				{
-					var value = binder(queryParameter.Value);
-
-					if (validatorType != null)
+					var value = binder(parameter);
+					if (parameterValidatorType != null)
 					{
-						var validationMethod = validatorType.GetMethod("validate", MethodLookupFlags);
-
-						var validator = Activator.CreateInstance(validatorType);
-						var validationResult = (ValidationResult)validationMethod.Invoke(validator, new[] {value});
+						var parameterValidator = Activator.CreateInstance(parameterValidatorType);
+						var validationResult = parameterValidator.InvokeMethod<ValidationResult>("validate", new[] {value});
 						if (validationResult.IsValid == false)
-							return validationResult.ErrorResponse;
+							return validationResult;
 					}
 
 					property.SetValue(requestHandler, value, null);
 				}
 				catch (FormatException)
 				{
-					throw new MalformedParameterException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, queryParameter.Value));
+					throw new MalformedParameterException(ExceptionMessageBuilder.BuildInvalidParameterAssignmentMessage(property, parameter));
 				}
 			}
 
-			return null;
+			return ValidationResult.Valid;
 		}
 
-		private static void BindContextualParameters(IRequestHandler requestHandler, IDictionary<string, object> contextualParameters, IEnumerable<PropertyInfo> properties)
+		private object[] DeserialisePayload(IRequestHandler requestHandler, string verb, string payload)
 		{
-			var contextualProperties = properties.Where(x => x.GetCustomAttributes(typeof(ContextualAttribute), true).Any());
-
-			foreach (var property in contextualProperties)
-			{
-				var contextualParameter = contextualParameters.SingleOrDefault(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
-				property.SetValue(requestHandler, contextualParameter.Value, null);
-			}
-		}
-
-		private object[] DeserialisePostParameter(string payload, MethodInfo handlerMethod)
-		{
-			var parameters = handlerMethod.GetParameters();
-			if (parameters.Length == 0)
+			var type = requestHandler.GetType().GetMethodParameterType(verb);
+			if (type == null)
 				return new object[0];
 
 			if (string.IsNullOrWhiteSpace(payload))
@@ -133,8 +119,7 @@ namespace Piccolo.Request
 
 			try
 			{
-				var parameterType = parameters.First().ParameterType;
-				return new[] {_jsonDecoder(parameterType, payload)};
+				return new[] {_jsonDecoder(type, payload)};
 			}
 			catch (JsonSerializationException jsex)
 			{
@@ -146,10 +131,17 @@ namespace Piccolo.Request
 			}
 		}
 
+		private static ValidationResult ValidatePayload(object payloadValidator, object[] payload)
+		{
+			if (payloadValidator == null)
+				return ValidationResult.Valid;
+
+			return payloadValidator.InvokeMethod<ValidationResult>("validate", payload);
+		}
+
 		private static HttpResponseMessage GetResponseMessage(object result)
 		{
-			var messageProperty = result.GetType().GetProperty("Message");
-			return messageProperty.GetValue(result, null) as HttpResponseMessage;
+			return result.GetPropertyValue<HttpResponseMessage>("message");
 		}
 	}
 }
