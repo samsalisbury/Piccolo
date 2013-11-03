@@ -1,5 +1,7 @@
 ﻿using Piccolo.Tasks.Repositories;
+using Piccolo.Tasks.Validators;
 using Piccolo.Tasks.ViewModels;
+using Piccolo.Validation;
 
 namespace Piccolo.Tasks.RequestHandlers
 {
@@ -17,6 +19,7 @@ namespace Piccolo.Tasks.RequestHandlers
 		public int? PageNumber { get; set; }
 
 		[Optional]
+		[ValidateWith(typeof(PageSizeValidator))]
 		public int? PageSize { get; set; }
 
 		[Optional]

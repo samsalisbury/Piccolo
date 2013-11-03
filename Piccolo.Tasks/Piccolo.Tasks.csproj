@@ -65,6 +65,7 @@
     <Compile Include="Startup\IoC\StartupTask.cs" />
     <Compile Include="Startup\IoC\SamplesRegistry.cs" />
     <Compile Include="Startup\IoC\StructureMapObjectFactory.cs" />
+    <Compile Include="Validators\PageSizeValidator.cs" />
     <Compile Include="ViewModels\AddTaskParameters.cs" />
     <Compile Include="ViewModels\TaskCollection.cs" />
     <Compile Include="ViewModels\UpdateTaskParameters.cs" />
