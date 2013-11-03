@@ -27,7 +27,7 @@ namespace Piccolo.Events
 
 				stopRequestProcessing = args.StopRequestProcessing;
 
-				if (args.StopEventProcessing)
+				if (stopRequestProcessing)
 					break;
 			}
 

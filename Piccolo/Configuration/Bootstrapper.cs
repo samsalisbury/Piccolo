@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Web;
 using Newtonsoft.Json;
@@ -29,10 +28,15 @@ namespace Piccolo.Configuration
 			return configuration;
 		}
 
+		private static bool AutomaticAssemblyDetectionFailed(Assembly assembly)
+		{
+			return assembly == typeof(HttpApplication).BaseType.Assembly;
+		}
+
 		private static void DiscoverRequestHandlers(PiccoloConfiguration configuration, Assembly assembly)
 		{
-			var requestHandlers = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IRequestHandler)));
-			configuration.RequestHandlers = requestHandlers.ToList();
+			var requestHandlers = assembly.GetTypesImplementing<IRequestHandler>();
+			configuration.RequestHandlers = requestHandlers;
 		}
 
 		private static void DiscoverEventHandlers(PiccoloConfiguration configuration, Assembly assembly)
@@ -76,18 +80,13 @@ namespace Piccolo.Configuration
 
 		private static void RunStartupTasks(PiccoloConfiguration configuration, Assembly assembly)
 		{
-			var bootstrapperTypes = assembly.GetExportedTypes().Where(x => x.GetInterfaces().Contains(typeof(IStartupTask)));
+			var bootstrapperTypes = assembly.GetTypesImplementing<IStartupTask>();
 
 			foreach (var bootstrapperType in bootstrapperTypes)
 			{
 				var instance = (IStartupTask)Activator.CreateInstance(bootstrapperType);
 				instance.Run(configuration);
 			}
-		}
-
-		private static bool AutomaticAssemblyDetectionFailed(Assembly assembly)
-		{
-			return assembly == typeof(HttpApplication).BaseType.Assembly;
 		}
 	}
 }

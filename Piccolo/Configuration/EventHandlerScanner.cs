@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Piccolo.Events;
+using Piccolo.Internal;
 
 namespace Piccolo.Configuration
 {
@@ -11,12 +12,11 @@ namespace Piccolo.Configuration
 		internal static List<Type> FindEventHandlersForEvent<TEvent>(Assembly assembly) where TEvent : IEvent
 		{
 			return assembly
-				.GetExportedTypes()
-				.Where(x => x.GetInterfaces().Contains(typeof(IHandle<TEvent>)))
-				.OrderBy(x =>
+				.GetTypesImplementing<IHandle<TEvent>>()
+				.OrderBy(type =>
 				{
-					var priorityAttribute = x.GetCustomAttributes(typeof(PriorityAttribute), false).FirstOrDefault();
-					return priorityAttribute != null ? ((PriorityAttribute)priorityAttribute).Level : byte.MaxValue;
+					var priorityAttribute = type.GetAttribute<PriorityAttribute>();
+					return priorityAttribute != null ? priorityAttribute.Level : byte.MaxValue;
 				})
 				.ToList();
 		}
