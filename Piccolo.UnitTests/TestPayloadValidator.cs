@@ -1,4 +1,3 @@
-using System.Net;
 using Piccolo.UnitTests.Request;
 using Piccolo.Validation;
 
@@ -9,7 +8,7 @@ namespace Piccolo.UnitTests
 		public ValidationResult Validate(RequestHandlerInvokerTests.TestResourceWithPayload.Parameters payload)
 		{
 			if (payload.A == string.Empty)
-				return new ValidationResult(HttpStatusCode.BadRequest, "invalid");
+				return new ValidationResult("invalid");
 
 			return ValidationResult.Valid;
 		}

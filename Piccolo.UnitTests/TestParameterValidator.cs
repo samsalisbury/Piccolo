@@ -1,4 +1,3 @@
-using System.Net;
 using Piccolo.Validation;
 
 namespace Piccolo.UnitTests
@@ -8,7 +7,7 @@ namespace Piccolo.UnitTests
 		public ValidationResult Validate(int value)
 		{
 			if (value < 0)
-				return new ValidationResult(HttpStatusCode.BadRequest, "invalid age");
+				return new ValidationResult("invalid age");
 
 			return ValidationResult.Valid;
 		}
