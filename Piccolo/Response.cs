@@ -7,8 +7,18 @@ namespace Piccolo
 	{
 		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string reason)
 		{
-			var responseMessage = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {error = reason})};
-			return new HttpResponseMessage<TOutput>(responseMessage);
+			var message = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {error = reason})};
+			return new HttpResponseMessage<TOutput>(message);
+		}
+
+		private static HttpResponseMessage<TOutput> CreateSuccessResponse<TOutput>(HttpStatusCode statusCode, TOutput content)
+		{
+			return new HttpResponseMessage<TOutput>(new HttpResponseMessage(statusCode) {Content = new ObjectContent(content)});
+		}
+
+		private static HttpResponseMessage<TOutput> CreateEmptyResponse<TOutput>(HttpStatusCode statusCode)
+		{
+			return new HttpResponseMessage<TOutput>(new HttpResponseMessage(statusCode));
 		}
 
 		public class Error
@@ -25,7 +35,7 @@ namespace Piccolo
 
 			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
 			{
-				return CreateErrorResponse<TOutput>(HttpStatusCode.NotFound, string.Empty);
+				return CreateEmptyResponse<TOutput>(HttpStatusCode.NotFound);
 			}
 
 			public static HttpResponseMessage<TOutput> Gone<TOutput>(string reason)
@@ -38,20 +48,17 @@ namespace Piccolo
 		{
 			public static HttpResponseMessage<TOutput> Ok<TOutput>(TOutput content)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.OK) {Content = new ObjectContent(content)};
-				return new HttpResponseMessage<TOutput>(responseMessage);
+				return CreateSuccessResponse(HttpStatusCode.OK, content);
 			}
 
 			public static HttpResponseMessage<TOutput> Created<TOutput>(TOutput content)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.Created) {Content = new ObjectContent(content)};
-				return new HttpResponseMessage<TOutput>(responseMessage);
+				return CreateSuccessResponse(HttpStatusCode.Created, content);
 			}
 
 			public static HttpResponseMessage<TOutput> NoContent<TOutput>()
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.NoContent);
-				return new HttpResponseMessage<TOutput>(responseMessage);
+				return CreateEmptyResponse<TOutput>(HttpStatusCode.NoContent);
 			}
 		}
 	}
