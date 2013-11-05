@@ -1,6 +1,3 @@
-using System.Net;
-using System.Net.Http;
-
 namespace Piccolo.Validation
 {
 	public class ValidationResult
@@ -15,14 +12,14 @@ namespace Piccolo.Validation
 			IsValid = true;
 		}
 
-		public ValidationResult(HttpStatusCode statusCode, string errorMessage)
+		public ValidationResult(string errorMessage)
 		{
 			IsValid = false;
-			ErrorResponse = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {message = errorMessage})};
+			ErrorMessage = errorMessage;
 		}
 
 		public static ValidationResult Valid { get; private set; }
 		public bool IsValid { get; private set; }
-		public HttpResponseMessage ErrorResponse { get; private set; }
+		public string ErrorMessage { get; private set; }
 	}
 }

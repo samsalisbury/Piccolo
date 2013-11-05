@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -27,14 +28,19 @@ namespace Piccolo.Request
 
 			var queryParameterValidationResult = BindQueryParameters(requestHandler, queryParameters);
 			if (queryParameterValidationResult.IsValid == false)
-				return queryParameterValidationResult.ErrorResponse;
+				return BadRequest(queryParameterValidationResult.ErrorMessage);
 
 			var payload = DeserialisePayload(requestHandler, verb, rawPayload);
 			var payloadValidationResult = ValidatePayload(payloadValidator, payload);
 			if (payloadValidationResult.IsValid == false)
-				return payloadValidationResult.ErrorResponse;
+				return BadRequest(payloadValidationResult.ErrorMessage);
 
 			return GetResponseMessage(requestHandler.InvokeMethod<object>(verb, payload));
+		}
+
+		private HttpResponseMessage BadRequest(string message)
+		{
+			return new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(new {message})};
 		}
 
 		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters)
