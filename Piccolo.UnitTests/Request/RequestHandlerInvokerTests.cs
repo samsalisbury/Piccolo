@@ -885,7 +885,7 @@ namespace Piccolo.UnitTests.Request
 			public void it_should_return_error_message()
 			{
 				var content = ((ObjectContent)_result.Content).Content;
-				content.GetType().GetProperty("message").GetValue(content, null).ShouldBe("invalid");
+				content.GetType().GetProperty("error").GetValue(content, null).ShouldBe("invalid");
 			}
 		}
 
@@ -930,7 +930,7 @@ namespace Piccolo.UnitTests.Request
 			public void it_should_return_error_message()
 			{
 				var content = ((ObjectContent)_result.Content).Content;
-				content.GetType().GetProperty("message").GetValue(content, null).ShouldBe("invalid age");
+				content.GetType().GetProperty("error").GetValue(content, null).ShouldBe("invalid age");
 			}
 		}
 

@@ -106,7 +106,7 @@ namespace Piccolo
 				_eventDispatcher.RaiseRequestFaultedEvent(context, mpex);
 
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
-				payload = SerialisePayload(new ObjectContent(new {message = "Payload missing"}));
+				payload = SerialisePayload(new ObjectContent(new {error = "Payload missing"}));
 
 				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
 			}

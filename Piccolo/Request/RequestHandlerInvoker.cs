@@ -40,7 +40,7 @@ namespace Piccolo.Request
 
 		private HttpResponseMessage BadRequest(string message)
 		{
-			return new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(new {message})};
+			return new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(new {error = message})};
 		}
 
 		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters)

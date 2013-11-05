@@ -7,7 +7,7 @@ namespace Piccolo
 	{
 		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string reason)
 		{
-			var responseMessage = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {message = reason})};
+			var responseMessage = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {error = reason})};
 			return new HttpResponseMessage<TOutput>(responseMessage);
 		}
 
@@ -15,26 +15,22 @@ namespace Piccolo
 		{
 			public static HttpResponseMessage<TOutput> BadRequest<TOutput>(string reason)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(new {message = reason})};
-				return new HttpResponseMessage<TOutput>(responseMessage);
+				return CreateErrorResponse<TOutput>(HttpStatusCode.BadRequest, reason);
 			}
 
 			public static HttpResponseMessage<TOutput> Unauthorized<TOutput>(string reason)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.Unauthorized) {Content = new ObjectContent(new {message = reason})};
-				return new HttpResponseMessage<TOutput>(responseMessage);
+				return CreateErrorResponse<TOutput>(HttpStatusCode.Unauthorized, reason);
 			}
 
 			public static HttpResponseMessage<TOutput> NotFound<TOutput>()
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
-				return new HttpResponseMessage<TOutput>(responseMessage);
+				return CreateErrorResponse<TOutput>(HttpStatusCode.NotFound, string.Empty);
 			}
 
 			public static HttpResponseMessage<TOutput> Gone<TOutput>(string reason)
 			{
-				var responseMessage = new HttpResponseMessage(HttpStatusCode.Gone) {Content = new ObjectContent(new {message = reason})};
-				return new HttpResponseMessage<TOutput>(responseMessage);
+				return CreateErrorResponse<TOutput>(HttpStatusCode.Gone, reason);
 			}
 		}
 
