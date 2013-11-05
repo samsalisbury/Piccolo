@@ -806,7 +806,7 @@ namespace Piccolo.UnitTests
 				var httpContext = Substitute.For<HttpContextBase>();
 				httpContext.Request.HttpMethod.Returns("POST");
 				httpContext.Request.Url.Returns(new Uri("https://api.com/alternate_malformed_payload_exception"));
-				httpContext.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("{ message: \"\" ")));
+				httpContext.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("{ error: \"\" ")));
 				httpContext.Response.Returns(_httpResponse);
 
 				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext));
@@ -952,7 +952,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"message\":\"Payload missing\"}");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"error\":\"Payload missing\"}");
 			}
 
 			[Test]
@@ -1011,7 +1011,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"message\":\"Payload missing\"}");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"error\":\"Payload missing\"}");
 			}
 
 			[Test]
@@ -1073,7 +1073,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"message\":\"invalid\"}");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"error\":\"invalid\"}");
 			}
 
 			[Test]
@@ -1091,7 +1091,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_error_message()
 			{
-				_httpResponse.Received().Write("{\"message\":\"invalid\"}");
+				_httpResponse.Received().Write("{\"error\":\"invalid\"}");
 			}
 		}
 
@@ -1128,7 +1128,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_raise_request_processed_event()
 			{
-				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"message\":\"invalid age\"}");
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"error\":\"invalid age\"}");
 			}
 
 			[Test]
@@ -1146,7 +1146,7 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void it_should_return_error_message()
 			{
-				_httpResponse.Received().Write("{\"message\":\"invalid age\"}");
+				_httpResponse.Received().Write("{\"error\":\"invalid age\"}");
 			}
 		}
 
