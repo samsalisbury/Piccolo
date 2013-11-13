@@ -7,7 +7,7 @@ namespace Piccolo.Internal
 {
 	internal static class ReflectionExtensions
 	{
-		private const BindingFlags MemberLookupFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
+		private const BindingFlags MemberLookupFlags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 		internal static IList<Type> GetTypesImplementing<TInterface>(this Assembly assembly)
 		{

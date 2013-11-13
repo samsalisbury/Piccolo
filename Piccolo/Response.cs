@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using System.Net.Http;
 
 namespace Piccolo
 {
@@ -8,18 +7,17 @@ namespace Piccolo
 	{
 		public static HttpResponseMessage<TOutput> CreateErrorResponse<TOutput>(HttpStatusCode statusCode, string reason)
 		{
-			var message = new HttpResponseMessage(statusCode) {Content = new ObjectContent(new {error = reason})};
-			return new HttpResponseMessage<TOutput>(message);
+			return new HttpResponseMessage<TOutput>(statusCode, new ObjectContent(new {error = reason}));
 		}
 
 		private static HttpResponseMessage<TOutput> CreateSuccessResponse<TOutput>(HttpStatusCode statusCode, TOutput content)
 		{
-			return new HttpResponseMessage<TOutput>(new HttpResponseMessage(statusCode) {Content = new ObjectContent(content)});
+			return new HttpResponseMessage<TOutput>(statusCode, content);
 		}
 
 		private static HttpResponseMessage<TOutput> CreateEmptyResponse<TOutput>(HttpStatusCode statusCode)
 		{
-			return new HttpResponseMessage<TOutput>(new HttpResponseMessage(statusCode));
+			return new HttpResponseMessage<TOutput>(statusCode);
 		}
 
 		public class Error

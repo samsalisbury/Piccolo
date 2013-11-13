@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Http;
 using NUnit.Framework;
 using Piccolo.Routing;
 using Shouldly;
@@ -277,7 +276,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 		}
 
@@ -287,7 +286,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 		}
 
@@ -298,7 +297,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 		}
 
@@ -308,7 +307,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 
 			public Int32 DynamicLevel1 { get; set; }
@@ -320,7 +319,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 
 			public int DynamicLevel2 { get; set; }
@@ -332,7 +331,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 
 			public int DynamicLevel2 { get; set; }
@@ -344,7 +343,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 
 			public int DynamicLevel1 { get; set; }
@@ -358,7 +357,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 		}
 
@@ -368,7 +367,7 @@ namespace Piccolo.UnitTests.Routing
 			[ExcludeFromCodeCoverage]
 			public HttpResponseMessage<string> Get()
 			{
-				return new HttpResponseMessage<string>(new HttpResponseMessage());
+				return new HttpResponseMessage<string>();
 			}
 
 			public string Dynamic { get; set; }

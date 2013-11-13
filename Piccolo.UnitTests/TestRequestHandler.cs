@@ -9,7 +9,7 @@ namespace Piccolo.UnitTests
 		[ExcludeFromCodeCoverage]
 		public HttpResponseMessage<string> Get()
 		{
-			return new HttpResponseMessage<string>(new HttpResponseMessage());
+			return new HttpResponseMessage<string>();
 		}
 
 		public int Id { get; set; }

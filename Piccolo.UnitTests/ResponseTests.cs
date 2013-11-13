@@ -23,13 +23,13 @@ namespace Piccolo.UnitTests
 				[Test]
 				public void status_code_should_be_400()
 				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)400);
+					_response.StatusCode.ShouldBe((HttpStatusCode)400);
 				}
 
 				[Test]
 				public void reason_phrase_should_be_not_found()
 				{
-					_response.Message.ReasonPhrase.ShouldBe("Bad Request");
+					_response.ReasonPhrase.ShouldBe("Bad Request");
 				}
 			}
 
@@ -47,13 +47,13 @@ namespace Piccolo.UnitTests
 				[Test]
 				public void status_code_should_be_401()
 				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)401);
+					_response.StatusCode.ShouldBe((HttpStatusCode)401);
 				}
 
 				[Test]
 				public void reason_phrase_should_be_unauthorized()
 				{
-					_response.Message.ReasonPhrase.ShouldBe("Unauthorized");
+					_response.ReasonPhrase.ShouldBe("Unauthorized");
 				}
 			}
 
@@ -71,13 +71,13 @@ namespace Piccolo.UnitTests
 				[Test]
 				public void status_code_should_be_404()
 				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)404);
+					_response.StatusCode.ShouldBe((HttpStatusCode)404);
 				}
 
 				[Test]
 				public void reason_phrase_should_be_not_found()
 				{
-					_response.Message.ReasonPhrase.ShouldBe("Not Found");
+					_response.ReasonPhrase.ShouldBe("Not Found");
 				}
 			}
 
@@ -95,13 +95,13 @@ namespace Piccolo.UnitTests
 				[Test]
 				public void status_code_should_be_410()
 				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)410);
+					_response.StatusCode.ShouldBe((HttpStatusCode)410);
 				}
 
 				[Test]
 				public void reason_phrase_should_be_gone()
 				{
-					_response.Message.ReasonPhrase.ShouldBe("Gone");
+					_response.ReasonPhrase.ShouldBe("Gone");
 				}
 			}
 		}
@@ -122,13 +122,13 @@ namespace Piccolo.UnitTests
 				[Test]
 				public void status_code_should_be_200()
 				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)200);
+					_response.StatusCode.ShouldBe((HttpStatusCode) 200);
 				}
 
 				[Test]
 				public void reason_phrase_should_be_ok()
 				{
-					_response.Message.ReasonPhrase.ShouldBe("OK");
+					_response.ReasonPhrase.ShouldBe("OK");
 				}
 			}
 
@@ -147,13 +147,13 @@ namespace Piccolo.UnitTests
 				[Test]
 				public void status_code_should_be_201()
 				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)201);
+					_response.StatusCode.ShouldBe((HttpStatusCode)201);
 				}
 
 				[Test]
 				public void reason_phrase_should_be_created()
 				{
-					_response.Message.ReasonPhrase.ShouldBe("Created");
+					_response.ReasonPhrase.ShouldBe("Created");
 				}
 
 				[Test]
@@ -161,7 +161,7 @@ namespace Piccolo.UnitTests
 				{
 					var expectedUri = new Uri("/newly/created/resource", UriKind.Relative);
 
-					_response.Message.Headers.Location.ShouldBe(expectedUri);
+					_response.Location.ShouldBe(expectedUri);
 				}
 			}
 
@@ -179,13 +179,13 @@ namespace Piccolo.UnitTests
 				[Test]
 				public void status_code_should_be_204()
 				{
-					_response.Message.StatusCode.ShouldBe((HttpStatusCode)204);
+					_response.StatusCode.ShouldBe((HttpStatusCode)204);
 				}
 
 				[Test]
 				public void reason_phrase_should_be_no_content()
 				{
-					_response.Message.ReasonPhrase.ShouldBe("No Content");
+					_response.ReasonPhrase.ShouldBe("No Content");
 				}
 			}
 		}
@@ -204,19 +204,19 @@ namespace Piccolo.UnitTests
 			[Test]
 			public void status_code_should_be_403()
 			{
-				_response.Message.StatusCode.ShouldBe((HttpStatusCode)403);
+				_response.StatusCode.ShouldBe((HttpStatusCode)403);
 			}
 
 			[Test]
 			public void reason_phrase_should_be_forbidden()
 			{
-				_response.Message.ReasonPhrase.ShouldBe("Forbidden");
+				_response.ReasonPhrase.ShouldBe("Forbidden");
 			}
 
 			[Test]
 			public void content_should_be_test()
 			{
-				var content = ((ObjectContent)_response.Message.Content).Content;
+				var content = ((ObjectContent)_response.Content).Content;
 				content.GetType().GetProperty("error").GetValue(content, null).ShouldBe("test");
 			}
 		}
