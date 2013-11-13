@@ -73,12 +73,12 @@ namespace Piccolo
 					var responseMessage = (HttpResponseMessage)_requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.Data, context.RequestPayload, payloadValidator);
 
 					payload = SerialisePayload(responseMessage.Content);
-					InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
+					InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, responseMessage.Headers.Location, payload);
 				}
 				else
 				{
 					var responseMessage = new HttpResponseMessage(HttpStatusCode.NotFound);
-					InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, null);
+					InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, null, null);
 				}
 			}
 			catch (RouteParameterDatatypeMismatchException rpdmex)
@@ -89,7 +89,7 @@ namespace Piccolo
 				if (context.Http.IsDebuggingEnabled)
 					payload = SerialisePayload(new ObjectContent(rpdmex));
 
-				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, null, payload);
 			}
 			catch (MalformedParameterException mpex)
 			{
@@ -99,7 +99,7 @@ namespace Piccolo
 				if (context.Http.IsDebuggingEnabled)
 					payload = SerialisePayload(new ObjectContent(mpex));
 
-				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, null, payload);
 			}
 			catch (MissingPayloadException mpex)
 			{
@@ -108,7 +108,7 @@ namespace Piccolo
 				var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest);
 				payload = SerialisePayload(new ObjectContent(new {error = "Payload missing"}));
 
-				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, null, payload);
 			}
 			catch (MalformedPayloadException mpex)
 			{
@@ -117,7 +117,7 @@ namespace Piccolo
 				if (context.Http.IsDebuggingEnabled)
 					payload = SerialisePayload(new ObjectContent(mpex));
 
-				InjectResponse(context, (HttpStatusCode)422, "Unprocessable Entity", payload);
+				InjectResponse(context, (HttpStatusCode)422, "Unprocessable Entity", null, payload);
 			}
 			catch (Exception ex)
 			{
@@ -127,7 +127,7 @@ namespace Piccolo
 				if (context.Http.IsDebuggingEnabled)
 					payload = SerialisePayload(new ObjectContent(ex));
 
-				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, payload);
+				InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, null, payload);
 			}
 			finally
 			{
@@ -150,10 +150,13 @@ namespace Piccolo
 			return _configuration.JsonSerialiser(objectContent.Content);
 		}
 
-		private static void InjectResponse(PiccoloContext context, HttpStatusCode statusCode, string reasonPhrase, string payload)
+		private static void InjectResponse(PiccoloContext context, HttpStatusCode statusCode, string reasonPhrase, Uri createdResourceLocation, string payload)
 		{
 			context.Http.Response.StatusCode = (int)statusCode;
 			context.Http.Response.StatusDescription = reasonPhrase;
+
+			if (createdResourceLocation != null)
+				context.Http.Response.AddHeader("Location", createdResourceLocation.ToString());
 
 			if (payload != null)
 			{

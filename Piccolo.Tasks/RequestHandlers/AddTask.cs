@@ -1,4 +1,5 @@
-﻿using Piccolo.Tasks.Models;
+﻿using System;
+using Piccolo.Tasks.Models;
 using Piccolo.Tasks.Repositories;
 using Piccolo.Tasks.ViewModels;
 
@@ -19,7 +20,9 @@ namespace Piccolo.Tasks.RequestHandlers
 			var task = new Task {Title = parameters.Title};
 			_taskRepository.Add(task);
 
-			return Response.Success.Created(task);
+			var createdTaskUri = new Uri(string.Format("/tasks/{0}", task.Id), UriKind.Relative);
+
+			return Response.Success.Created(task, createdTaskUri);
 		}
 	}
 }

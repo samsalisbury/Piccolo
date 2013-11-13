@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using NUnit.Framework;
 using Shouldly;
 
@@ -139,7 +140,8 @@ namespace Piccolo.UnitTests
 				[SetUp]
 				public void SetUp()
 				{
-					_response = Response.Success.Created<object>(null);
+					var locationUri = new Uri("/newly/created/resource", UriKind.Relative);
+					_response = Response.Success.Created<object>(null, locationUri);
 				}
 
 				[Test]
@@ -152,6 +154,14 @@ namespace Piccolo.UnitTests
 				public void reason_phrase_should_be_created()
 				{
 					_response.Message.ReasonPhrase.ShouldBe("Created");
+				}
+
+				[Test]
+				public void location_header_should_be_set()
+				{
+					var expectedUri = new Uri("/newly/created/resource", UriKind.Relative);
+
+					_response.Message.Headers.Location.ShouldBe(expectedUri);
 				}
 			}
 
