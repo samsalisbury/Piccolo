@@ -6,17 +6,17 @@ namespace Piccolo
 {
 	public class HttpResponseMessage<TOutput>
 	{
-		public HttpStatusCode StatusCode{get { return Message.StatusCode; }}
+		public HttpStatusCode StatusCode { get { return Message.StatusCode; } }
 		public object Content { get { return Message.Content; } }
-		public Uri Location{get { return Message.Headers.Location; }}
-		public string ReasonPhrase{get { return Message.ReasonPhrase; }}
+		public Uri Location { get { return Message.Headers.Location; } }
+		public string ReasonPhrase { get { return Message.ReasonPhrase; } }
 
 		public HttpResponseMessage() : this(null, null, null)
 		{
 		}
 
 		public HttpResponseMessage(HttpStatusCode statusCode)
-			: this(new HttpStatusCode?(statusCode), null, null)
+			: this((HttpStatusCode?) statusCode, null, null)
 		{
 		}
 
@@ -36,12 +36,12 @@ namespace Piccolo
 		}
 
 		public HttpResponseMessage(HttpStatusCode statusCode, HttpContent content)
-			: this((HttpStatusCode?)statusCode, content, null)
+			: this((HttpStatusCode?) statusCode, content, null)
 		{
 		}
 
 		public HttpResponseMessage(HttpStatusCode statusCode, object content, Uri location)
-			: this(new HttpStatusCode?(statusCode), content == null ? null : new ObjectContent(content), location)
+			: this((HttpStatusCode?) statusCode, content == null ? null : new ObjectContent(content), location)
 		{
 		}
 
