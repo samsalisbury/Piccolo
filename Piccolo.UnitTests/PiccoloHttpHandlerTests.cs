@@ -172,12 +172,18 @@ namespace Piccolo.UnitTests
 				_httpResponse.Received().Write("{\"test\":\"Test\"}");
 			}
 
+			[Test]
+			public void it_should_have_location_header_set()
+			{
+				_httpResponse.Received().AddHeader("Location", "/created/resource");
+			}
+
 			[Route("/test-resources")]
 			public class CreateTestResource : IPost<CreateTestResource.Parameters, CreateTestResource.Parameters>
 			{
 				public HttpResponseMessage<Parameters> Post(Parameters parameters)
 				{
-					return Response.Success.Created(parameters);
+					return Response.Success.Created(parameters, new Uri("/created/resource", UriKind.Relative));
 				}
 
 				public class Parameters

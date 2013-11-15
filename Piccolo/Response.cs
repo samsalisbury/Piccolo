@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 
@@ -51,9 +52,12 @@ namespace Piccolo
 				return CreateSuccessResponse(HttpStatusCode.OK, content);
 			}
 
-			public static HttpResponseMessage<TOutput> Created<TOutput>(TOutput content)
+			public static HttpResponseMessage<TOutput> Created<TOutput>(TOutput content, Uri createdResourceUri)
 			{
-				return CreateSuccessResponse(HttpStatusCode.Created, content);
+				var response = CreateSuccessResponse(HttpStatusCode.Created, content);
+				response.Message.Headers.Location = createdResourceUri;
+
+				return response;
 			}
 
 			public static HttpResponseMessage<TOutput> NoContent<TOutput>()
