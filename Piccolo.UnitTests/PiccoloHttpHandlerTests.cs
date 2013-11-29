@@ -16,7 +16,7 @@ namespace Piccolo.UnitTests
 {
 	public class PiccoloHttpHandlerTests
 	{
-		#region Verbs: GET, POST, PUT, DELETE
+		#region Verbs: GET, POST, PUT, PATCH, DELETE
 
 		[TestFixture]
 		public class when_processing_get_request_to_test_resource : given_http_handler
@@ -231,13 +231,13 @@ namespace Piccolo.UnitTests
 			}
 
 			[Test]
-			public void it_should_return_status_204()
+			public void it_should_return_status_200()
 			{
 				_httpResponse.Received().StatusCode = (int)HttpStatusCode.OK;
 			}
 
 			[Test]
-			public void it_should_return_status_reason_no_content()
+			public void it_should_return_status_description_ok()
 			{
 				_httpResponse.Received().StatusDescription = "OK";
 			}
@@ -258,6 +258,84 @@ namespace Piccolo.UnitTests
 			public class UpdateTestResource : IPut<UpdateTestResource.Parameters, UpdateTestResource.Parameters>
 			{
 				public HttpResponseMessage<Parameters> Put(Parameters parameters)
+				{
+					return Response.Success.Ok(parameters);
+				}
+
+				public class Parameters
+				{
+					public string Test { get; set; }
+				}
+
+				public int Id { get; set; }
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_patch_request_to_test_resource : given_http_handler
+		{
+			private HttpResponseBase _httpResponse;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_httpResponse = Substitute.For<HttpResponseBase>();
+
+				var httpContext = Substitute.For<HttpContextBase>();
+				httpContext.Request.HttpMethod.Returns("PATCH");
+				httpContext.Request.Url.Returns(new Uri("https://api.com/test-resources/1"));
+				httpContext.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("{\"Test\":\"Test\"}")));
+				httpContext.Response.Returns(_httpResponse);
+
+				PiccoloHttpHandler.ProcessRequest(new PiccoloContext(httpContext));
+			}
+
+			[Test]
+			public void it_should_raise_request_processing_event()
+			{
+				_httpResponse.Received().Write("RequestProcessingEvent handled");
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				_httpResponse.Received().Write("RequestProcessedEvent handled with StopEventProcessing: {\"test\":\"Test\"}");
+			}
+
+			[Test]
+			public void it_should_not_raise_request_faulted_event()
+			{
+				_httpResponse.DidNotReceive().Write("RequestFaultedEvent handled");
+			}
+
+			[Test]
+			public void it_should_return_status_200()
+			{
+				_httpResponse.Received().StatusCode = (int)HttpStatusCode.OK;
+			}
+
+			[Test]
+			public void it_should_return_status_description_ok()
+			{
+				_httpResponse.Received().StatusDescription = "OK";
+			}
+
+			[Test]
+			public void it_should_set_mime_type_to_application_json()
+			{
+				_httpResponse.Received().ContentType = "application/json";
+			}
+
+			[Test]
+			public void it_should_return_content()
+			{
+				_httpResponse.Received().Write("{\"test\":\"Test\"}");
+			}
+
+			[Route("/test-resources/{Id}")]
+			public class PatchTestResource : IPatch<PatchTestResource.Parameters, PatchTestResource.Parameters>
+			{
+				public HttpResponseMessage<Parameters> Patch(Parameters parameters)
 				{
 					return Response.Success.Ok(parameters);
 				}
