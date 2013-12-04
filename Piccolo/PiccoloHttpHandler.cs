@@ -65,7 +65,7 @@ namespace Piccolo
 				if (stopRequestProcessing)
 					return;
 
-				var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.RequestUri);
+				var lookupResult = _requestRouter.FindRequestHandler(context.RequestVerb, context.ApplicationPath, context.RequestUri);
 				if (lookupResult.IsSuccessful)
 				{
 					var requestHandler = _configuration.ObjectFactory.CreateInstance<IRequestHandler>(lookupResult.RequestHandlerType);

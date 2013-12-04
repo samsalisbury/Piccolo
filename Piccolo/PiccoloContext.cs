@@ -28,6 +28,11 @@ namespace Piccolo
 			get { return _httpContext.Request.HttpMethod; }
 		}
 
+		public string ApplicationPath
+		{
+			get { return _httpContext.Request.ApplicationPath; }
+		}
+
 		public Uri RequestUri
 		{
 			get { return _httpContext.Request.Url; }

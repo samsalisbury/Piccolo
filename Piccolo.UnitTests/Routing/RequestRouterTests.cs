@@ -11,6 +11,24 @@ namespace Piccolo.UnitTests.Routing
 	public class RequestRouterTests
 	{
 		[TestFixture]
+		public class when_searching_for_request_handler_within_virtual_application : given_request_router_initialised_with_test_routes
+		{
+			private RouteHandlerLookupResult _routeHandlerLookupResult;
+
+			[SetUp]
+			public void SetUp()
+			{
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", "/v1", new Uri("http://test.com/v1", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_request_handler()
+			{
+				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(RootRequestHandler));
+			}
+		}
+
+		[TestFixture]
 		public class when_searching_for_request_handler_that_matches_root : given_request_router_initialised_with_test_routes
 		{
 			private RouteHandlerLookupResult _routeHandlerLookupResult;
@@ -18,7 +36,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/", UriKind.Absolute));
 			}
 
 			[Test]
@@ -36,7 +54,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/level-1", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/level-1", UriKind.Absolute));
 			}
 
 			[Test]
@@ -54,7 +72,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/level-1/level-2", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/level-1/level-2", UriKind.Absolute));
 			}
 
 			[Test]
@@ -72,7 +90,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/alternative-path", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/alternative-path", UriKind.Absolute));
 			}
 
 			[Test]
@@ -90,7 +108,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/1", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/1", UriKind.Absolute));
 			}
 
 			[Test]
@@ -114,7 +132,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/level-1/2", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/level-1/2", UriKind.Absolute));
 			}
 
 			[Test]
@@ -138,7 +156,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/level-1/2/level-3", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/level-1/2/level-3", UriKind.Absolute));
 			}
 
 			[Test]
@@ -162,7 +180,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/1/2/3", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/1/2/3", UriKind.Absolute));
 			}
 
 			[Test]
@@ -186,7 +204,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/specificity/static", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/specificity/static", UriKind.Absolute));
 			}
 
 			[Test]
@@ -204,7 +222,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", new Uri("http://test.com/1/2/3/is-not-routed", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/1/2/3/is-not-routed", UriKind.Absolute));
 			}
 
 			[Test]
@@ -222,7 +240,7 @@ namespace Piccolo.UnitTests.Routing
 			[SetUp]
 			public void SetUp()
 			{
-				_routeHandlerLookupResult = RequestRouter.FindRequestHandler(string.Empty, new Uri("http://test.com/", UriKind.Absolute));
+				_routeHandlerLookupResult = RequestRouter.FindRequestHandler(string.Empty, string.Empty, new Uri("http://test.com/", UriKind.Absolute));
 			}
 
 			[Test]
