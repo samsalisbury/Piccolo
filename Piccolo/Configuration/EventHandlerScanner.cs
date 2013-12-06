@@ -7,9 +7,9 @@ using Piccolo.Internal;
 
 namespace Piccolo.Configuration
 {
-	internal static class EventHandlerScanner
+	public static class EventHandlerScanner
 	{
-		internal static List<Type> FindEventHandlersForEvent<TEvent>(Assembly assembly) where TEvent : IEvent
+		public static List<Type> FindEventHandlersForEvent<TEvent>(Assembly assembly) where TEvent : IEvent
 		{
 			return assembly
 				.GetTypesImplementing<IHandle<TEvent>>()
