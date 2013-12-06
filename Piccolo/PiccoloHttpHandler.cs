@@ -11,6 +11,7 @@ namespace Piccolo
 {
 	public class PiccoloHttpHandler : IHttpHandler
 	{
+		[ExcludeFromCodeCoverage]
 		public PiccoloHttpHandler() : this(BuildManager.GetGlobalAsaxType().BaseType.Assembly)
 		{
 			/* This requires a Global.asax (even an empty one) to be place in the root directory of the application.
