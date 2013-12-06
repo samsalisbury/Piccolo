@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{23CC50
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.Tests", "Piccolo.Tests\Piccolo.Tests.csproj", "{BC8CB66B-DD36-4E38-BD6B-B4AD90431D45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13F6D88F-EBC7-4FA1-B6E0-D90FDEA23E94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC8CB66B-DD36-4E38-BD6B-B4AD90431D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC8CB66B-DD36-4E38-BD6B-B4AD90431D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC8CB66B-DD36-4E38-BD6B-B4AD90431D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC8CB66B-DD36-4E38-BD6B-B4AD90431D45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
