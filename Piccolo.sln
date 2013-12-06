@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo", "Piccolo\Piccolo.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.UnitTests", "Piccolo.UnitTests\Piccolo.UnitTests.csproj", "{2D1D5C98-F62F-4626-B67D-515335FFF6AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.UnitTests.InvalidConfigurationDetection", "Piccolo.UnitTests.InvalidConfigurationDetection\Piccolo.UnitTests.InvalidConfigurationDetection.csproj", "{FB896841-B2A6-46DE-8563-3CECB6B529A2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CB6B68A8-DEE1-4D3F-B697-4D6AEE9CBEAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piccolo.Tasks", "Piccolo.Tasks\Piccolo.Tasks.csproj", "{A17AE55B-3660-43CC-9432-97ECE3C974CC}"
@@ -34,10 +32,6 @@ Global
 		{2D1D5C98-F62F-4626-B67D-515335FFF6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D1D5C98-F62F-4626-B67D-515335FFF6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D1D5C98-F62F-4626-B67D-515335FFF6AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB896841-B2A6-46DE-8563-3CECB6B529A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB896841-B2A6-46DE-8563-3CECB6B529A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB896841-B2A6-46DE-8563-3CECB6B529A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB896841-B2A6-46DE-8563-3CECB6B529A2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A17AE55B-3660-43CC-9432-97ECE3C974CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
