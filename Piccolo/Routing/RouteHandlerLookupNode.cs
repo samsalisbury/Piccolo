@@ -41,10 +41,7 @@ namespace Piccolo.Routing
 			var childNode = FindChildNode(headFragment);
 			if (childNode != null)
 			{
-				if (remainingTemplateFragments.Any())
-					childNode.AddNode(remainingTemplateFragments, requestHandler);
-				else
-					childNode.RequestHandler = requestHandler;
+				childNode.AddNode(remainingTemplateFragments, requestHandler);
 			}
 			else
 			{
