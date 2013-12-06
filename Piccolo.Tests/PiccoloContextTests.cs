@@ -14,7 +14,7 @@ namespace Piccolo.Tests
 			[SetUp]
 			public void SetUp()
 			{
-				_httpHandler = new PiccoloHttpHandler(Assembly.GetExecutingAssembly());
+				_httpHandler = new PiccoloHttpHandler(Assembly.GetCallingAssembly());
 			}
 
 			[Test]
