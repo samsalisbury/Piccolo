@@ -3,7 +3,7 @@ using System.Net;
 using NUnit.Framework;
 using Shouldly;
 
-namespace Piccolo.UnitTests
+namespace Piccolo.Tests
 {
 	public class ResponseTests
 	{

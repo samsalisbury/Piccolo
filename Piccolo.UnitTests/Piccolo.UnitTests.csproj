@@ -37,7 +37,6 @@
     <Compile Include="PiccoloContextTests.cs" />
     <Compile Include="PiccoloHttpHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponseTests.cs" />
     <Compile Include="TestRequestHandler.cs" />
     <Compile Include="Extensions.cs" />
   </ItemGroup>
