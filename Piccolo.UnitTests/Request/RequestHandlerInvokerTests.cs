@@ -6,6 +6,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Request;
+using Piccolo.UnitTests;
 using Piccolo.Validation;
 using Shouldly;
 

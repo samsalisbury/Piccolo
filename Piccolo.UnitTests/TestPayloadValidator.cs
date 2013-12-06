@@ -1,4 +1,4 @@
-using Piccolo.UnitTests.Request;
+using Piccolo.Tests.Request;
 using Piccolo.Validation;
 
 namespace Piccolo.UnitTests

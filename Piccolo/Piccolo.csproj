@@ -45,8 +45,6 @@
     <Compile Include="Events\PriorityAttribute.cs" />
     <Compile Include="Internal\ReflectionExtensions.cs" />
     <Compile Include="Internal\MalformedParameterException.cs" />
-    <Compile Include="Internal\MalformedPayloadException.cs" />
-    <Compile Include="Internal\MissingPayloadException.cs" />
     <Compile Include="Events\EventDispatcher.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\IHandle.cs" />
@@ -54,6 +52,8 @@
     <Compile Include="Events\RequestProcessedEvent.cs" />
     <Compile Include="Events\RequestProcessingEvent.cs" />
     <Compile Include="Internal\RouteParameterDatatypeMismatchException.cs" />
+    <Compile Include="MalformedPayloadException.cs" />
+    <Compile Include="MissingPayloadException.cs" />
     <Compile Include="PiccoloContext.cs" />
     <Compile Include="PiccoloEngine.cs" />
     <Compile Include="PiccoloHttpHandler.cs" />

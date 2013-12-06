@@ -214,6 +214,112 @@ namespace Piccolo.Tests.Request
 			}
 		}
 
+		[TestFixture]
+		public class when_executing_request_with_missing_payload : given_request_handler_invoker
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				const string rawPayload = null;
+
+				Assert.Throws<MissingPayloadException>(() => Invoker.Execute(new PostResource(), "POST", new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, object>(), rawPayload, null));
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class PostResource : IPost<string, string>
+			{
+				public HttpResponseMessage<string> Post(string parameters)
+				{
+					throw new Exception();
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_request_with_malformed_payload : given_request_handler_invoker
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				const string rawPayload = "{";
+
+				Assert.Throws<MalformedPayloadException>(() => Invoker.Execute(new PostResource(), "POST", new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, object>(), rawPayload, null));
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class PostResource : IPost<string, string>
+			{
+				public HttpResponseMessage<string> Post(string parameters)
+				{
+					throw new Exception();
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_request_with_malformed_payload_parameter : given_request_handler_invoker
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				const string rawPayload = "{ dateTime: \"\" }";
+
+				Assert.Throws<MalformedPayloadException>(() => Invoker.Execute(new PostResource(), "POST", new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, object>(), rawPayload, null));
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class PostResource : IPost<Params, string>
+			{
+				public HttpResponseMessage<string> Post(Params parameters)
+				{
+					throw new Exception();
+				}
+			}
+
+			public class Params
+			{
+				public DateTime DateTime { get; set; }
+			}
+		}
+
+		[TestFixture]
+		public class when_executing_request_with_invalid_payload : given_request_handler_invoker
+		{
+			private HttpContent _content;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string rawPayload = "\"payload\"";
+				object payloadValidator = new Validator();
+
+				_content = Invoker.Execute(new PostResource(), "POST", new Dictionary<string, string>(), new Dictionary<string, string>(), new Dictionary<string, object>(), rawPayload, payloadValidator).Content;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				((ObjectContent)_content).Content.ToString().ShouldBe("{ error = meh }");
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class PostResource : IPost<string, string>
+			{
+				public HttpResponseMessage<string> Post(string parameters)
+				{
+					throw new Exception();
+				}
+			}
+
+			public class Validator : IPayloadValidator<string>
+			{
+				public ValidationResult Validate(string payload)
+				{
+					return new ValidationResult("meh");
+				}
+			}
+		}
+
 		public abstract class given_request_handler_invoker
 		{
 			protected RequestHandlerInvoker Invoker;

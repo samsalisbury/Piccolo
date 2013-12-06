@@ -2,11 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
-namespace Piccolo.Internal
+namespace Piccolo
 {
 	[Serializable]
 	[ExcludeFromCodeCoverage]
-	internal class MissingPayloadException : Exception
+	public class MissingPayloadException : Exception
 	{
 		internal MissingPayloadException()
 		{
