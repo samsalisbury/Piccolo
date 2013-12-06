@@ -9,7 +9,7 @@ using Piccolo.Request;
 using Piccolo.Validation;
 using Shouldly;
 
-namespace Piccolo.UnitTests.Request
+namespace Piccolo.Tests.Request
 {
 	public class RequestHandlerInvokerTests
 	{
