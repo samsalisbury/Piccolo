@@ -134,6 +134,46 @@ namespace Piccolo.Tests.Request
 			}
 		}
 
+		[TestFixture]
+		public class when_executing_patch_request : given_request_handler_invoker
+		{
+			private string _result;
+
+			[SetUp]
+			public void SetUp()
+			{
+				var routeParameters = new Dictionary<string, string> {{"route", "1"}};
+				var contextualParameters = new Dictionary<string, object>{{"context", 2}};
+				var queryParameters = new Dictionary<string, string> {{"query", "3"}};
+				var rawPayload = "4";
+
+				_result = Invoker.Execute(new PatchResource(), "PATCH", routeParameters, queryParameters, contextualParameters, rawPayload, null).Content.ReadAsStringAsync().Result;
+			}
+
+			[Test]
+			public void it_should_bind_parameters()
+			{
+				_result.ShouldBe("route:1, context:2, query:3, payload:4");
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class PatchResource : IPatch<string, string>
+			{
+				public int Route { get; set; }
+
+				[Contextual]
+				public int Context { get; set; }
+
+				[Optional]
+				public int Query { get; set; }
+				
+				public HttpResponseMessage<string> Patch(string parameters)
+				{
+					return new HttpResponseMessage<string>(new HttpResponseMessage { Content = new StringContent(string.Format("route:{0}, context:{1}, query:{2}, payload:{3}", Route, Context, Query, parameters)) });
+				}
+			}
+		}
+
 		public abstract class given_request_handler_invoker
 		{
 			protected RequestHandlerInvoker Invoker;
