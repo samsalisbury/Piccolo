@@ -42,7 +42,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request\RequestHandlerInvokerTests.cs" />
     <Compile Include="ResponseTests.cs" />
-    <Compile Include="Routing\RequestRouterTests.cs" />
     <Compile Include="TestRequestHandler.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="TestPayloadValidator.cs" />
