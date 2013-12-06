@@ -52,7 +52,7 @@ namespace Piccolo.Configuration
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)
 		{
 			configuration.ObjectFactory = new DefaultObjectFactory();
-			configuration.ParameterBinders = new Dictionary<Type, Func<string, object>>
+			configuration.Parsers = new Dictionary<Type, Func<string, object>>
 			{
 				{typeof(String), x => x},
 				{typeof(Boolean), x => Boolean.Parse(x)},

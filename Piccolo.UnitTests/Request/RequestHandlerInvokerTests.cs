@@ -970,7 +970,7 @@ namespace Piccolo.UnitTests.Request
 			protected given_request_handler_invoker()
 			{
 				var configuration = Bootstrapper.ApplyConfiguration(Assembly.GetExecutingAssembly(), false);
-				Invoker = new RequestHandlerInvoker(configuration.JsonDeserialiser, configuration.ParameterBinders);
+				Invoker = new RequestHandlerInvoker(configuration.JsonDeserialiser, configuration.Parsers);
 			}
 		}
 	}

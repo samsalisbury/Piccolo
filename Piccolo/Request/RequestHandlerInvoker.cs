@@ -13,12 +13,12 @@ namespace Piccolo.Request
 	public class RequestHandlerInvoker
 	{
 		private readonly Func<Type, string, object> _jsonDecoder;
-		private readonly IDictionary<Type, Func<string, object>> _routeParameterBinders;
+		private readonly IDictionary<Type, Func<string, object>> _routeParameterParsers;
 
-		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, IDictionary<Type, Func<string, object>> routeParameterBinders)
+		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, IDictionary<Type, Func<string, object>> routeParameterParsers)
 		{
 			_jsonDecoder = jsonDecoder;
-			_routeParameterBinders = routeParameterBinders;
+			_routeParameterParsers = routeParameterParsers;
 		}
 
 		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator)
@@ -50,11 +50,11 @@ namespace Piccolo.Request
 			foreach (var parameter in routeParameters)
 			{
 				var property = requestHandlerType.GetProperty(parameter.Key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-				var binder = _routeParameterBinders.Single(x => x.Key == property.PropertyType).Value;
+				var parser = _routeParameterParsers.Single(x => x.Key == property.PropertyType).Value;
 
 				try
 				{
-					var value = binder(parameter.Value);
+					var value = parser(parameter.Value);
 					property.SetValue(requestHandler, value, null);
 				}
 				catch (FormatException)
@@ -85,8 +85,8 @@ namespace Piccolo.Request
 				if (parameter == null)
 					continue;
 
-				var binder = _routeParameterBinders.SingleOrDefault(x => x.Key == property.PropertyType).Value;
-				if (binder == null)
+				var parser = _routeParameterParsers.SingleOrDefault(x => x.Key == property.PropertyType).Value;
+				if (parser == null)
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
 				var validatorAttribute = property.GetCustomAttributes(typeof(ValidateWithAttribute), true).SingleOrDefault();
@@ -94,7 +94,7 @@ namespace Piccolo.Request
 
 				try
 				{
-					var value = binder(parameter);
+					var value = parser(parameter);
 					if (parameterValidatorType != null)
 					{
 						var parameterValidator = Activator.CreateInstance(parameterValidatorType);

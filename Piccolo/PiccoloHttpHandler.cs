@@ -24,7 +24,7 @@ namespace Piccolo
 
 			var eventDispatcher = new EventDispatcher(Configuration.EventHandlers, Configuration.ObjectFactory);
 			var requestRouter = new RequestRouter(Configuration.RequestHandlers);
-			var requestHandlerInvoker = new RequestHandlerInvoker(Configuration.JsonDeserialiser, Configuration.ParameterBinders);
+			var requestHandlerInvoker = new RequestHandlerInvoker(Configuration.JsonDeserialiser, Configuration.Parsers);
 
 			Engine = new PiccoloEngine(Configuration, eventDispatcher, requestRouter, requestHandlerInvoker);
 		}

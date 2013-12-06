@@ -55,45 +55,45 @@ namespace Piccolo.Tests.Configuration
 			}
 
 			[Test]
-			public void it_should_configure_string_parameter_binder()
+			public void it_should_configure_string_parameter_parser()
 			{
-				_handlerConfiguration.ParameterBinders[typeof(string)]("test").ShouldBe("test");
+				_handlerConfiguration.Parsers[typeof(string)]("test").ShouldBe("test");
 			}
 
 			[Test]
-			public void it_should_configure_boolean_parameter_binder()
+			public void it_should_configure_boolean_parameter_parser()
 			{
-				_handlerConfiguration.ParameterBinders[typeof(bool)]("true").ShouldBe(true);
+				_handlerConfiguration.Parsers[typeof(bool)]("true").ShouldBe(true);
 			}
 
 			[Test]
-			public void it_should_configure_nullable_boolean_parameter_binder()
+			public void it_should_configure_nullable_boolean_parameter_parser()
 			{
-				_handlerConfiguration.ParameterBinders[typeof(bool?)]("true").ShouldBe(true);
+				_handlerConfiguration.Parsers[typeof(bool?)]("true").ShouldBe(true);
 			}
 
 			[Test]
-			public void it_should_configure_integer_parameter_binder()
+			public void it_should_configure_integer_parameter_parser()
 			{
-				_handlerConfiguration.ParameterBinders[typeof(int)]("1").ShouldBe(1);
+				_handlerConfiguration.Parsers[typeof(int)]("1").ShouldBe(1);
 			}
 
 			[Test]
-			public void it_should_configure_nullable_integer_parameter_binder()
+			public void it_should_configure_nullable_integer_parameter_parser()
 			{
-				_handlerConfiguration.ParameterBinders[typeof(int?)]("1").ShouldBe(1);
+				_handlerConfiguration.Parsers[typeof(int?)]("1").ShouldBe(1);
 			}
 
 			[Test]
-			public void it_should_configure_datetime_parameter_binder()
+			public void it_should_configure_datetime_parameter_parser()
 			{
-				_handlerConfiguration.ParameterBinders[typeof(DateTime)]("01/01/1970 12:00:00").ShouldBe(new DateTime(1970, 01, 01, 12, 00, 00));
+				_handlerConfiguration.Parsers[typeof(DateTime)]("01/01/1970 12:00:00").ShouldBe(new DateTime(1970, 01, 01, 12, 00, 00));
 			}
 
 			[Test]
-			public void it_should_configure_nullable_datetime_parameter_binder()
+			public void it_should_configure_nullable_datetime_parameter_parser()
 			{
-				_handlerConfiguration.ParameterBinders[typeof(DateTime?)]("01/01/1970 12:00:00").ShouldBe(new DateTime(1970, 01, 01, 12, 00, 00));
+				_handlerConfiguration.Parsers[typeof(DateTime?)]("01/01/1970 12:00:00").ShouldBe(new DateTime(1970, 01, 01, 12, 00, 00));
 			}
 
 			[Test]
