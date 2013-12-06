@@ -34,7 +34,6 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="TestParameterValidator.cs" />
-    <Compile Include="Events\EventDispatcherTests.cs" />
     <Compile Include="PiccoloContextTests.cs" />
     <Compile Include="PiccoloHttpHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

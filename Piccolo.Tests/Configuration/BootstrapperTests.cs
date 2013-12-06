@@ -37,15 +37,15 @@ namespace Piccolo.Tests.Configuration
 			}
 
 			[Test]
-			public void it_should_autodetect_request_processed_event_handlers()
-			{
-				_handlerConfiguration.EventHandlers.RequestProcessed.First().GetInterfaces().First().ShouldBe(typeof(IHandle<RequestProcessedEvent>));
-			}
-
-			[Test]
 			public void it_should_autodetect_request_faulted_event_handlers()
 			{
 				_handlerConfiguration.EventHandlers.RequestFaulted.First().GetInterfaces().First().ShouldBe(typeof(IHandle<RequestFaultedEvent>));
+			}
+
+			[Test]
+			public void it_should_autodetect_request_processed_event_handlers()
+			{
+				_handlerConfiguration.EventHandlers.RequestProcessed.First().GetInterfaces().First().ShouldBe(typeof(IHandle<RequestProcessedEvent>));
 			}
 
 			[Test]

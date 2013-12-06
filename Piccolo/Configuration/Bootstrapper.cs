@@ -44,8 +44,8 @@ namespace Piccolo.Configuration
 			configuration.EventHandlers = new EventHandlers
 			{
 				RequestProcessing = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessingEvent>(assembly),
-				RequestProcessed = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessedEvent>(assembly),
-				RequestFaulted = EventHandlerScanner.FindEventHandlersForEvent<RequestFaultedEvent>(assembly)
+				RequestFaulted = EventHandlerScanner.FindEventHandlersForEvent<RequestFaultedEvent>(assembly),
+				RequestProcessed = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessedEvent>(assembly)
 			};
 		}
 
