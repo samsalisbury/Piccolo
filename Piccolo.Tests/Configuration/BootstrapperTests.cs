@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Web;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Events;
@@ -13,7 +14,7 @@ namespace Piccolo.Tests.Configuration
 	public class BootstrapperTests
 	{
 		[TestFixture]
-		public class when_instantiated_with_default_configuration
+		public class when_executed_with_default_configuration
 		{
 			private PiccoloConfiguration _handlerConfiguration;
 
@@ -87,6 +88,16 @@ namespace Piccolo.Tests.Configuration
 			public void it_should_configure_custom_request_handler_factory()
 			{
 				_handlerConfiguration.ObjectFactory.ShouldBeTypeOf<CustomObjectFactory>();
+			}
+		}
+
+		[TestFixture]
+		public class when_executed_with_assembly_that_does_not_contain_global_asax
+		{
+			[Test]
+			public void it_should_throw_exception()
+			{
+				Should.Throw<InvalidOperationException>(() => Bootstrapper.ApplyConfiguration(typeof(HttpApplication).BaseType.Assembly, false));
 			}
 		}
 

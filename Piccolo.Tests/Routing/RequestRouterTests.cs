@@ -24,6 +24,12 @@ namespace Piccolo.Tests.Routing
 			}
 
 			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
+			}
+
+			[Test]
 			public void it_should_return_request_handler()
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(RootRequestHandler));
@@ -39,6 +45,12 @@ namespace Piccolo.Tests.Routing
 			public void SetUp()
 			{
 				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
 			}
 
 			[Test]
@@ -60,6 +72,12 @@ namespace Piccolo.Tests.Routing
 			}
 
 			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
+			}
+
+			[Test]
 			public void it_should_return_request_handler()
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(StaticLevel1RequestHandler));
@@ -75,6 +93,12 @@ namespace Piccolo.Tests.Routing
 			public void SetUp()
 			{
 				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/level-1/level-2", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
 			}
 
 			[Test]
@@ -96,6 +120,12 @@ namespace Piccolo.Tests.Routing
 			}
 
 			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
+			}
+
+			[Test]
 			public void it_should_return_request_handler()
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(StaticLevel2RequestHandler));
@@ -111,6 +141,12 @@ namespace Piccolo.Tests.Routing
 			public void SetUp()
 			{
 				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/1", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
 			}
 
 			[Test]
@@ -138,6 +174,12 @@ namespace Piccolo.Tests.Routing
 			}
 
 			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
+			}
+
+			[Test]
 			public void it_should_return_request_handler()
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicLevel2RequestHandler));
@@ -159,6 +201,12 @@ namespace Piccolo.Tests.Routing
 			public void SetUp()
 			{
 				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/level-1/2/level-3", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
 			}
 
 			[Test]
@@ -186,6 +234,12 @@ namespace Piccolo.Tests.Routing
 			}
 
 			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
+			}
+
+			[Test]
 			public void it_should_return_request_handler()
 			{
 				_routeHandlerLookupResult.RequestHandlerType.ShouldBe(typeof(DynamicMultiLevelRequestHandler));
@@ -207,6 +261,12 @@ namespace Piccolo.Tests.Routing
 			public void SetUp()
 			{
 				_routeHandlerLookupResult = RequestRouter.FindRequestHandler("get", string.Empty, new Uri("http://test.com/specificity/static", UriKind.Absolute));
+			}
+
+			[Test]
+			public void it_should_return_success()
+			{
+				_routeHandlerLookupResult.IsSuccessful.ShouldBe(true);
 			}
 
 			[Test]
@@ -235,7 +295,7 @@ namespace Piccolo.Tests.Routing
 		}
 
 		[TestFixture]
-		public class when_searching_for_request_handler : given_request_router_lookup_initialised_with_0_routes
+		public class when_searching_for_request_handler : given_request_router_initialised_with_test_routes
 		{
 			private RouteHandlerLookupResult _routeHandlerLookupResult;
 
@@ -351,8 +411,10 @@ namespace Piccolo.Tests.Routing
 
 		#endregion
 
-		public abstract class given_request_router_initialised_with_test_routes : given_request_router
+		public abstract class given_request_router_initialised_with_test_routes
 		{
+			protected RequestRouter RequestRouter;
+
 			private static readonly IEnumerable<Type> _testRoutes = new List<Type>
 			{
 				typeof(RootRequestHandler),
@@ -366,25 +428,9 @@ namespace Piccolo.Tests.Routing
 				typeof(SpecificityTestStaticHandler)
 			};
 
-			protected given_request_router_initialised_with_test_routes() : base(_testRoutes)
+			protected given_request_router_initialised_with_test_routes()
 			{
-			}
-		}
-
-		public abstract class given_request_router_lookup_initialised_with_0_routes : given_request_router
-		{
-			protected given_request_router_lookup_initialised_with_0_routes() : base(new List<Type>())
-			{
-			}
-		}
-
-		public abstract class given_request_router
-		{
-			protected RequestRouter RequestRouter;
-
-			protected given_request_router(IEnumerable<Type> requestHandlers)
-			{
-				RequestRouter = new RequestRouter(requestHandlers);
+				RequestRouter = new RequestRouter(_testRoutes);
 			}
 		}
 
