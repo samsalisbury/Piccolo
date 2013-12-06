@@ -2,11 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
-namespace Piccolo.Internal
+namespace Piccolo
 {
 	[Serializable]
 	[ExcludeFromCodeCoverage]
-	internal class RouteParameterDatatypeMismatchException : Exception
+	public class RouteParameterDatatypeMismatchException : Exception
 	{
 		internal RouteParameterDatatypeMismatchException()
 		{

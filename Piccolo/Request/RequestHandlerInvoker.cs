@@ -50,7 +50,9 @@ namespace Piccolo.Request
 			foreach (var parameter in routeParameters)
 			{
 				var property = requestHandlerType.GetProperty(parameter.Key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-				var parser = _routeParameterParsers.Single(x => x.Key == property.PropertyType).Value;
+				var parser = _routeParameterParsers.SingleOrDefault(x => x.Key == property.PropertyType).Value;
+				if (parser == null)
+					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
 				try
 				{
