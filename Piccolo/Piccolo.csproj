@@ -55,6 +55,7 @@
     <Compile Include="Events\RequestProcessingEvent.cs" />
     <Compile Include="Internal\RouteParameterDatatypeMismatchException.cs" />
     <Compile Include="PiccoloContext.cs" />
+    <Compile Include="PiccoloEngine.cs" />
     <Compile Include="PiccoloHttpHandler.cs" />
     <Compile Include="HttpResponseMessage.cs" />
     <Compile Include="IDelete.cs" />
