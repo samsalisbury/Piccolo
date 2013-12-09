@@ -14,7 +14,7 @@ namespace Piccolo
 		[ExcludeFromCodeCoverage]
 		public PiccoloHttpHandler() : this(BuildManager.GetGlobalAsaxType().BaseType.Assembly)
 		{
-			/* This requires a Global.asax (even an empty one) to be place in the root directory of the application.
+			/* This requires a Global.asax (even an empty one) to be placed in the root directory of the application.
 			 * NB: Could't find a cleaer way to auto-detecting this. None of the usual Assembly.Get***Assembly() methods return what I need. */
 		}
 
