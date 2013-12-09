@@ -138,24 +138,6 @@ namespace Piccolo.Tests
 			}
 
 			[Test]
-			public void it_should_raise_request_processing_event()
-			{
-				EventDispatcher.Received().RaiseRequestProcessingEvent(_piccoloContext);
-			}
-
-			[Test]
-			public void it_should_not_raise_request_faulted_event()
-			{
-				EventDispatcher.DidNotReceive().RaiseRequestFaultedEvent(_piccoloContext, Arg.Any<Exception>());
-			}
-
-			[Test]
-			public void it_should_raise_request_processed_event()
-			{
-				EventDispatcher.Received().RaiseRequestProcessedEvent(_piccoloContext, null);
-			}
-
-			[Test]
 			public void it_should_return_status_code_204()
 			{
 				HttpContextBase.Response.StatusCode.Returns(204);
@@ -171,6 +153,58 @@ namespace Piccolo.Tests
 			public void it_should_not_return_response_payload()
 			{
 				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
+			}
+
+			public class GetResource : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_that_set_location_header : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "POST";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources");
+				var routeParameters = new Dictionary<string, string>();
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(GetResource), routeParameters));
+
+				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.Created);
+				httpResponseMessage.Headers.Location = new Uri("http://example.com/resources/1");
+
+				RequestHandlerInvoker.Execute(
+					Arg.Any<GetResource>(),
+					verb,
+					routeParameters,
+					Arg.Is<IDictionary<string, string>>(x => x.Count == 0),
+					Arg.Any<IDictionary<string, object>>(),
+					Arg.Is<string>(x => x == string.Empty),
+					Arg.Is<object>(x => x == null)).Returns(httpResponseMessage);
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_set_location_response_header()
+			{
+				HttpContextBase.Response.Received().AddHeader("Location", "http://example.com/resources/1");
 			}
 
 			public class GetResource : IGet<string>
