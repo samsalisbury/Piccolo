@@ -463,6 +463,64 @@ namespace Piccolo.Tests
 				}
 			}
 		}
+
+		[TestFixture]
+		public class when_processing_request_that_is_missing_payload_and_http_debugging_is_disabled : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "GET";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources/1");
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MissingPayloadException(); });
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				EventDispatcher.Received().RaiseRequestFaultedEvent(_piccoloContext, Arg.Any<MissingPayloadException>());
+			}
+
+			[Test]
+			public void it_should_return_status_code_400()
+			{
+				HttpContextBase.Response.StatusCode.Returns(400);
+			}
+
+			[Test]
+			public void it_should_return_status_description_bad_request()
+			{
+				HttpContextBase.Response.StatusDescription.Returns("Bad Request");
+			}
+
+			[Test]
+			public void it_should_return_response_payload()
+			{
+				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("Payload missing")));
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class GetResource : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
 	}
 
 	public abstract class given_piccolo_engine
