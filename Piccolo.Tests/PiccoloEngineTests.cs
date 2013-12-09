@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -94,6 +95,7 @@ namespace Piccolo.Tests
 				HttpContextBase.Response.Received().Write("\"test\"");
 			}
 
+			[ExcludeFromCodeCoverage]
 			public class GetResource : IGet<string>
 			{
 				public HttpResponseMessage<string> Get()
@@ -155,6 +157,7 @@ namespace Piccolo.Tests
 				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
 			}
 
+			[ExcludeFromCodeCoverage]
 			public class GetResource : IGet<string>
 			{
 				public HttpResponseMessage<string> Get()
@@ -207,6 +210,7 @@ namespace Piccolo.Tests
 				HttpContextBase.Response.Received().AddHeader("Location", "http://example.com/resources/1");
 			}
 
+			[ExcludeFromCodeCoverage]
 			public class GetResource : IGet<string>
 			{
 				public HttpResponseMessage<string> Get()
