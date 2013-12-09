@@ -123,10 +123,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.Url.Returns(uri);
 				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
 
-				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(GetResource), routeParameters));
+				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(DeleteResource), routeParameters));
 
 				RequestHandlerInvoker.Execute(
-					Arg.Any<GetResource>(),
+					Arg.Any<DeleteResource>(),
 					verb,
 					routeParameters,
 					Arg.Is<IDictionary<string, string>>(x => x.Count == 0),
@@ -158,7 +158,7 @@ namespace Piccolo.Tests
 			}
 
 			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
+			public class DeleteResource : IGet<string>
 			{
 				public HttpResponseMessage<string> Get()
 				{
@@ -185,13 +185,13 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.Url.Returns(uri);
 				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
 
-				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(GetResource), routeParameters));
+				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(CreateResource), routeParameters));
 
 				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.Created);
 				httpResponseMessage.Headers.Location = new Uri("http://example.com/resources/1");
 
 				RequestHandlerInvoker.Execute(
-					Arg.Any<GetResource>(),
+					Arg.Any<CreateResource>(),
 					verb,
 					routeParameters,
 					Arg.Is<IDictionary<string, string>>(x => x.Count == 0),
@@ -208,6 +208,53 @@ namespace Piccolo.Tests
 			public void it_should_set_location_response_header()
 			{
 				HttpContextBase.Response.Received().AddHeader("Location", "http://example.com/resources/1");
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class CreateResource : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_that_returns_a_404_result : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "GET";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources/1");
+				var routeParameters = new Dictionary<string, string> { { "route", "1" } };
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(RouteHandlerLookupResult.FailedResult);
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_return_status_code_404()
+			{
+				HttpContextBase.Response.StatusCode.Returns(404);
+			}
+
+			[Test]
+			public void it_should_return_status_description_not_found()
+			{
+				HttpContextBase.Response.StatusDescription.Returns("Not Found");
 			}
 
 			[ExcludeFromCodeCoverage]
