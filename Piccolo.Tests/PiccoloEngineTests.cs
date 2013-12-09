@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using NSubstitute;
 using NUnit.Framework;
@@ -34,7 +35,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(GetResource), routeParameters));
 
@@ -121,7 +125,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(DeleteResource), routeParameters));
 
@@ -183,7 +190,7 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("request_payload")));
 
 				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(CreateResource), routeParameters));
 
@@ -196,7 +203,7 @@ namespace Piccolo.Tests
 					routeParameters,
 					Arg.Is<IDictionary<string, string>>(x => x.Count == 0),
 					Arg.Any<IDictionary<string, object>>(),
-					Arg.Is<string>(x => x == string.Empty),
+					Arg.Is<string>(x => x == "request_payload"),
 					Arg.Is<object>(x => x == null)).Returns(httpResponseMessage);
 
 				_piccoloContext = new PiccoloContext(HttpContextBase);
@@ -235,7 +242,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(RouteHandlerLookupResult.FailedResult);
 
@@ -281,7 +291,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new RouteParameterDatatypeMismatchException(); });
 
@@ -339,8 +352,11 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
 				HttpContextBase.IsDebuggingEnabled.Returns(true);
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new RouteParameterDatatypeMismatchException(); });
 
@@ -380,7 +396,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MalformedParameterException(); });
 
@@ -438,8 +457,11 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
 				HttpContextBase.IsDebuggingEnabled.Returns(true);
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MalformedParameterException(); });
 
@@ -479,7 +501,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MissingPayloadException(); });
 
@@ -537,7 +562,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MalformedPayloadException(); });
 
@@ -595,8 +623,11 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
 				HttpContextBase.IsDebuggingEnabled.Returns(true);
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MalformedPayloadException(); });
 
@@ -636,7 +667,10 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new Exception(); });
 
@@ -694,8 +728,11 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
 				HttpContextBase.IsDebuggingEnabled.Returns(true);
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
 
 				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new Exception(); });
 
