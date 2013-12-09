@@ -150,7 +150,7 @@ namespace Piccolo.Tests.Configuration
 		[ExcludeFromCodeCoverage]
 		public class CustomObjectFactory : IObjectFactory
 		{
-			public T CreateInstance<T>(Type requestHandlerType)
+			public T CreateInstance<T>(Type type)
 			{
 				return default(T);
 			}
