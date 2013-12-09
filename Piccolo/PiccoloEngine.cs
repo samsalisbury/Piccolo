@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using Piccolo.Configuration;
 using Piccolo.Events;
+using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Routing;
 using Piccolo.Validation;
@@ -106,7 +107,7 @@ namespace Piccolo
 
 		private object GetPayloadValidator(Type requestHandlerType)
 		{
-			var attribute = requestHandlerType.GetCustomAttributes(typeof(ValidateWithAttribute), true).Cast<ValidateWithAttribute>().SingleOrDefault();
+			var attribute = requestHandlerType.GetAttribute<ValidateWithAttribute>();
 			return attribute == null ? null : _configuration.ObjectFactory.CreateInstance<object>(attribute.ValidatorType);
 		}
 

@@ -24,6 +24,16 @@ namespace Piccolo.Internal
 			return (TAttribute)type.GetCustomAttributes(typeof(TAttribute), false).SingleOrDefault();
 		}
 
+		internal static TAttribute GetAttribute<TAttribute>(this PropertyInfo property)
+		{
+			return (TAttribute)property.GetCustomAttributes(typeof(TAttribute), false).SingleOrDefault();
+		}
+
+		internal static IList<TAttribute> GetAttributes<TAttribute>(this Type type)
+		{
+			return type.GetCustomAttributes(typeof(TAttribute), true).Cast<TAttribute>().ToList();
+		}
+
 		internal static Type GetMethodParameterType(this Type type, string methodName)
 		{
 			var parameter = type.GetMethod(methodName, MemberLookupFlags).GetParameters().FirstOrDefault();

@@ -16,9 +16,9 @@ namespace Piccolo.Routing
 			{typeof(IDelete<,>).Name, "delete"}
 		};
 
-		public static List<RouteAttribute> GetRouteAttributes(Type requestHandler)
+		public static IList<RouteAttribute> GetRouteAttributes(Type requestHandler)
 		{
-			return requestHandler.GetCustomAttributes(typeof(RouteAttribute), true).Cast<RouteAttribute>().ToList();
+			return requestHandler.GetAttributes<RouteAttribute>();
 		}
 
 		public static string GetVerb(Type requestHandler)

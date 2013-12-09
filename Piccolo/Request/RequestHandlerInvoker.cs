@@ -91,7 +91,7 @@ namespace Piccolo.Request
 				if (parser == null)
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
-				var validatorAttribute = property.GetCustomAttributes(typeof(ValidateWithAttribute), true).SingleOrDefault();
+				var validatorAttribute = property.GetAttribute<ValidateWithAttribute>();
 				var parameterValidatorType = validatorAttribute != null ? ((ValidateWithAttribute)validatorAttribute).ValidatorType : null;
 
 				try
