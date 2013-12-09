@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using Piccolo.Configuration;
 using Piccolo.Events;
-using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Routing;
 using Piccolo.Validation;
@@ -14,11 +13,11 @@ namespace Piccolo
 	public class PiccoloEngine
 	{
 		private readonly PiccoloConfiguration _configuration;
-		private readonly EventDispatcher _eventDispatcher;
-		private readonly RequestHandlerInvoker _requestHandlerInvoker;
-		private readonly RequestRouter _requestRouter;
+		private readonly IEventDispatcher _eventDispatcher;
+		private readonly IRequestHandlerInvoker _requestHandlerInvoker;
+		private readonly IRequestRouter _requestRouter;
 
-		public PiccoloEngine(PiccoloConfiguration configuration, EventDispatcher eventDispatcher, RequestRouter requestRouter, RequestHandlerInvoker requestHandlerInvoker)
+		public PiccoloEngine(PiccoloConfiguration configuration, IEventDispatcher eventDispatcher, IRequestRouter requestRouter, IRequestHandlerInvoker requestHandlerInvoker)
 		{
 			_configuration = configuration;
 			_eventDispatcher = eventDispatcher;

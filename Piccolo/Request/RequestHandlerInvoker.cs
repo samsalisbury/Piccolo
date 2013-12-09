@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,15 +11,20 @@ using Piccolo.Validation;
 
 namespace Piccolo.Request
 {
-	public class RequestHandlerInvoker
+	public class RequestHandlerInvoker : IRequestHandlerInvoker
 	{
-		private readonly Func<Type, string, object> _jsonDecoder;
-		private readonly IDictionary<Type, Func<string, object>> _routeParameterParsers;
-
-		public RequestHandlerInvoker(Func<Type, string, object> jsonDecoder, IDictionary<Type, Func<string, object>> routeParameterParsers)
+		private readonly Func<Type, string, object> _jsonDeserialiser;
+		private readonly IDictionary<Type, Func<string, object>> _parsers;
+		
+		public RequestHandlerInvoker(Func<Type, string, object> jsonDeserialiser, IDictionary<Type, Func<string, object>> parsers)
 		{
-			_jsonDecoder = jsonDecoder;
-			_routeParameterParsers = routeParameterParsers;
+			_jsonDeserialiser = jsonDeserialiser;
+			_parsers = parsers;
+		}
+
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, string rawPayload, object payloadValidator)
+		{
+			throw new NotImplementedException();
 		}
 
 		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator)
@@ -50,7 +56,7 @@ namespace Piccolo.Request
 			foreach (var parameter in routeParameters)
 			{
 				var property = requestHandlerType.GetProperty(parameter.Key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-				var parser = _routeParameterParsers.SingleOrDefault(x => x.Key == property.PropertyType).Value;
+				var parser = _parsers.SingleOrDefault(x => x.Key == property.PropertyType).Value;
 				if (parser == null)
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
@@ -87,7 +93,7 @@ namespace Piccolo.Request
 				if (parameter == null)
 					continue;
 
-				var parser = _routeParameterParsers.SingleOrDefault(x => x.Key == property.PropertyType).Value;
+				var parser = _parsers.SingleOrDefault(x => x.Key == property.PropertyType).Value;
 				if (parser == null)
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
@@ -127,7 +133,7 @@ namespace Piccolo.Request
 
 			try
 			{
-				return new[] {_jsonDecoder(type, payload)};
+				return new[] {_jsonDeserialiser(type, payload)};
 			}
 			catch (JsonSerializationException jsex)
 			{
@@ -151,5 +157,11 @@ namespace Piccolo.Request
 		{
 			return result.GetPropertyValue<HttpResponseMessage>("message");
 		}
+	}
+
+	public interface IRequestHandlerInvoker
+	{
+		HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, string rawPayload, object payloadValidator);
+		HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator);
 	}
 }

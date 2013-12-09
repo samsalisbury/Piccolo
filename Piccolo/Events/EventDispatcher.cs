@@ -4,7 +4,7 @@ using Piccolo.Configuration;
 
 namespace Piccolo.Events
 {
-	public class EventDispatcher
+	public class EventDispatcher : IEventDispatcher
 	{
 		private readonly EventHandlers _eventHandlers;
 		private readonly IObjectFactory _objectFactory;
@@ -57,5 +57,12 @@ namespace Piccolo.Events
 					break;
 			}
 		}
+	}
+
+	public interface IEventDispatcher
+	{
+		bool RaiseRequestProcessingEvent(PiccoloContext context);
+		void RaiseRequestProcessedEvent(PiccoloContext context, string payload);
+		void RaiseRequestFaultedEvent(PiccoloContext context, Exception exception);
 	}
 }

@@ -1,9 +1,7 @@
 using System;
 using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CSharp;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Events;
@@ -37,22 +35,7 @@ namespace Piccolo.Tests.Configuration
 				highPriorityHandler.BaseTypes.Add(@interface);
 				highPriorityHandler.Members.Add(method);
 
-				var @namespace = new CodeNamespace();
-				@namespace.Types.Add(lowPriorityHandler);
-				@namespace.Types.Add(highPriorityHandler);
-
-				var assembly = new CodeCompileUnit();
-				assembly.ReferencedAssemblies.Add("Piccolo.dll");
-				assembly.Namespaces.Add(@namespace);
-
-				var compilerParameters = new CompilerParameters
-				{
-					GenerateExecutable = false,
-					IncludeDebugInformation = false,
-					GenerateInMemory = true
-				};
-
-				var compiledAssembly = new CSharpCodeProvider().CompileAssemblyFromDom(compilerParameters, assembly).CompiledAssembly;
+				var compiledAssembly = RuntimeAssemblyBuilder.BuildAssembly(lowPriorityHandler, highPriorityHandler);
 				_handlers = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessingEvent>(compiledAssembly);
 			}
 

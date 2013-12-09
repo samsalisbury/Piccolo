@@ -36,12 +36,14 @@
     <Compile Include="Configuration\BootstrapperTests.cs" />
     <Compile Include="Configuration\EventHandlerScannerTests.cs" />
     <Compile Include="Configuration\DefaultObjectFactoryTests.cs" />
+    <Compile Include="PiccoloEngineTests.cs" />
     <Compile Include="Events\EventDispatcherTests.cs" />
-    <Compile Include="PiccoloContextTests.cs" />
+    <Compile Include="PiccoloHttpHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request\RequestHandlerInvokerTests.cs" />
     <Compile Include="ResponseTests.cs" />
     <Compile Include="Routing\RequestRouterTests.cs" />
+    <Compile Include="RuntimeAssemblyBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Piccolo\Piccolo.csproj">
@@ -50,6 +52,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.6.1.0\lib\NET40\NSubstitute.dll</HintPath>
     </Reference>

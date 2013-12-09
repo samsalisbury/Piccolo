@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Piccolo.Routing
 {
-	public class RequestRouter
+	public class RequestRouter : IRequestRouter
 	{
 		private readonly RouteHandlerLookupNode _tree;
 
@@ -48,5 +49,10 @@ namespace Piccolo.Routing
 			routeParameters.Add(node.RouteTemplateFragment, pathFragment);
 			return true;
 		}
+	}
+
+	public interface IRequestRouter
+	{
+		RouteHandlerLookupResult FindRequestHandler(string verb, string applicationPath, Uri uri);
 	}
 }
