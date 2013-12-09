@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Web;
 using Newtonsoft.Json;
@@ -36,7 +37,7 @@ namespace Piccolo.Configuration
 		private static void DiscoverRequestHandlers(PiccoloConfiguration configuration, Assembly assembly)
 		{
 			var requestHandlers = assembly.GetTypesImplementing<IRequestHandler>();
-			configuration.RequestHandlers = requestHandlers;
+			configuration.RequestHandlers = new ReadOnlyCollection<Type>(requestHandlers);
 		}
 
 		private static void DiscoverEventHandlers(PiccoloConfiguration configuration, Assembly assembly)
