@@ -265,15 +265,6 @@ namespace Piccolo.Tests
 			{
 				HttpContextBase.Response.StatusDescription.Returns("Not Found");
 			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
-			}
 		}
 
 		[TestFixture]
@@ -326,15 +317,6 @@ namespace Piccolo.Tests
 			{
 				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
 			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
-			}
 		}
 
 		[TestFixture]
@@ -369,15 +351,6 @@ namespace Piccolo.Tests
 			public void it_should_return_response_payload()
 			{
 				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("RouteParameterDatatypeMismatchException")));
-			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
 			}
 		}
 
@@ -431,15 +404,6 @@ namespace Piccolo.Tests
 			{
 				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
 			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
-			}
 		}
 
 		[TestFixture]
@@ -474,15 +438,6 @@ namespace Piccolo.Tests
 			public void it_should_return_response_payload()
 			{
 				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("MalformedParameterException")));
-			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
 			}
 		}
 
@@ -536,15 +491,6 @@ namespace Piccolo.Tests
 			{
 				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("Payload missing")));
 			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
-			}
 		}
 
 		[TestFixture]
@@ -597,15 +543,6 @@ namespace Piccolo.Tests
 			{
 				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
 			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
-			}
 		}
 
 		[TestFixture]
@@ -640,15 +577,6 @@ namespace Piccolo.Tests
 			public void it_should_return_response_payload()
 			{
 				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("MalformedPayloadException")));
-			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
 			}
 		}
 
@@ -702,15 +630,6 @@ namespace Piccolo.Tests
 			{
 				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
 			}
-
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
-			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
-			}
 		}
 
 		[TestFixture]
@@ -746,14 +665,33 @@ namespace Piccolo.Tests
 			{
 				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("Exception")));
 			}
+		}
 
-			[ExcludeFromCodeCoverage]
-			public class GetResource : IGet<string>
+		[TestFixture]
+		public class when_processing_request_that_is_interrupted_by_a_request_processing_event_handler : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
 			{
-				public HttpResponseMessage<string> Get()
-				{
-					return null;
-				}
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				EventDispatcher.RaiseRequestProcessingEvent(_piccoloContext).Returns(true);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_not_continue_processing_request()
+			{
+				RequestRouter.DidNotReceive().FindRequestHandler(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Uri>());
+			}
+
+			[Test]
+			public void it_should_raise_request_processed_event()
+			{
+				EventDispatcher.Received().RaiseRequestProcessedEvent(_piccoloContext, Arg.Any<string>());
 			}
 		}
 	}
