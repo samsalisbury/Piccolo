@@ -8,7 +8,7 @@ namespace Piccolo
 	[ExcludeFromCodeCoverage]
 	public class MissingPayloadException : Exception
 	{
-		internal MissingPayloadException()
+		public MissingPayloadException()
 		{
 		}
 

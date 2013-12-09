@@ -231,7 +231,6 @@ namespace Piccolo.Tests
 				const string verb = "GET";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
-				var routeParameters = new Dictionary<string, string> { { "route", "1" } };
 
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
@@ -255,6 +254,105 @@ namespace Piccolo.Tests
 			public void it_should_return_status_description_not_found()
 			{
 				HttpContextBase.Response.StatusDescription.Returns("Not Found");
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class GetResource : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_that_sends_an_invalid_route_parameter_type_and_http_debugging_is_disabled : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "GET";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources/1");
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new RouteParameterDatatypeMismatchException(); });
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				EventDispatcher.Received().RaiseRequestFaultedEvent(_piccoloContext, Arg.Any<RouteParameterDatatypeMismatchException>());
+			}
+
+			[Test]
+			public void it_should_return_status_code_404()
+			{
+				HttpContextBase.Response.StatusCode.Returns(404);
+			}
+
+			[Test]
+			public void it_should_return_status_description_not_found()
+			{
+				HttpContextBase.Response.StatusDescription.Returns("Not Found");
+			}
+
+			[Test]
+			public void it_should_not_return_response_payload()
+			{
+				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class GetResource : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_that_sends_an_invalid_route_parameter_type_and_http_debugging_is_enabled : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "GET";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources/1");
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+				HttpContextBase.IsDebuggingEnabled.Returns(true);
+
+				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new RouteParameterDatatypeMismatchException(); });
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_return_response_payload()
+			{
+				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("RouteParameterDatatypeMismatchException")));
 			}
 
 			[ExcludeFromCodeCoverage]

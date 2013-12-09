@@ -8,7 +8,7 @@ namespace Piccolo
 	[ExcludeFromCodeCoverage]
 	public class MalformedParameterException : Exception
 	{
-		internal MalformedParameterException()
+		public MalformedParameterException()
 		{
 		}
 

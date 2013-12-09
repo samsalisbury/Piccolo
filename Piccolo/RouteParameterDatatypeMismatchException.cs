@@ -8,7 +8,7 @@ namespace Piccolo
 	[ExcludeFromCodeCoverage]
 	public class RouteParameterDatatypeMismatchException : Exception
 	{
-		internal RouteParameterDatatypeMismatchException()
+		public RouteParameterDatatypeMismatchException()
 		{
 		}
 

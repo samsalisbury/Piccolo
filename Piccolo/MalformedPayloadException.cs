@@ -8,7 +8,7 @@ namespace Piccolo
 	[ExcludeFromCodeCoverage]
 	public class MalformedPayloadException : Exception
 	{
-		internal MalformedPayloadException()
+		public MalformedPayloadException()
 		{
 		}
 
