@@ -22,11 +22,6 @@ namespace Piccolo.Request
 			_parsers = parsers;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, string rawPayload, object payloadValidator)
-		{
-			throw new NotImplementedException();
-		}
-
 		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator)
 		{
 			BindRouteParameters(requestHandler, routeParameters);
@@ -161,7 +156,6 @@ namespace Piccolo.Request
 
 	public interface IRequestHandlerInvoker
 	{
-		HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, string rawPayload, object payloadValidator);
 		HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator);
 	}
 }
