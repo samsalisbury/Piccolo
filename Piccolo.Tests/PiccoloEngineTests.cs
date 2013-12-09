@@ -228,7 +228,7 @@ namespace Piccolo.Tests
 			[SetUp]
 			public void SetUp()
 			{
-				const string verb = "GET";
+				const string verb = "POST";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
 
@@ -274,7 +274,7 @@ namespace Piccolo.Tests
 			[SetUp]
 			public void SetUp()
 			{
-				const string verb = "GET";
+				const string verb = "POST";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
 
@@ -332,7 +332,7 @@ namespace Piccolo.Tests
 			[SetUp]
 			public void SetUp()
 			{
-				const string verb = "GET";
+				const string verb = "POST";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
 
@@ -373,7 +373,7 @@ namespace Piccolo.Tests
 			[SetUp]
 			public void SetUp()
 			{
-				const string verb = "GET";
+				const string verb = "POST";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
 
@@ -431,7 +431,7 @@ namespace Piccolo.Tests
 			[SetUp]
 			public void SetUp()
 			{
-				const string verb = "GET";
+				const string verb = "POST";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
 
@@ -472,7 +472,7 @@ namespace Piccolo.Tests
 			[SetUp]
 			public void SetUp()
 			{
-				const string verb = "GET";
+				const string verb = "POST";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
 
@@ -510,6 +510,105 @@ namespace Piccolo.Tests
 			public void it_should_return_response_payload()
 			{
 				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("Payload missing")));
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class GetResource : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_that_sends_a_malformed_payload_and_http_debugging_is_disabled : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "POST";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources/1");
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+
+				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MalformedPayloadException(); });
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_raise_request_faulted_event()
+			{
+				EventDispatcher.Received().RaiseRequestFaultedEvent(_piccoloContext, Arg.Any<MalformedPayloadException>());
+			}
+
+			[Test]
+			public void it_should_return_status_code_422()
+			{
+				HttpContextBase.Response.StatusCode.Returns(422);
+			}
+
+			[Test]
+			public void it_should_return_status_description_unprocessable_entity()
+			{
+				HttpContextBase.Response.StatusDescription.Returns("Unprocessable Entity");
+			}
+
+			[Test]
+			public void it_should_not_return_response_payload()
+			{
+				HttpContextBase.Response.DidNotReceive().Write(Arg.Any<string>());
+			}
+
+			[ExcludeFromCodeCoverage]
+			public class GetResource : IGet<string>
+			{
+				public HttpResponseMessage<string> Get()
+				{
+					return null;
+				}
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_that_sends_a_malformed_payload_and_http_debugging_is_enabled : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "POST";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources/1");
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream());
+				HttpContextBase.IsDebuggingEnabled.Returns(true);
+
+				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MalformedPayloadException(); });
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_return_response_payload()
+			{
+				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("MalformedPayloadException")));
 			}
 
 			[ExcludeFromCodeCoverage]
