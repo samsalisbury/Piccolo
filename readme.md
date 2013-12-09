@@ -27,6 +27,7 @@ public class Hello : IGet<string>
 1. [GET Request Handlers](https://github.com/opentable/Piccolo/wiki/GET-Request-Handlers)
 1. [POST Request Handlers](https://github.com/opentable/Piccolo/wiki/POST-Request-Handlers)
 1. [PUT Request Handlers](https://github.com/opentable/Piccolo/wiki/PUT-Request-Handlers)
+1. [PATCH Request Handlers](https://github.com/opentable/Piccolo/wiki/PATCH-Request-Handlers)
 1. [DELETE Request Handlers](https://github.com/opentable/Piccolo/wiki/DELETE-Request-Handlers)
 1. [Routing](https://github.com/opentable/Piccolo/wiki/Routing)
 1. [Response Helpers](https://github.com/opentable/Piccolo/wiki/Response-Helpers)
