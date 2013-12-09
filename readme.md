@@ -44,7 +44,6 @@ public class Hello : IGet<string>
     1. [Implementing Custom Parsers](https://github.com/opentable/Piccolo/wiki/Implementing-Custom-Parsers)
     1. [Overriding JSON Serialisation](https://github.com/opentable/Piccolo/wiki/Overriding-JSON-Serialisation)
     1. [Overriding JSON Deserialisation](https://github.com/opentable/Piccolo/wiki/Overriding-JSON-Deserialisation)
-    1. [High-Level Architecture](https://github.com/opentable/Piccolo/wiki/High-Level-Architecture)
 1. [Roadmap](https://github.com/opentable/Piccolo/wiki/Roadmap)
 
 ## License
