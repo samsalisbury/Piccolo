@@ -42,12 +42,11 @@ namespace Piccolo.Configuration
 
 		private static void DiscoverEventHandlers(PiccoloConfiguration configuration, Assembly assembly)
 		{
-			configuration.EventHandlers = new EventHandlers
-			{
-				RequestProcessing = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessingEvent>(assembly),
-				RequestFaulted = EventHandlerScanner.FindEventHandlersForEvent<RequestFaultedEvent>(assembly),
-				RequestProcessed = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessedEvent>(assembly)
-			};
+			var requestProcessingHandlers = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessingEvent>(assembly);
+			var requestFaultedHandlers = EventHandlerScanner.FindEventHandlersForEvent<RequestFaultedEvent>(assembly);
+			var requestProcessedHandlers = EventHandlerScanner.FindEventHandlersForEvent<RequestProcessedEvent>(assembly);
+
+			configuration.EventHandlers = new EventHandlers(requestProcessingHandlers, requestFaultedHandlers, requestProcessedHandlers);
 		}
 
 		private static void ApplyDefaultConfiguration(PiccoloConfiguration configuration)

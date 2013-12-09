@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using NSubstitute;
@@ -17,22 +18,22 @@ namespace Piccolo.Tests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				EventHandlers.RequestProcessing.Add(typeof(EventHandler1));
-				EventHandlers.RequestProcessing.Add(typeof(EventHandler2));
+				var eventHandlers = new EventHandlers(new List<Type> {typeof(EventHandler1), typeof(EventHandler2)}, new List<Type>(), new List<Type>());
+				var dispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 
-				Dispatcher.RaiseRequestProcessingEvent(PiccoloContext);
+				dispatcher.RaiseRequestProcessingEvent(PiccoloContext);
 			}
 
 			[Test]
 			public void it_should_execute_first_event_handler()
 			{
-				_httpResponse.Received().Write("EventHandler1");
+				HttpResponse.Received().Write("EventHandler1");
 			}
 
 			[Test]
 			public void it_should_execute_second_event_handler()
 			{
-				_httpResponse.Received().Write("EventHandler2");
+				HttpResponse.Received().Write("EventHandler2");
 			}
 
 			[ExcludeFromCodeCoverage]
@@ -60,22 +61,22 @@ namespace Piccolo.Tests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				EventHandlers.RequestFaulted.Add(typeof(EventHandler1));
-				EventHandlers.RequestFaulted.Add(typeof(EventHandler2));
+				var eventHandlers = new EventHandlers(new List<Type>(), new List<Type> {typeof(EventHandler1), typeof(EventHandler2)}, new List<Type>());
+				var dispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 
-				Dispatcher.RaiseRequestFaultedEvent(PiccoloContext, new Exception());
+				dispatcher.RaiseRequestFaultedEvent(PiccoloContext, new Exception());
 			}
 
 			[Test]
 			public void it_should_execute_first_event_handler()
 			{
-				_httpResponse.Received().Write("EventHandler1: Exception");
+				HttpResponse.Received().Write("EventHandler1: Exception");
 			}
 
 			[Test]
 			public void it_should_execute_second_event_handler()
 			{
-				_httpResponse.Received().Write("EventHandler2: Exception");
+				HttpResponse.Received().Write("EventHandler2: Exception");
 			}
 
 			[ExcludeFromCodeCoverage]
@@ -103,22 +104,22 @@ namespace Piccolo.Tests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				EventHandlers.RequestProcessed.Add(typeof(EventHandler1));
-				EventHandlers.RequestProcessed.Add(typeof(EventHandler2));
+				var eventHandlers = new EventHandlers(new List<Type>(), new List<Type>(), new List<Type> {typeof(EventHandler1), typeof(EventHandler2)});
+				var dispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 
-				Dispatcher.RaiseRequestProcessedEvent(PiccoloContext, "payload");
+				dispatcher.RaiseRequestProcessedEvent(PiccoloContext, "payload");
 			}
 
 			[Test]
 			public void it_should_execute_first_event_handler()
 			{
-				_httpResponse.Received().Write("EventHandler1: payload");
+				HttpResponse.Received().Write("EventHandler1: payload");
 			}
 
 			[Test]
 			public void it_should_execute_second_event_handler()
 			{
-				_httpResponse.Received().Write("EventHandler2: payload");
+				HttpResponse.Received().Write("EventHandler2: payload");
 			}
 
 			[ExcludeFromCodeCoverage]
@@ -148,22 +149,22 @@ namespace Piccolo.Tests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				EventHandlers.RequestProcessing.Add(typeof(EventHandler1));
-				EventHandlers.RequestProcessing.Add(typeof(EventHandler2));
+				var eventHandlers = new EventHandlers(new List<Type> {typeof(EventHandler1), typeof(EventHandler2)}, new List<Type>(), new List<Type>());
+				var dispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 
-				_stopRequestProcessing = Dispatcher.RaiseRequestProcessingEvent(PiccoloContext);
+				_stopRequestProcessing = dispatcher.RaiseRequestProcessingEvent(PiccoloContext);
 			}
 
 			[Test]
 			public void it_should_execute_first_handler()
 			{
-				_httpResponse.Received().Write("EventHandler1");
+				HttpResponse.Received().Write("EventHandler1");
 			}
 
 			[Test]
 			public void it_should_not_execute_second_handler()
 			{
-				_httpResponse.DidNotReceive().Write("EventHandler2");
+				HttpResponse.DidNotReceive().Write("EventHandler2");
 			}
 
 			[Test]
@@ -198,22 +199,22 @@ namespace Piccolo.Tests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				EventHandlers.RequestFaulted.Add(typeof(EventHandler1));
-				EventHandlers.RequestFaulted.Add(typeof(EventHandler2));
+				var eventHandlers = new EventHandlers(new List<Type>(), new List<Type> {typeof(EventHandler1), typeof(EventHandler2)}, new List<Type>());
+				var dispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 
-				Dispatcher.RaiseRequestFaultedEvent(PiccoloContext, new Exception());
+				dispatcher.RaiseRequestFaultedEvent(PiccoloContext, new Exception());
 			}
 
 			[Test]
 			public void it_should_execute_first_handler()
 			{
-				_httpResponse.Received().Write("EventHandler1");
+				HttpResponse.Received().Write("EventHandler1");
 			}
 
 			[Test]
 			public void it_should_not_execute_second_handler()
 			{
-				_httpResponse.DidNotReceive().Write("EventHandler2");
+				HttpResponse.DidNotReceive().Write("EventHandler2");
 			}
 
 			[ExcludeFromCodeCoverage]
@@ -242,22 +243,22 @@ namespace Piccolo.Tests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				EventHandlers.RequestProcessed.Add(typeof(EventHandler1));
-				EventHandlers.RequestProcessed.Add(typeof(EventHandler2));
+				var eventHandlers = new EventHandlers(new List<Type>(), new List<Type>(), new List<Type> {typeof(EventHandler1), typeof(EventHandler2)});
+				var dispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 
-				Dispatcher.RaiseRequestProcessedEvent(PiccoloContext, null);
+				dispatcher.RaiseRequestProcessedEvent(PiccoloContext, null);
 			}
 
 			[Test]
 			public void it_should_execute_first_handler()
 			{
-				_httpResponse.Received().Write("EventHandler1");
+				HttpResponse.Received().Write("EventHandler1");
 			}
 
 			[Test]
 			public void it_should_not_execute_second_handler()
 			{
-				_httpResponse.DidNotReceive().Write("EventHandler2");
+				HttpResponse.DidNotReceive().Write("EventHandler2");
 			}
 
 			[ExcludeFromCodeCoverage]
@@ -288,22 +289,22 @@ namespace Piccolo.Tests.Events
 			[TestFixtureSetUp]
 			public void SetUp()
 			{
-				EventHandlers.RequestProcessing.Add(typeof(EventHandler1));
-				EventHandlers.RequestProcessing.Add(typeof(EventHandler2));
+				var eventHandlers = new EventHandlers(new List<Type> {typeof(EventHandler1), typeof(EventHandler2)}, new List<Type>(), new List<Type>());
+				var dispatcher = new EventDispatcher(eventHandlers, new DefaultObjectFactory());
 
-				_stopRequestProcessing = Dispatcher.RaiseRequestProcessingEvent(PiccoloContext);
+				_stopRequestProcessing = dispatcher.RaiseRequestProcessingEvent(PiccoloContext);
 			}
 
 			[Test]
 			public void it_should_execute_first_handler()
 			{
-				_httpResponse.Received().Write("EventHandler1");
+				HttpResponse.Received().Write("EventHandler1");
 			}
 
 			[Test]
 			public void it_should_execute_second_handler()
 			{
-				_httpResponse.Received().Write("EventHandler2");
+				HttpResponse.Received().Write("EventHandler2");
 			}
 
 			[Test]
@@ -334,18 +335,15 @@ namespace Piccolo.Tests.Events
 
 		public abstract class given_event_dispatcher
 		{
-			protected EventHandlers EventHandlers = new EventHandlers();
-			protected HttpResponseBase _httpResponse = Substitute.For<HttpResponseBase>();
+			protected HttpResponseBase HttpResponse = Substitute.For<HttpResponseBase>();
 			protected PiccoloContext PiccoloContext;
-			protected EventDispatcher Dispatcher;
 
 			protected given_event_dispatcher()
 			{
 				var httpContext = Substitute.For<HttpContextBase>();
-				httpContext.Response.Returns(_httpResponse);
+				httpContext.Response.Returns(HttpResponse);
 
 				PiccoloContext = new PiccoloContext(httpContext);
-				Dispatcher = new EventDispatcher(EventHandlers, new DefaultObjectFactory());
 			}
 		}
 	}
