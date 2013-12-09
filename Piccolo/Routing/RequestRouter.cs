@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Piccolo.Routing
@@ -18,7 +17,7 @@ namespace Piccolo.Routing
 		{
 			var applicationRelativePath = uri.AbsolutePath.Remove(0, applicationPath.Length);
 			var handlerIdentifier = RouteIdentifierBuilder.BuildIdentifier(verb, applicationRelativePath);
-			
+
 			return FindNode(_tree, handlerIdentifier, new Dictionary<string, string>());
 		}
 

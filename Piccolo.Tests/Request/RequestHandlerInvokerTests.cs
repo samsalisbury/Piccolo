@@ -470,7 +470,7 @@ namespace Piccolo.Tests.Request
 
 				public HttpResponseMessage<string> Get()
 				{
-					return new HttpResponseMessage<string>(new HttpResponseMessage { Content = new StringContent("query: " + Query) });
+					return new HttpResponseMessage<string>(new HttpResponseMessage {Content = new StringContent("query: " + Query)});
 				}
 
 				public class Validator : IParameterValidator<int>

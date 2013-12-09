@@ -116,7 +116,7 @@ namespace Piccolo.Tests
 				const string verb = "DELETE";
 				const string applicationPath = "/";
 				var uri = new Uri("http://example.com/resources/1");
-				var routeParameters = new Dictionary<string, string> { { "route", "1" } };
+				var routeParameters = new Dictionary<string, string> {{"route", "1"}};
 
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);

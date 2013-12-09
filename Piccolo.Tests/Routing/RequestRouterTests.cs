@@ -322,7 +322,7 @@ namespace Piccolo.Tests.Routing
 			[Test]
 			public void it_should_throw_exception()
 			{
-				var requestHandlers = new List<Type> { typeof(Handler1), typeof(Handler2) };
+				var requestHandlers = new List<Type> {typeof(Handler1), typeof(Handler2)};
 				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
 			}
 
@@ -353,7 +353,7 @@ namespace Piccolo.Tests.Routing
 			[Test]
 			public void it_should_throw_exception()
 			{
-				var requestHandlers = new List<Type> { typeof(Handler) };
+				var requestHandlers = new List<Type> {typeof(Handler)};
 				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
 			}
 
@@ -369,7 +369,7 @@ namespace Piccolo.Tests.Routing
 			[Test]
 			public void it_should_throw_exception()
 			{
-				var requestHandlers = new List<Type> { typeof(Handler) };
+				var requestHandlers = new List<Type> {typeof(Handler)};
 				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
 			}
 
@@ -395,7 +395,7 @@ namespace Piccolo.Tests.Routing
 			[Test]
 			public void it_should_throw_exception()
 			{
-				var requestHandlers = new List<Type> { typeof(Handler) };
+				var requestHandlers = new List<Type> {typeof(Handler)};
 				Should.Throw<InvalidOperationException>(() => new RequestRouter(requestHandlers));
 			}
 

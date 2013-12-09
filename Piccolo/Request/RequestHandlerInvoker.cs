@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,7 +14,7 @@ namespace Piccolo.Request
 	{
 		private readonly Func<Type, string, object> _jsonDeserialiser;
 		private readonly IDictionary<Type, Func<string, object>> _parsers;
-		
+
 		public RequestHandlerInvoker(Func<Type, string, object> jsonDeserialiser, IDictionary<Type, Func<string, object>> parsers)
 		{
 			_jsonDeserialiser = jsonDeserialiser;
