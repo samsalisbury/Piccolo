@@ -13,6 +13,7 @@ using Piccolo.Configuration;
 using Piccolo.Events;
 using Piccolo.Request;
 using Piccolo.Routing;
+using Piccolo.Validation;
 using Shouldly;
 
 namespace Piccolo.Tests
@@ -48,8 +49,7 @@ namespace Piccolo.Tests
 					routeParameters,
 					Arg.Is<IDictionary<string, string>>(x => x["query"] == "2"),
 					Arg.Is<IDictionary<string, object>>(x => (string)x["context"] == "3"),
-					Arg.Is<string>(x => x == string.Empty),
-					Arg.Is<object>(x => x == null)).Returns(new HttpResponseMessage {Content = new ObjectContent("test")});
+					Arg.Is<string>(x => x == null)).Returns(new HttpResponseMessage {Content = new ObjectContent("test")});
 
 				_piccoloContext = new PiccoloContext(HttpContextBase);
 				_piccoloContext.Data.context = "3";
@@ -138,8 +138,7 @@ namespace Piccolo.Tests
 					routeParameters,
 					Arg.Is<IDictionary<string, string>>(x => x.Count == 0),
 					Arg.Any<IDictionary<string, object>>(),
-					Arg.Is<string>(x => x == string.Empty),
-					Arg.Is<object>(x => x == null)).Returns(new HttpResponseMessage(HttpStatusCode.NoContent));
+					Arg.Is<string>(x => x == string.Empty)).Returns(new HttpResponseMessage(HttpStatusCode.NoContent));
 
 				_piccoloContext = new PiccoloContext(HttpContextBase);
 
@@ -175,7 +174,7 @@ namespace Piccolo.Tests
 		}
 
 		[TestFixture]
-		public class when_processing_request_that_set_location_header : given_piccolo_engine
+		public class when_processing_request_that_sets_location_header : given_piccolo_engine
 		{
 			private PiccoloContext _piccoloContext;
 
@@ -190,7 +189,7 @@ namespace Piccolo.Tests
 				HttpContextBase.Request.HttpMethod.Returns(verb);
 				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
 				HttpContextBase.Request.Url.Returns(uri);
-				HttpContextBase.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("request_payload")));
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("\"request_payload\"")));
 
 				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(CreateResource), routeParameters));
 
@@ -203,8 +202,7 @@ namespace Piccolo.Tests
 					routeParameters,
 					Arg.Is<IDictionary<string, string>>(x => x.Count == 0),
 					Arg.Any<IDictionary<string, object>>(),
-					Arg.Is<string>(x => x == "request_payload"),
-					Arg.Is<object>(x => x == null)).Returns(httpResponseMessage);
+					Arg.Is<string>(x => x == "request_payload")).Returns(httpResponseMessage);
 
 				_piccoloContext = new PiccoloContext(HttpContextBase);
 
@@ -218,9 +216,9 @@ namespace Piccolo.Tests
 			}
 
 			[ExcludeFromCodeCoverage]
-			public class CreateResource : IGet<string>
+			public class CreateResource : IPost<string, string>
 			{
-				public HttpResponseMessage<string> Get()
+				public HttpResponseMessage<string> Post(string parameters)
 				{
 					return null;
 				}
@@ -692,6 +690,114 @@ namespace Piccolo.Tests
 			public void it_should_raise_request_processed_event()
 			{
 				EventDispatcher.Received().RaiseRequestProcessedEvent(_piccoloContext, Arg.Any<string>());
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_with_an_invalid_validator : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "POST";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources/1");
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.IsDebuggingEnabled.Returns(true);
+
+				var inputStream = Substitute.For<Stream>();
+				inputStream.CanRead.Returns(false);
+				HttpContextBase.Request.InputStream.Returns(inputStream);
+
+				RequestRouter.When(x => x.FindRequestHandler(verb, applicationPath, uri)).Do(_ => { throw new MalformedPayloadException(); });
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_return_response_payload()
+			{
+				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("MalformedPayloadException")));
+			}
+		}
+
+		[TestFixture]
+		public class when_processing_request_that_fails_payload_validation : given_piccolo_engine
+		{
+			private PiccoloContext _piccoloContext;
+
+			[SetUp]
+			public void SetUp()
+			{
+				const string verb = "POST";
+				const string applicationPath = "/";
+				var uri = new Uri("http://example.com/resources");
+				var routeParameters = new Dictionary<string, string>();
+
+				HttpContextBase.Request.HttpMethod.Returns(verb);
+				HttpContextBase.Request.ApplicationPath.Returns(applicationPath);
+				HttpContextBase.Request.Url.Returns(uri);
+				HttpContextBase.Request.InputStream.Returns(new MemoryStream(Encoding.UTF8.GetBytes("\"request_payload\"")));
+
+				RequestRouter.FindRequestHandler(verb, applicationPath, uri).Returns(new RouteHandlerLookupResult(typeof(CreateResource), routeParameters));
+
+				var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.Created);
+				httpResponseMessage.Headers.Location = new Uri("http://example.com/resources/1");
+
+				RequestHandlerInvoker.Execute(
+					Arg.Any<CreateResource>(),
+					verb,
+					routeParameters,
+					Arg.Is<IDictionary<string, string>>(x => x.Count == 0),
+					Arg.Any<IDictionary<string, object>>(),
+					Arg.Is<string>(x => x == "request_payload")).Returns(httpResponseMessage);
+
+				_piccoloContext = new PiccoloContext(HttpContextBase);
+
+				Engine.ProcessRequest(_piccoloContext);
+			}
+
+			[Test]
+			public void it_should_return_status_code_400()
+			{
+				HttpContextBase.Response.StatusCode.Returns(400);
+			}
+
+			[Test]
+			public void it_should_return_status_description_bad_request()
+			{
+				HttpContextBase.Response.StatusDescription.Returns("Bad Request");
+			}
+
+			[Test]
+			public void it_should_return_response_payload()
+			{
+				HttpContextBase.Response.Received().Write(Arg.Is<string>(x => x.Contains("FAIL")));
+			}
+
+			[ExcludeFromCodeCoverage]
+			[ValidateWith(typeof(Validator))]
+			public class CreateResource : IPost<string, string>
+			{
+				public HttpResponseMessage<string> Post(string parameters)
+				{
+					return null;
+				}
+			}
+
+			public class Validator : IPayloadValidator<string>
+			{
+				public ValidationResult Validate(string payload)
+				{
+					return new ValidationResult("FAIL");
+				}
 			}
 		}
 	}

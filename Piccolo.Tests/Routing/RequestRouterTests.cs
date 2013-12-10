@@ -413,7 +413,7 @@ namespace Piccolo.Tests.Routing
 
 		public abstract class given_request_router_initialised_with_test_routes
 		{
-			protected RequestRouter RequestRouter;
+			protected IRequestRouter RequestRouter;
 
 			private static readonly IEnumerable<Type> _testRoutes = new List<Type>
 			{

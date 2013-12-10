@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Piccolo.Validation;
 
 namespace Piccolo.Internal
 {
@@ -13,11 +14,11 @@ namespace Piccolo.Internal
 			return string.Format("Handler for route template [{0}] is already defined. Unable to register request handler [{1}] for lookup as it would be unreachable.", routeTemplate, requestHandler.FullName);
 		}
 
-		internal static string BuildUnreachableRouteParameterMessage(IEnumerable<RouteAttribute> routeAttributes, Type requestHandlerType, string unreachableParameter, List<string> propertyNames)
+		internal static string BuildUnreachableRouteParameterMessage(IEnumerable<RouteAttribute> routeAttributes, Type requestHandler, string unreachableParameter, List<string> propertyNames)
 		{
 			var messageBuilder = new StringBuilder();
 			messageBuilder.Append("Unreachable route parameter detected: ");
-			messageBuilder.AppendFormat("request handler [{0}] does not expose property [{1}].", requestHandlerType.FullName, unreachableParameter);
+			messageBuilder.AppendFormat("request handler [{0}] does not expose property [{1}].", requestHandler.FullName, unreachableParameter);
 			messageBuilder.AppendLine();
 			messageBuilder.AppendLine();
 			messageBuilder.AppendLine("Route Templates:");
@@ -46,10 +47,6 @@ namespace Piccolo.Internal
 			                     "{3} - System.String" +
 			                     "{3} - System.Boolean" +
 			                     "{3} - System.Boolean?" +
-			                     "{3} - System.Byte" +
-			                     "{3} - System.Byte?" +
-			                     "{3} - System.Int16" +
-			                     "{3} - System.Int16?" +
 			                     "{3} - System.Int32" +
 			                     "{3} - System.Int32?" +
 			                     "{3} - System.DateTime" +
@@ -63,12 +60,17 @@ namespace Piccolo.Internal
 
 		internal static string BuildMissingGlobalAsaxMessage()
 		{
-			return "Global.asax could not be found.";
+			return "Unable to auto-configure Piccolo: Global.asax could not be found (see https://github.com/opentable/Piccolo/blob/master/Piccolo/PiccoloHttpHandler.cs#L15 for more information).";
 		}
 
 		internal static string BuildMissingRouteMessage(Type requestHandler)
 		{
-			return String.Format("Request handler [{0}] does not have any routes defined.", requestHandler);
+			return string.Format("Request handler [{0}] does not have any routes defined.", requestHandler);
+		}
+
+		public static string BuildInvalidPayloadValidatorMessage(Type payloadValidator, Type requestHandler)
+		{
+			return string.Format("Payload validator [{0}] defined on request handler [{1}] does not implement interface {2}.", payloadValidator, requestHandler, typeof(IPayloadValidator<>));
 		}
 	}
 }

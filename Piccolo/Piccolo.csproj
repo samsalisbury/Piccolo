@@ -41,6 +41,7 @@
     <Compile Include="Configuration\IObjectFactory.cs" />
     <Compile Include="Configuration\IStartupTask.cs" />
     <Compile Include="ContextualAttribute.cs" />
+    <Compile Include="InvalidPayloadValidatorException.cs" />
     <Compile Include="IPatch.cs" />
     <Compile Include="Events\PriorityAttribute.cs" />
     <Compile Include="Internal\ReflectionExtensions.cs" />
@@ -64,9 +65,11 @@
     <Compile Include="IPost.cs" />
     <Compile Include="IPut.cs" />
     <Compile Include="IRequestHandler.cs" />
+    <Compile Include="Request\PayloadDeserialiser.cs" />
     <Compile Include="RouteParameterDatatypeMismatchException.cs" />
     <Compile Include="Validation\IParameterValidator.cs" />
     <Compile Include="Validation\IPayloadValidator.cs" />
+    <Compile Include="Validation\PayloadValidatorInvoker.cs" />
     <Compile Include="Validation\ValidateWithAttribute.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
     <None Include="NuGet\Global.asax.cs.pp">

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using Newtonsoft.Json;
 using Piccolo.Internal;
 using Piccolo.Validation;
 
@@ -12,35 +11,23 @@ namespace Piccolo.Request
 {
 	public class RequestHandlerInvoker : IRequestHandlerInvoker
 	{
-		private readonly Func<Type, string, object> _jsonDeserialiser;
 		private readonly IDictionary<Type, Func<string, object>> _parsers;
 
-		public RequestHandlerInvoker(Func<Type, string, object> jsonDeserialiser, IDictionary<Type, Func<string, object>> parsers)
+		public RequestHandlerInvoker(IDictionary<Type, Func<string, object>> parsers)
 		{
-			_jsonDeserialiser = jsonDeserialiser;
 			_parsers = parsers;
 		}
 
-		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator)
+		public HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, object payload)
 		{
 			BindRouteParameters(requestHandler, routeParameters);
 			BindContextualParameters(requestHandler, contextualParameters);
 
 			var queryParameterValidationResult = BindQueryParameters(requestHandler, queryParameters);
 			if (queryParameterValidationResult.IsValid == false)
-				return BadRequest(queryParameterValidationResult.ErrorMessage);
-
-			var payload = DeserialisePayload(requestHandler, verb, rawPayload);
-			var payloadValidationResult = ValidatePayload(payloadValidator, payload);
-			if (payloadValidationResult.IsValid == false)
-				return BadRequest(payloadValidationResult.ErrorMessage);
+				return new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(new {error = queryParameterValidationResult.ErrorMessage})};
 
 			return GetResponseMessage(requestHandler.InvokeMethod<object>(verb, payload));
-		}
-
-		private HttpResponseMessage BadRequest(string message)
-		{
-			return new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new ObjectContent(new {error = message})};
 		}
 
 		private void BindRouteParameters(IRequestHandler requestHandler, IEnumerable<KeyValuePair<string, string>> routeParameters)
@@ -100,7 +87,7 @@ namespace Piccolo.Request
 					if (parameterValidatorType != null)
 					{
 						var parameterValidator = Activator.CreateInstance(parameterValidatorType);
-						var validationResult = parameterValidator.InvokeMethod<ValidationResult>("validate", new[] {value});
+						var validationResult = parameterValidator.InvokeMethod<ValidationResult>("validate", value);
 						if (validationResult.IsValid == false)
 							return validationResult;
 					}
@@ -116,37 +103,6 @@ namespace Piccolo.Request
 			return ValidationResult.Valid;
 		}
 
-		private object[] DeserialisePayload(IRequestHandler requestHandler, string verb, string payload)
-		{
-			var type = requestHandler.GetType().GetMethodParameterType(verb);
-			if (type == null)
-				return new object[0];
-
-			if (string.IsNullOrWhiteSpace(payload))
-				throw new MissingPayloadException();
-
-			try
-			{
-				return new[] {_jsonDeserialiser(type, payload)};
-			}
-			catch (JsonSerializationException jsex)
-			{
-				throw new MalformedPayloadException("Failed to deserialise request payload.", jsex);
-			}
-			catch (JsonReaderException jrex)
-			{
-				throw new MalformedPayloadException("Failed to deserialise request payload.", jrex);
-			}
-		}
-
-		private static ValidationResult ValidatePayload(object payloadValidator, object[] payload)
-		{
-			if (payloadValidator == null)
-				return ValidationResult.Valid;
-
-			return payloadValidator.InvokeMethod<ValidationResult>("validate", payload);
-		}
-
 		private static HttpResponseMessage GetResponseMessage(object result)
 		{
 			return result.GetPropertyValue<HttpResponseMessage>("message");
@@ -155,6 +111,6 @@ namespace Piccolo.Request
 
 	public interface IRequestHandlerInvoker
 	{
-		HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, string rawPayload, object payloadValidator);
+		HttpResponseMessage Execute(IRequestHandler requestHandler, string verb, IDictionary<string, string> routeParameters, IDictionary<string, string> queryParameters, IDictionary<string, object> contextualParameters, object payload);
 	}
 }

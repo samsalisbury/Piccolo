@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using Piccolo.Configuration;
 using Piccolo.Events;
-using Piccolo.Internal;
 using Piccolo.Request;
 using Piccolo.Routing;
 using Piccolo.Validation;
@@ -14,6 +13,8 @@ namespace Piccolo
 	{
 		private readonly PiccoloConfiguration _configuration;
 		private readonly IEventDispatcher _eventDispatcher;
+		private readonly IPayloadDeserialiser _payloadDeserialiser;
+		private readonly IPayloadValidatorInvoker _payloadValidatorInvoker;
 		private readonly IRequestHandlerInvoker _requestHandlerInvoker;
 		private readonly IRequestRouter _requestRouter;
 
@@ -21,8 +22,10 @@ namespace Piccolo
 		{
 			_configuration = configuration;
 			_eventDispatcher = eventDispatcher;
-			_requestHandlerInvoker = requestHandlerInvoker;
 			_requestRouter = requestRouter;
+			_payloadDeserialiser = new PayloadDeserialiser(configuration.JsonDeserialiser);
+			_payloadValidatorInvoker = new PayloadValidatorInvoker(configuration.ObjectFactory);
+			_requestHandlerInvoker = requestHandlerInvoker;
 		}
 
 		public void ProcessRequest(PiccoloContext context)
@@ -38,8 +41,18 @@ namespace Piccolo
 				if (lookupResult.IsSuccessful)
 				{
 					var requestHandler = _configuration.ObjectFactory.CreateInstance<IRequestHandler>(lookupResult.RequestHandlerType);
-					var payloadValidator = GetPayloadValidator(lookupResult.RequestHandlerType);
-					var responseMessage = (HttpResponseMessage)_requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.Data, context.RequestPayload, payloadValidator);
+					var requestPayload = _payloadDeserialiser.DeserialisePayload(requestHandler, context.RequestVerb, context.RequestPayload);
+					if (requestPayload != null)
+					{
+						string errorMessage;
+						if ((errorMessage = _payloadValidatorInvoker.ValidatePayload(lookupResult.RequestHandlerType, context.RequestVerb, requestPayload)) != null)
+						{
+							InjectResponse(context, HttpStatusCode.BadRequest, "Bad Request", null, errorMessage);
+							return;
+						}
+					}
+
+					var responseMessage = _requestHandlerInvoker.Execute(requestHandler, context.RequestVerb, lookupResult.RouteParameters, context.RequestQueryParameters, context.Data, requestPayload);
 
 					payload = SerialisePayload(responseMessage.Content);
 					InjectResponse(context, responseMessage.StatusCode, responseMessage.ReasonPhrase, responseMessage.Headers.Location, payload);
@@ -102,12 +115,6 @@ namespace Piccolo
 			{
 				_eventDispatcher.RaiseRequestProcessedEvent(context, payload);
 			}
-		}
-
-		private object GetPayloadValidator(Type requestHandlerType)
-		{
-			var attribute = requestHandlerType.GetAttribute<ValidateWithAttribute>();
-			return attribute == null ? null : _configuration.ObjectFactory.CreateInstance<object>(attribute.ValidatorType);
 		}
 
 		private string SerialisePayload(HttpContent httpContent)

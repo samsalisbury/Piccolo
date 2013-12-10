@@ -40,10 +40,12 @@
     <Compile Include="Events\EventDispatcherTests.cs" />
     <Compile Include="PiccoloHttpHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\PayloadDeserialiserTests.cs" />
     <Compile Include="Request\RequestHandlerInvokerTests.cs" />
     <Compile Include="ResponseTests.cs" />
     <Compile Include="Routing\RequestRouterTests.cs" />
     <Compile Include="RuntimeAssemblyBuilder.cs" />
+    <Compile Include="Validation\PayloadValidatorInvokerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Piccolo\Piccolo.csproj">

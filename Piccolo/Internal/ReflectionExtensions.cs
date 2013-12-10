@@ -40,10 +40,10 @@ namespace Piccolo.Internal
 			return parameter == null ? null : parameter.ParameterType;
 		}
 
-		internal static TResponse InvokeMethod<TResponse>(this object target, string methodName, object[] parameters)
+		internal static TResponse InvokeMethod<TResponse>(this object target, string methodName, object parameter)
 		{
 			var method = target.GetType().GetMethod(methodName, MemberLookupFlags);
-			return (TResponse)method.Invoke(target, parameters);
+			return (TResponse)method.Invoke(target, parameter == null ? null : new[] {parameter});
 		}
 
 		internal static TValue GetPropertyValue<TValue>(this object target, string propertyName)
