@@ -50,8 +50,13 @@ namespace Piccolo.Internal
 		{
 			return (TValue)target
 				.GetType()
-				.GetProperty(propertyName, MemberLookupFlags)
+				.FindProperty(propertyName)
 				.GetValue(target, null);
+		}
+
+		internal static PropertyInfo FindProperty(this Type type, string propertyName)
+		{
+			return type.GetProperty(propertyName, MemberLookupFlags);
 		}
 	}
 }

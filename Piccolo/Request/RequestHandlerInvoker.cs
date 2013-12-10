@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using Piccolo.Internal;
 using Piccolo.Validation;
 
@@ -36,7 +35,7 @@ namespace Piccolo.Request
 
 			foreach (var parameter in routeParameters)
 			{
-				var property = requestHandlerType.GetProperty(parameter.Key, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+				var property = requestHandlerType.FindProperty(parameter.Key);
 				var parser = _parsers.SingleOrDefault(x => x.Key == property.PropertyType).Value;
 				if (parser == null)
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
@@ -79,7 +78,7 @@ namespace Piccolo.Request
 					throw new InvalidOperationException(ExceptionMessageBuilder.BuildUnsupportedParameterTypeMessage(property));
 
 				var validatorAttribute = property.GetAttribute<ValidateWithAttribute>();
-				var parameterValidatorType = validatorAttribute != null ? ((ValidateWithAttribute)validatorAttribute).ValidatorType : null;
+				var parameterValidatorType = validatorAttribute != null ? validatorAttribute.ValidatorType : null;
 
 				try
 				{
