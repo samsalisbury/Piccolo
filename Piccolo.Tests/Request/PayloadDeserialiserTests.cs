@@ -4,6 +4,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Piccolo.Configuration;
 using Piccolo.Request;
+using Piccolo.Tests.Validation;
 using Shouldly;
 
 namespace Piccolo.Tests.Request
@@ -104,6 +105,27 @@ namespace Piccolo.Tests.Request
 			public class Params
 			{
 				public DateTime DateTime { get; set; }
+			}
+		}
+
+		[TestFixture]
+		public class when_deserialiser_throws_format_exception : given_payload_deserialiser
+		{
+			[Test]
+			public void it_should_throw_malformed_payload_exception()
+			{
+				var deserialiser = new PayloadDeserialiser((_, __) => { throw new FormatException(); });
+
+				Assert.Throws<MalformedPayloadException>(() => deserialiser.DeserialisePayload(new PostResource(), "POST", "{}"));
+			}
+
+			[ExcludeFromCodeCoverage]
+			private class PostResource : IPost<object, string>
+			{
+				public HttpResponseMessage<string> Post(object parameters)
+				{
+					return null;
+				}
 			}
 		}
 

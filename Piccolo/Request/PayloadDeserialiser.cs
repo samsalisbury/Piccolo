@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Piccolo.Internal;
 
@@ -33,6 +34,10 @@ namespace Piccolo.Request
 			catch (JsonReaderException jrex)
 			{
 				throw new MalformedPayloadException("Failed to deserialise request payload.", jrex);
+			}
+			catch (FormatException formatException)
+			{
+				throw new MalformedPayloadException("Failed to deserialise request payload.", formatException);
 			}
 		}
 	}
